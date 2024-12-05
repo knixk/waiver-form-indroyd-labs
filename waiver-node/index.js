@@ -16,7 +16,7 @@ const con = mysql.createConnection({
   password: process.env.MY_PASSWORD,
 });
 
-const folder__id = "1OYaavNL7ykYk4pJ2o57ypwC0ng-OyHRR";
+const folder__id = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
 app.use(express.json({ limit: "50mb" })); // Increase limit for JSON payloads
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -114,43 +114,6 @@ const postACenter = (con, data) => {
   );
 };
 
-// const getSubmissions = async (
-//   con,
-//   { name = null, mobile_number = null, email = null, days = null } = {}
-// ) => {
-//   let getSubmissionsQuery = "SELECT * FROM submissions WHERE 1=1"; // Base query to start with
-
-//   // Filter by name if provided
-//   if (name) {
-//     getSubmissionsQuery += ` AND name LIKE '%${name}%'`; // Using LIKE for partial matching
-//   }
-
-//   // Filter by mobile_number if provided
-//   if (mobile_number) {
-//     getSubmissionsQuery += ` AND mobile_number LIKE '%${mobile_number}%'`;
-//   }
-
-//   // Filter by email if provided
-//   if (email) {
-//     getSubmissionsQuery += ` AND email LIKE '%${email}%'`; // Using LIKE for partial matching
-//   }
-
-//   // Filter by submission date range if provided
-//   if (days) {
-//     getSubmissionsQuery += ` AND submission_date >= CURDATE() - INTERVAL ${days} DAY`;
-//   }
-
-//   return new Promise((resolve, reject) => {
-//     con.query(getSubmissionsQuery, (err, result, fields) => {
-//       if (err) {
-//         reject(err); // Reject promise on error
-//       } else {
-//         resolve(result); // Resolve promise with the result
-//       }
-//     });
-//   });
-// };
-
 const getSubmissions = async (
   con,
   { name = null, mobile_number = null, email = null, days = null } = {}
@@ -226,7 +189,7 @@ con.connect(function (err) {
   if (err) throw err;
   console.log("mysql db connected!");
 
-  const selectDB = "use waiver_form;";
+  const selectDB = `use ${process.env.DB_NAME};`;
 
   con.query(selectDB, (err, result) => {
     if (err) throw err;
@@ -241,10 +204,7 @@ app.listen(port, () => {
 });
 
 app.get("/submissions", async (req, res) => {
-  console.log("========== submitting =========");
-
   console.log(req.query);
-  // console.log(req.params.id);
   const { mobile_number } = req.query;
   const token = req.headers.authorization?.split(" ")[1];
 
@@ -279,7 +239,6 @@ app.post("/get-token", async (req, res) => {
   }
 
   const token = await generateJWT(secret_key);
-  console.log(token);
 
   res.json({
     token,
@@ -351,8 +310,6 @@ app.post("/template-id-from-center", async (req, res) => {
 app.post("/submissions", async (req, res) => {
   const { fixed__email, fixed__name, fixed__number } = req.body;
 
-  console.log(req.body, "===========================================>");
-
   const data = {
     template_id: req.body.template_id,
     submission_data: JSON.stringify(req.body),
@@ -360,8 +317,6 @@ app.post("/submissions", async (req, res) => {
     email: fixed__email,
     mobile_number: fixed__number,
   };
-
-  console.log(data);
 
   postASubmission(con, data);
 
@@ -385,7 +340,7 @@ const postATemplate = (con, data) => {
           return reject(err); // Reject if there's an error
         }
         console.log("Inserted ID:", result.insertId);
-        console.log("Insertion finished.");
+        console.log("Insertion finished...");
         resolve(result.insertId); // Resolve with the inserted ID
       }
     );
@@ -402,7 +357,6 @@ app.post("/templates", async (req, res) => {
 
   try {
     const ans = await postATemplate(con, data); // Await the result from the template insertion
-    console.log(ans, "outside");
 
     res.status(200).json({
       msg: "Template was saved",
@@ -419,8 +373,6 @@ app.post("/templates", async (req, res) => {
 
 // create a center
 app.post("/centers", async (req, res) => {
-  console.log(req.body);
-
   const data = {
     center_name: req.body.center_name,
     address: req.body.center_address,
@@ -438,7 +390,6 @@ app.post("/centers", async (req, res) => {
 const getTemplates = async (con, { id = null } = {}) => {
   let getTemplatesQuery = `SELECT * FROM templates WHERE id = ?`; // Base query to start with
 
-  console.log("template fetch was run");
   return new Promise((resolve, reject) => {
     con.query(getTemplatesQuery, [id], (err, result, fields) => {
       if (err) {
@@ -457,7 +408,6 @@ app.post("/post-center", async (req, res) => {
   };
 
   const result = await getTemplates(con, filterOptions);
-  console.log(result);
 
   res.status(200).json({
     data: result,
@@ -483,7 +433,6 @@ const getSubmissionById = (dbConnection, submissionId) => {
 app.post("/get-submission-as-file", async (req, res) => {
   const sID = 31;
   const response = getSubmissionById(con, sID);
-  console.log(response.data);
   // res.json({
   //   data:
   // });
@@ -579,7 +528,6 @@ const getTemplateBySubmissionId = async (con, { submissionId = null } = {}) => {
 
 // Endpoint to fetch template by submission ID
 app.post("/template-from-sid", async (req, res) => {
-  console.log(req.body);
   const { submissionId } = req.body;
 
   if (!submissionId) {
