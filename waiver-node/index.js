@@ -10,8 +10,10 @@ const fs = require("fs");
 
 env.config();
 
+const dbPORT = 3306;
+
 const con = mysql.createConnection({
-  host: process.env.HOST,
+  host: `${process.env.HOST}:${dbPORT}`,
   user: process.env.MY_USER,
   password: process.env.MY_PASSWORD,
 });
@@ -193,7 +195,7 @@ con.connect(function (err) {
 
   con.query(selectDB, (err, result) => {
     if (err) throw err;
-    console.log(`Selected DB waiver_form`);
+    console.log(`Selected DB ${process.env.DB_NAME}`);
   });
 });
 
