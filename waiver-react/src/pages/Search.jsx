@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useContext } from "react";
 import { MyContext } from "../App";
+import SearchIcon from "@mui/icons-material/Search";
 
 function Search() {
   // const localJWT = localStorage.setItem('waiver_form_jwt_token')
@@ -26,6 +27,7 @@ function Search() {
     setSubmissions,
     viewParticipant,
     setViewParticipant,
+    setErr
   } = myState;
 
   const [input, setInput] = useState("");
@@ -50,14 +52,14 @@ function Search() {
       return response.data;
     } catch (error) {
       if (error.status == 403) {
-        toast.error("You're not authorized.");
+        toast.error("Invalid token...");
       } else {
         toast.error("Data not found...");
 
-        console.error(
-          "Error:",
-          error.response ? error.response.data : error.message
-        );
+        // console.error(
+        //   "Error:",
+        //   error.response ? error.response.data : error.message
+        // );
       }
     }
   };
@@ -70,7 +72,7 @@ function Search() {
     const res = await getSubmissions(data);
 
     if (!res) {
-      console.error("Error fetching data..");
+      // console.error("Error fetching data..");
       return;
     }
 
@@ -90,6 +92,8 @@ function Search() {
   };
 
   useEffect(() => {
+
+    setErr(false)
     const tkn_data = localStorage.getItem("waiver_form_jwt_token");
     if (tkn_data) {
       toast.success("Token found in local storage..");
@@ -128,7 +132,7 @@ function Search() {
               sx={{ height: 55 }}
               onClick={(e) => handleSubmit(e)}
             >
-              Search
+              <SearchIcon />
             </Button>
           </Box>
         </form>

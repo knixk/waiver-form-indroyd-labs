@@ -31,7 +31,7 @@ function Navbar() {
           </div>
 
           <div className="btns__container">
-            {location.pathname != "/" && (
+            {/* {location.pathname != "/" && (
               <Button
                 variant="contained"
                 type="submit"
@@ -54,7 +54,7 @@ function Navbar() {
               >
                 Download
               </Button>
-            )}
+            )} */}
           </div>
         </footer>
       )}

@@ -2,8 +2,11 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import formIcon from "../assets/contact-form.png";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import HomeIcon from "@mui/icons-material/Home";
 
 import { useContext } from "react";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { MyContext } from "../App";
 
 function Navbar() {
@@ -30,7 +33,7 @@ function Navbar() {
               navigate(-1);
             }}
           >
-            Back
+            <ArrowBackIcon />
           </Button>
         )}
 
@@ -41,7 +44,7 @@ function Navbar() {
             fullWidth
             onClick={handleDownload}
           >
-            Download
+            <CloudDownloadIcon />
           </Button>
         )}
 
@@ -52,7 +55,7 @@ function Navbar() {
             fullWidth
             onClick={() => navigate("/")}
           >
-            Home
+            <HomeIcon />
           </Button>
         )}
       </div>

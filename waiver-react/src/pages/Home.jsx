@@ -62,13 +62,13 @@ function Home() {
               Get Started
             </Button>
 
-            <Button
+            {/* <Button
               variant="contained"
               onClick={() => navigate("/search")}
               sx={{ mt: 2.5, ml: 2 }}
             >
               Search forms
-            </Button>
+            </Button> */}
           </Box>
         )}
       </Box>
