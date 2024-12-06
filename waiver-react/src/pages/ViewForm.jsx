@@ -341,7 +341,7 @@ const ViewForm = () => {
                           </Button>
                           {formData[question.question_id] && (
                             <Typography variant="body2" marginTop={1}>
-                              Selected: {formData[question.question_id].name}
+                              Selected: {formData[question.question_id]}
                             </Typography>
                           )}
                         </FormControl>

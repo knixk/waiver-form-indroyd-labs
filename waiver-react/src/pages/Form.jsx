@@ -154,7 +154,7 @@ const Form = () => {
           submissionPayload
         );
         toast.success("Form submitted successfully!");
-        setTimeout(() => navigate("/"), 5000);
+        setTimeout(() => navigate("/"), 3000);
       } catch (error) {
         toast.error("Submission failed!");
         console.error(error);
