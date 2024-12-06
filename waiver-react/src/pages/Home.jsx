@@ -58,7 +58,11 @@ function Home() {
               Don't let queues eat up your time, use online forms instead!
             </Typography>
 
-            <Button variant="contained" onClick={handleNext} sx={{ mt: 2.5 }}>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/form?center=3")}
+              sx={{ mt: 2.5 }}
+            >
               Get Started
             </Button>
 
@@ -69,52 +73,6 @@ function Home() {
             >
               Search forms
             </Button> */}
-          </Box>
-        )}
-      </Box>
-
-      {/* Second Screen */}
-      <Box
-        sx={{
-          opacity: layer === 2 ? 1 : 0, // Fade in for the second screen
-          transition: "opacity 0.5s ease",
-          position: "absolute",
-          width: "100%",
-          maxWidth: "600px",
-        }}
-      >
-        {layer === 2 && (
-          <Box>
-            <Typography variant="h4">Ready to Fill the Form?</Typography>
-            <Button variant="contained" color="primary" href="/" sx={{ mt: 4 }}>
-              Go back
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              href="/form?center=1"
-              sx={{ mt: 4, ml: 4 }}
-            >
-              Fill the Form
-            </Button>
-          </Box>
-        )}
-      </Box>
-
-      {/* Third Screen (Form) */}
-      <Box
-        sx={{
-          opacity: layer === 3 ? 1 : 0, // Fade in when the user is ready for the form
-          transition: "opacity 0.5s ease",
-          position: "absolute",
-          width: "100%",
-          maxWidth: "600px",
-        }}
-      >
-        {layer === 3 && (
-          <Box>
-            <Typography variant="h4">Form Loading...</Typography>
-            {/* Your form component will go here */}
           </Box>
         )}
       </Box>
