@@ -64,6 +64,7 @@ const Form = () => {
   const centerParams = queryParameters.get("center");
 
   const handleInputChange = (id, value) => {
+    console.log(value);
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
@@ -457,14 +458,14 @@ const Form = () => {
                             onChange={(e) =>
                               handleInputChange(
                                 question.question_id,
-                                e.target.files[0]
+                                e.target.files[0].name
                               )
                             }
                           />
                         </Button>
                         {formData[question.question_id] && (
                           <Typography variant="body2" marginTop={1}>
-                            Selected: {formData[question.question_id].name}
+                            Selected: {formData[question.question_id]}
                           </Typography>
                         )}
                       </FormControl>

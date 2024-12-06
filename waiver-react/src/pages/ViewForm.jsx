@@ -142,6 +142,7 @@ const ViewForm = () => {
     };
 
     fetchTemplateFromSID(submissionID);
+    setParticipants(formData.participants);
   }, []);
 
   return (
