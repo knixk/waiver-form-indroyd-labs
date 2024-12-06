@@ -45,8 +45,8 @@ body {
 nav,
 footer {
   display: flex;
-  justify-content: center;
-  gap: 35%;
+  justify-content: space-around;
+  /* gap: 35%; */
   align-items: center;
   padding: 2rem 0;
   font-size: 16px;
@@ -157,7 +157,10 @@ canvas {
 }
 
 .footer {
-  position: relative;
+  display: flex;
+  /* gap: 8%; */
+  /* gap: 35%; */
+
   bottom: 0;
   width: 100%;
   padding: auto auto;
@@ -430,7 +433,7 @@ img {
 }
 
 .form__icon {
-  width: 30px;
+  width: 25px;
 }
 
 .sig__img {
@@ -457,7 +460,7 @@ img {
 }
 
 .footer__icon {
-  width: 20px;
+  width: 25px;
 }
 
 .footer__logo {
@@ -507,3 +510,12 @@ img {
 }
 
 /*  err page */
+
+@media (max-width: 480px) {
+  .nav,
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+}

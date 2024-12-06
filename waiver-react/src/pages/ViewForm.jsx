@@ -82,6 +82,16 @@ const ViewForm = () => {
                   <h3 className="h2">Look like you're lost</h3>
 
                   <p>the form you are looking for is not available..</p>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    sx={{ mt: 2 }}
+                    onClick={() => {
+                      navigate("/");
+                    }}
+                  >
+                    Home
+                  </Button>
                 </div>
               </div>
             </div>

@@ -17,7 +17,7 @@ function Navbar() {
 
   return (
     <>
-      {location.pathname == "/search" ? (
+      {location.pathname == "/search" || err ? (
         <></>
       ) : (
         <footer className="footer">

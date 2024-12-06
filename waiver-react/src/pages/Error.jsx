@@ -1,8 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Button } from "@mui/material";
+
+import { useContext } from "react";
+import { MyContext } from "../App";
+
 function Error() {
+  const myState = useContext(MyContext);
+  const { setErr } = myState;
   const navigate = useNavigate();
+
+  setErr(true);
   return (
     <section className="page_404">
       <div className="container">
@@ -17,10 +26,16 @@ function Error() {
                 <h3 className="h2">Look like you're lost</h3>
 
                 <p>the page you are looking for is not available..</p>
-
-                <button onClick={() => navigate("/")} className="link_404">
-                  Go to Home
-                </button>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  sx={{ mt: 2 }}
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
+                  Home
+                </Button>
               </div>
             </div>
           </div>

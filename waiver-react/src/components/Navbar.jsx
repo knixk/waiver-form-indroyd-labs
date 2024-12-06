@@ -39,10 +39,20 @@ function Navbar() {
             variant="contained"
             type="submit"
             fullWidth
-            id="download__btn"
             onClick={handleDownload}
           >
             Download
+          </Button>
+        )}
+
+        {location.pathname == "/search" && !err && (
+          <Button
+            variant="contained"
+            type="submit"
+            fullWidth
+            onClick={() => navigate("/")}
+          >
+            Home
           </Button>
         )}
       </div>

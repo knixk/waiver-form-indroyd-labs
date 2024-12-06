@@ -125,7 +125,7 @@ function Search() {
             <Button
               variant="contained"
               color="primary"
-              sx={{ mt: 2 }}
+              sx={{ height: 55 }}
               onClick={(e) => handleSubmit(e)}
             >
               Search
