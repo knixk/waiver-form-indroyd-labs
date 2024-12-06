@@ -178,7 +178,7 @@ const Form = () => {
       } catch (error) {
         console.error(error);
         toast("No form found...");
-        setTimeout(() => navigate("/"), 5000);
+        setTimeout(() => navigate("/"), 3000);
       }
 
       return ans;
