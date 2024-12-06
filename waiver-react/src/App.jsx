@@ -7,6 +7,7 @@ import Search from "./pages/Search";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ViewForm from "./pages/ViewForm";
+import Error from "./pages/Error";
 
 import { createContext } from "react";
 
@@ -107,6 +108,7 @@ function App() {
           <Route path="/form" element={<Form />} />
           <Route path="/search" element={<Search />} />
           <Route path="/view-form" element={<ViewForm />} />
+          <Route path="*" element={<Error />} />
         </Routes>
         <Footer />
       </Router>
