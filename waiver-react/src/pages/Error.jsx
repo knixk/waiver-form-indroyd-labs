@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
@@ -11,7 +11,9 @@ function Error() {
   const { setErr } = myState;
   const navigate = useNavigate();
 
-  setErr(true);
+  useEffect(() => {
+    setErr(true);
+  }, []);
   return (
     <section className="page_404">
       <div className="container">

@@ -21,7 +21,6 @@ import {
   Radio,
 } from "@mui/material";
 
-
 import deleteIcon from "../assets/delete.png";
 
 const ViewForm = () => {
@@ -50,7 +49,6 @@ const ViewForm = () => {
   const navigate = useNavigate();
 
   if (!submissionID) {
-    setErr(true);
     return (
       <section className="page_404">
         <div className="container">
