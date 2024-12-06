@@ -103,6 +103,9 @@ const ViewForm = () => {
 
   const temp = JSON.parse(viewParticipant.submission_data);
 
+  console.log(temp);
+  // temp && setParticipants(temp);
+
   const addParticipant = () => {};
 
   const handleChange = () => {};
@@ -142,7 +145,7 @@ const ViewForm = () => {
     };
 
     fetchTemplateFromSID(submissionID);
-    setParticipants(formData.participants);
+    // setParticipants(formData.participants);
   }, []);
 
   return (
@@ -371,36 +374,37 @@ const ViewForm = () => {
                 <Box sx={{ mt: 3 }}>
                   <Typography variant="h6">Participants</Typography>
 
-                  {participants.map((participant, index) => (
-                    <Grid
-                      container
-                      spacing={2}
-                      style={{ marginTop: 10 }}
-                      alignItems="center"
-                      key={participant.id}
-                    >
-                      {extraFields.map((field, fieldIndex) => {
-                        return (
-                          <Grid item xs={5} key={fieldIndex}>
-                            <TextField
-                              fullWidth
-                              label={field.label}
-                              type={field.type}
-                              onChange={handleChange}
-                              value={participant[field.label] || ""} // Ensure `label` matches participant keys
-                            />
-                          </Grid>
-                        );
-                      })}
-                      <Grid item xs={2}>
-                        <IconButton
-                          onClick={() => deleteParticipant(participant.id)}
-                        >
-                          <img style={{ width: 30 }} src={deleteIcon} />
-                        </IconButton>
+                  {formData.participants &&
+                    formData.participants.map((participant, index) => (
+                      <Grid
+                        container
+                        spacing={2}
+                        style={{ marginTop: 10 }}
+                        alignItems="center"
+                        key={participant.id}
+                      >
+                        {extraFields.map((field, fieldIndex) => {
+                          return (
+                            <Grid item xs={5} key={fieldIndex}>
+                              <TextField
+                                fullWidth
+                                label={field.label}
+                                type={field.type}
+                                onChange={handleChange}
+                                value={participant[field.label] || ""} // Ensure `label` matches participant keys
+                              />
+                            </Grid>
+                          );
+                        })}
+                        <Grid item xs={2}>
+                          <IconButton
+                            onClick={() => deleteParticipant(participant.id)}
+                          >
+                            <img style={{ width: 30 }} src={deleteIcon} />
+                          </IconButton>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  ))}
+                    ))}
 
                   <Button
                     variant="outlined"
