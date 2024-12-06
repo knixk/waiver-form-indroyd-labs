@@ -16,6 +16,8 @@ export const MyContext = createContext();
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
+import toast, { Toaster } from "react-hot-toast";
+
 // context api allows us to use state from one place in every component, which is very handy
 
 function App() {
@@ -63,6 +65,8 @@ function App() {
     a.click(); // Trigger the download
     document.body.removeChild(a); // Clean up the link
     URL.revokeObjectURL(url); // Release the URL
+
+    toast.success("Download started...");
   };
 
   return (
@@ -112,6 +116,7 @@ function App() {
         </Routes>
         <Footer />
       </Router>
+      <Toaster />
     </MyContext.Provider>
   );
 }
