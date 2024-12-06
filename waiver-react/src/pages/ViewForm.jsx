@@ -1,21 +1,10 @@
 import { useEffect } from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-
-// contains dummy submissions data
-// import temp from "./Temp.json";
-
-// contains the dummy template
-// import config from "./config.json";
-
-// get the template id from submissions
-
-// const { template_config, template_name, signature_data } = config;
 
 import { useContext } from "react";
 import { MyContext } from "../App";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -43,18 +32,11 @@ const ViewForm = () => {
     setCompanyName,
     displayForm,
     setDisplayForm,
-    disabled,
-    setDisabled,
     extraFields,
     setExtraFields,
     questions,
     setQuestions,
-    templateId,
-    setTemplateId,
     sign,
-    setSign,
-    participants,
-    setParticipants,
     formData,
     setFormData,
     companyLogo,
@@ -103,9 +85,6 @@ const ViewForm = () => {
 
   const temp = JSON.parse(viewParticipant.submission_data);
 
-  console.log(temp);
-  // temp && setParticipants(temp);
-
   const addParticipant = () => {};
 
   const handleChange = () => {};
@@ -145,7 +124,6 @@ const ViewForm = () => {
     };
 
     fetchTemplateFromSID(submissionID);
-    // setParticipants(formData.participants);
   }, []);
 
   return (
