@@ -23,42 +23,44 @@ function Navbar() {
         <p>Waiver form</p>
       </div>
 
-      <div className="btns__container">
-        {location.pathname != "/" && (
-          <Button
-            variant="contained"
-            type="submit"
-            id="download__btn"
-            onClick={() => {
-              navigate(-1);
-            }}
-          >
-            <ArrowBackIcon />
-          </Button>
-        )}
+      {location.pathname != "/" && (
+        <div className="btns__container">
+          {location.pathname != "/" && (
+            <Button
+              variant="contained"
+              type="submit"
+              id="download__btn"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              <ArrowBackIcon />
+            </Button>
+          )}
 
-        {location.pathname == "/view-form" && !err && (
-          <Button
-            variant="contained"
-            type="submit"
-            fullWidth
-            onClick={handleDownload}
-          >
-            <CloudDownloadIcon />
-          </Button>
-        )}
+          {location.pathname == "/view-form" && !err && (
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              onClick={handleDownload}
+            >
+              <CloudDownloadIcon />
+            </Button>
+          )}
 
-        {location.pathname == "/search" && !err && (
-          <Button
-            variant="contained"
-            type="submit"
-            fullWidth
-            onClick={() => navigate("/")}
-          >
-            <HomeIcon />
-          </Button>
-        )}
-      </div>
+          {location.pathname == "/search" && !err && (
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              onClick={() => navigate("/")}
+            >
+              <HomeIcon />
+            </Button>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

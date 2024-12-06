@@ -31,6 +31,8 @@ import {
 } from "@mui/material";
 
 import deleteIcon from "../assets/delete.png";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 const Form = () => {
   const myState = useContext(MyContext);
@@ -505,7 +507,8 @@ const Form = () => {
                       <IconButton
                         onClick={() => deleteParticipant(participant.id)}
                       >
-                        <img style={{ width: 30 }} src={deleteIcon} />
+                        <HighlightOffIcon fontSize="large" />
+                        {/* <img style={{ width: 30 }} src={deleteIcon} /> */}
                       </IconButton>
                     </Grid>
                   </Grid>
