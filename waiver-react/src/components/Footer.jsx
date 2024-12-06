@@ -10,7 +10,7 @@ import { MyContext } from "../App";
 
 function Navbar() {
   const myState = useContext(MyContext);
-  const { handleDownload } = myState;
+  const { handleDownload, err } = myState;
   const navigate = useNavigate();
 
   let location = useLocation();
@@ -44,7 +44,7 @@ function Navbar() {
               </Button>
             )}
 
-            {location.pathname == "/view-form" && (
+            {location.pathname == "/view-form" && !err && (
               <Button
                 variant="contained"
                 type="submit"

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Button, Typography, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const logo = "https://dypdvfcjkqkg2.cloudfront.net/large/5862799-1989.jpg";
 // import logo from "../assets/unicef.png";
 
 function Home() {
   const [layer, setLayer] = useState(1);
+  const navigate = useNavigate();
 
   const handleNext = () => {
     if (layer < 3) {
@@ -56,8 +58,16 @@ function Home() {
               Don't let queues eat up your time, use online forms instead!
             </Typography>
 
-            <Button variant="contained" onClick={handleNext} sx={{ mt: 4 }}>
+            <Button variant="contained" onClick={handleNext} sx={{ mt: 2.5 }}>
               Get Started
+            </Button>
+
+            <Button
+              variant="contained"
+              onClick={() => navigate("/search")}
+              sx={{ mt: 2.5, ml: 2 }}
+            >
+              Search forms
             </Button>
           </Box>
         )}
@@ -87,7 +97,6 @@ function Home() {
             >
               Fill the Form
             </Button>
-            
           </Box>
         )}
       </Box>

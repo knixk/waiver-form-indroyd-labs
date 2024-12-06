@@ -32,6 +32,7 @@ function App() {
   const [submissionID, setSubmissionID] = useState();
   const [submissions, setSubmissions] = useState();
   const [viewParticipant, setViewParticipant] = useState();
+  const [err, setErr] = useState(false);
 
   const handleDownload = async () => {
     const formElement = document.querySelector(".form__container__main");
@@ -95,6 +96,8 @@ function App() {
         setSubmissions,
         viewParticipant,
         setViewParticipant,
+        err,
+        setErr,
       }}
     >
       <Router>

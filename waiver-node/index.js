@@ -13,15 +13,15 @@ env.config();
 const dbPORT = 3306;
 
 const con = mysql.createConnection({
-  host: `${process.env.HOST}:${dbPORT}`,
+  host: process.env.MY_HOST,
   user: process.env.MY_USER,
   password: process.env.MY_PASSWORD,
 });
 
 const folder__id = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
-app.use(express.json({ limit: "50mb" })); // Increase limit for JSON payloads
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(express.json({ limit: "10mb" })); // Increase limit for JSON payloads
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // Google Drive API Configuration
 const auth = new google.auth.GoogleAuth({
@@ -191,7 +191,7 @@ con.connect(function (err) {
   if (err) throw err;
   console.log("mysql db connected!");
 
-  const selectDB = `use ${process.env.DB_NAME};`;
+  const selectDB = `use ${process.env.DB_NAME};`; 
 
   con.query(selectDB, (err, result) => {
     if (err) throw err;

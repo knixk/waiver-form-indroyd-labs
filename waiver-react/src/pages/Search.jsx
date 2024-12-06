@@ -11,14 +11,14 @@ import {
   Grid,
 } from "@mui/material";
 
-import { jsPDF } from "jspdf";
-
 import { useNavigate } from "react-router-dom";
 
 import { useContext } from "react";
 import { MyContext } from "../App";
 
 function Search() {
+  // const localJWT = localStorage.setItem('waiver_form_jwt_token')
+
   const myState = useContext(MyContext);
   const {
     submissionID,
@@ -44,11 +44,9 @@ function Search() {
         },
       });
 
-      console.log(response.data);
-
       const tmp_data = JSON.parse(response.data.data[0].submission_data);
       setTemplateData(tmp_data);
-
+      localStorage.setItem("waiver_form_jwt_token", jwt);
       return response.data;
     } catch (error) {
       if (error.status == 403) {
@@ -79,8 +77,6 @@ function Search() {
     if (res.data.length === 0) {
       toast("No data found.");
     }
-
-    console.log(res.data, "im res ===============>");
     setData(res.data);
     setSubmissions(res.data);
   };
@@ -93,7 +89,17 @@ function Search() {
     setParams(`?${params.toString()}`);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const tkn_data = localStorage.getItem("waiver_form_jwt_token");
+    if (tkn_data) {
+      toast.success("Token found in local storage..");
+      setJwt(tkn_data);
+    } else {
+      toast("Please enter the jwt token..", {
+        icon: "🪙",
+      });
+    }
+  }, []);
 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>

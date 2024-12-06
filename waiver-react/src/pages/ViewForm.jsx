@@ -35,8 +35,6 @@ import {
 import deleteIcon from "../assets/delete.png";
 
 const ViewForm = () => {
-  const { state } = useLocation();
-
   const myState = useContext(MyContext);
   const {
     loading,
@@ -63,23 +61,41 @@ const ViewForm = () => {
     setCompanyLogo,
     submissionID,
     viewParticipant,
+    setErr,
   } = myState;
 
   const navigate = useNavigate();
-  const queryParameters = new URLSearchParams(window.location.search);
-  const centerParams = queryParameters.get("center");
 
-  // if (submission_data == null) {
-  //   toast.error("Invalid action..");
-  //   return <div>no data...</div>;
-  // }
+  if (!submissionID) {
+    setErr(true);
+    return (
+      <section className="page_404">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12 ">
+              <div className="col-sm-10 col-sm-offset-1  text-center">
+                <div className="four_zero_four_bg">
+                  <h1 className="text-center ">404</h1>
+                </div>
+
+                <div className="contant_box_404">
+                  <h3 className="h2">Look like you're lost</h3>
+
+                  <p>the page you are looking for is not available..</p>
+
+                  <button onClick={() => navigate("/")} className="link_404">
+                    Go to Home
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const temp = JSON.parse(viewParticipant.submission_data);
-
-  // console.log(
-  //   JSON.parse(viewParticipant.submission_data),
-  //   "================> participant"
-  // );
 
   const addParticipant = () => {};
 
@@ -92,58 +108,6 @@ const ViewForm = () => {
   const handleInputChange = async (e) => {};
 
   useEffect(() => {
-    const getTemplateIdFromCenterID = async (id) => {
-      let ans = null;
-      const templates = "http://localhost:5050/template-id-from-center";
-
-      const options = {
-        center_id: id,
-      };
-
-      try {
-        const response = await axios.post(templates, options);
-        ans = response.data.template_id;
-        setTemplateId(ans);
-      } catch (error) {
-        console.error(error);
-        toast("No form found...");
-        setTimeout(() => navigate("/"), 5000);
-      }
-
-      return ans;
-    };
-
-    const fetchTemplate = async (t_id) => {
-      const templates = "http://localhost:5050/post-center";
-
-      const options = {
-        id: t_id,
-      };
-
-      try {
-        const response = await axios.post(templates, options);
-        const myData = JSON.parse(response.data.data[0].template_config);
-
-        if (myData) {
-          setQuestions(myData.questions);
-          setCompanyLogo(myData.company_logo);
-          setExtraFields(myData.extra_participants_form_fields);
-          setDisplayForm(true);
-          setCompanyName(myData.company_name);
-          setSign(myData.signature_data);
-          setLoading(false);
-          if (!participants) {
-            setParticipants(temp.participants);
-          }
-        }
-      } catch (error) {
-        toast("template doesn't exist");
-        console.error(
-          "Error:",
-          error.response ? error.response.data : error.message
-        );
-      }
-    };
 
     const fetchTemplateFromSID = async (submissionId) => {
       const templatefromSIDURL = "http://localhost:5050/template-from-sid";
