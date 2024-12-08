@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const env = require("dotenv");
 const { google } = require("googleapis");
 const fs = require("fs");
+const serverless = require("serverless-http");
 
 env.config();
 
@@ -17,7 +18,7 @@ const con = mysql.createConnection({
   user: process.env.MY_USER,
   password: process.env.MY_PASSWORD,
   database: process.env.DB_NAME,
-  port: dbPORT,
+  port: process.env.AWS_DATABASE_PORT,
 });
 
 const folder__id = process.env.GOOGLE_DRIVE_FOLDER_ID;
@@ -203,9 +204,9 @@ con.connect(function (err) {
 
 app.use(cors());
 
-app.listen(port, () => {
-  console.log(`app running on port: ${port}..`);
-});
+// app.listen(port, () => {
+//   console.log(`app running on port: ${port}..`);
+// });
 
 app.get("/submissions", async (req, res) => {
   console.log(req.query);
@@ -551,3 +552,5 @@ app.post("/template-from-sid", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+module.exports.handler = serverless(app);
