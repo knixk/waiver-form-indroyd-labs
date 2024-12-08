@@ -27,7 +27,7 @@ function Search() {
     setSubmissions,
     viewParticipant,
     setViewParticipant,
-    setErr
+    setErr,
   } = myState;
 
   const [input, setInput] = useState("");
@@ -54,7 +54,7 @@ function Search() {
       if (error.status == 403) {
         toast.error("Invalid token...");
       } else {
-        toast.error("Data not found...");
+        toast("Data not found...");
 
         // console.error(
         //   "Error:",
@@ -92,8 +92,7 @@ function Search() {
   };
 
   useEffect(() => {
-
-    setErr(false)
+    setErr(false);
     const tkn_data = localStorage.getItem("waiver_form_jwt_token");
     if (tkn_data) {
       toast.success("Token found in local storage..");
