@@ -20,3 +20,21 @@ MY_PASSWORD = gamer123
 DB_NAME = waiver-form
 GOOGLE_DRIVE_FOLDER_ID = 1OYaavNL7ykYk4pJ2o57ypwC0ng-OyHRR
 AWS_DATABASE_PORT = 3306
+
+
+
+
+
+
+--- 2
+
+
+PORT = 5050
+SECRET_KEY = 9820042672
+MY_HOST = localhost
+MY_USER = root
+MY_PASSWORD = Gamer12345!
+DB_NAME = waiver-form
+GOOGLE_DRIVE_FOLDER_ID = 1OYaavNL7ykYk4pJ2o57ypwC0ng-OyHRR
+AWS_DATABASE_PORT = 3306
+AWS_DB_ENDPOINT = waiver-form.cdaee04uo8lt.us-east-1.rds.amazonaws.com

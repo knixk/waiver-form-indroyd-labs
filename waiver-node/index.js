@@ -16,6 +16,8 @@ const con = mysql.createConnection({
   host: process.env.MY_HOST,
   user: process.env.MY_USER,
   password: process.env.MY_PASSWORD,
+  database: process.env.DB_NAME,
+  port: dbPORT,
 });
 
 const folder__id = process.env.GOOGLE_DRIVE_FOLDER_ID;
@@ -191,12 +193,12 @@ con.connect(function (err) {
   if (err) throw err;
   console.log("mysql db connected!");
 
-  const selectDB = `use ${process.env.DB_NAME};`; 
+  // const selectDB = `use ${process.env.DB_NAME};`;
 
-  con.query(selectDB, (err, result) => {
-    if (err) throw err;
-    console.log(`Selected DB ${process.env.DB_NAME}`);
-  });
+  // con.query(selectDB, (err, result) => {
+  //   if (err) throw err;
+  //   console.log(`Selected DB ${process.env.DB_NAME}`);
+  // });
 });
 
 app.use(cors());
