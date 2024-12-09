@@ -13,6 +13,9 @@ import {
 
 import { useNavigate } from "react-router-dom";
 
+const aws_url =
+  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
+
 import { useContext } from "react";
 import { MyContext } from "../App";
 import SearchIcon from "@mui/icons-material/Search";
@@ -38,7 +41,7 @@ function Search() {
   const navigate = useNavigate();
 
   const getSubmissions = async (data) => {
-    const submissions = `http://localhost:5050/submissions${params}`;
+    const submissions = `${aws_url}/submissions${params}`;
     try {
       const response = await axios.get(submissions, {
         headers: {

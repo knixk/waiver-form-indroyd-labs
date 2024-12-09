@@ -14,6 +14,9 @@ import { createContext } from "react";
 // Create the context
 export const MyContext = createContext();
 
+const AWS_URI =
+  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws/";
+
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
@@ -36,6 +39,7 @@ function App() {
   const [submissions, setSubmissions] = useState();
   const [viewParticipant, setViewParticipant] = useState();
   const [err, setErr] = useState(false);
+  const [awsURI, setAWSURI] = useState(AWS_URI);
 
   const handleDownload = async () => {
     const formElement = document.querySelector(".form__container__main");

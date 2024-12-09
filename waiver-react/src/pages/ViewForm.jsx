@@ -21,6 +21,9 @@ import {
   Radio,
 } from "@mui/material";
 
+const aws_url =
+  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
+
 import deleteIcon from "../assets/delete.png";
 
 const ViewForm = () => {
@@ -96,7 +99,7 @@ const ViewForm = () => {
 
   useEffect(() => {
     const fetchTemplateFromSID = async (submissionId) => {
-      const templatefromSIDURL = "http://localhost:5050/template-from-sid";
+      const templatefromSIDURL = `${aws_url}/template-from-sid`;
       try {
         const response = await axios.post(templatefromSIDURL, {
           submissionId,

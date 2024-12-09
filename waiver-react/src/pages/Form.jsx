@@ -30,6 +30,9 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 
+const aws_url =
+  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
+
 import deleteIcon from "../assets/delete.png";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
@@ -59,6 +62,7 @@ const Form = () => {
     setFormData,
     companyLogo,
     setCompanyLogo,
+    awsURI,
   } = myState;
 
   const navigate = useNavigate();
@@ -97,8 +101,7 @@ const Form = () => {
   };
 
   const uploadImageToBackend = async (imgData) => {
-    return;
-    const response = await axios.post("http://localhost:5050/upload-image", {
+    const response = await axios.post(`${aws_url}/upload-image`, {
       imgData,
     });
     return response.data.link; // Backend returns the Google Drive link
@@ -151,10 +154,7 @@ const Form = () => {
           signature_data: sign?.getTrimmedCanvas().toDataURL("image/png"),
         };
 
-        await axios.post(
-          "http://localhost:5050/submissions",
-          submissionPayload
-        );
+        await axios.post(`${aws_url}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
         setTimeout(() => navigate("/"), 3000);
       } catch (error) {
@@ -168,7 +168,7 @@ const Form = () => {
   useEffect(() => {
     const getTemplateIdFromCenterID = async (id) => {
       let ans = null;
-      const templates = "http://localhost:5050/template-id-from-center";
+      const templates = `${aws_url}/template-id-from-center`;
 
       const options = {
         center_id: id,
@@ -188,7 +188,7 @@ const Form = () => {
     };
 
     const fetchTemplate = async (t_id) => {
-      const templates = "http://localhost:5050/post-center";
+      const templates = `${aws_url}/post-center`;
 
       const options = {
         id: t_id,
