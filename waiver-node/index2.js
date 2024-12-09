@@ -1,25 +1,81 @@
 const express = require("express");
 const mysql = require("mysql");
 const app = express();
-// const port = process.env.PORT || 5050;
+const port = process.env.PORT || 5050;
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv");
 const { google } = require("googleapis");
 const fs = require("fs");
-const serverless = require("serverless-http");
+// const serverless = require("serverless-http");
 
 env.config();
 
 // const dbPORT = 3306;
 
-const con = mysql.createConnection({
-  host: process.env.MY_HOST,
-  user: process.env.MY_USER,
-  password: process.env.MY_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.AWS_DATABASE_PORT,
+// const con = mysql.createConnection({
+//   host: process.env.MY_HOST,
+//   user: process.env.MY_USER,
+//   password: process.env.MY_PASSWORD,
+//   database: process.env.DB_NAME,
+//   port: process.env.AWS_DATABASE_PORT,
+// });
+
+const connectToDatabase = () => {
+  return new Promise((resolve, reject) => {
+    const connectionObj = mysql.createConnection({
+      host: process.env.MY_HOST,
+      user: process.env.MY_USER,
+      password: process.env.MY_PASSWORD,
+      database: process.env.DB_NAME,
+      port: process.env.AWS_DATABASE_PORT,
+    });
+
+    // Attempt to connect
+    connectionObj.connect((err) => {
+      if (err) {
+        return reject(
+          new Error("Failed to connect to database: " + err.message)
+        );
+      }
+      resolve(connectionObj);
+    });
+
+    // Timeout if connection takes too long
+    setTimeout(() => {
+      reject(new Error("Database connection timeout"));
+    }, 10 * 1000); // Timeout after 10 seconds
+  });
+};
+
+// Usage
+(async () => {
+  try {
+    const dbConnection = await connectToDatabase();
+    console.log("Database connected successfully");
+    // You can now use dbConnection in your app
+  } catch (err) {
+    console.error(err.message);
+  }
+})();
+
+app.use(async (req, res, next) => {
+  try {
+    if (!global.dbConnection) {
+      global.dbConnection = await connectToDatabase(); // Wait for connection
+    }
+    req.db = global.dbConnection; // Pass connection to routes
+    next();
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
+
+// connect db
+// con.connect(function (err) {
+//   if (err) throw err;
+//   console.log("mysql db connected!");
+// });
 
 const folder__id = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
@@ -189,30 +245,24 @@ const generateJWT = async (key) => {
   return token;
 };
 
-// connect db
-con.connect(function (err) {
-  if (err) throw err;
-  console.log("mysql db connected!");
-
-  // const selectDB = `use ${process.env.DB_NAME};`;
-
-  // con.query(selectDB, (err, result) => {
-  //   if (err) throw err;
-  //   console.log(`Selected DB ${process.env.DB_NAME}`);
-  // });
-});
-
 app.use(cors());
 
-// app.listen(port, () => {
-//   console.log(`app running on port: ${port}..`);
-// });
+app.listen(port, () => {
+  console.log(`app running on port: ${port}..`);
+});
 
 app.get("/", (req, res) => {
   res.send("hello world 3");
 });
 
 app.get("/submissions", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   console.log(req.query);
   const { mobile_number } = req.query;
   const token = req.headers.authorization?.split(" ")[1];
@@ -241,6 +291,13 @@ app.get("/submissions", async (req, res) => {
 });
 
 app.post("/get-token", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const { secret_key } = req.body; // Assuming username and email are provided in the request body
 
   if (!secret_key) {
@@ -249,13 +306,20 @@ app.post("/get-token", async (req, res) => {
 
   const token = await generateJWT(secret_key);
 
-  res.json({
+  res.status(200).json({
     token,
   });
 });
 
 // get all the templates
 app.get("/templates", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   console.log(req.body);
   // get this from query params
   const filterOptions = {
@@ -272,6 +336,14 @@ app.get("/templates", async (req, res) => {
 // get all the templates
 app.get("/centers", async (req, res) => {
   // get this from query params
+
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const filterOptions = {
     center_name: "game",
     days: 2,
@@ -302,12 +374,21 @@ const getTemplateByCenter = async (con, centerId) => {
 };
 
 app.post("/template-id-from-center", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const { center_id } = req.body;
 
   const result = await getTemplateByCenter(con, center_id);
 
   if (!result || !result[0]) {
-    return res.sendStatus(404); // Handle undefined or empty result
+    return res.sendStatus(404).json({
+      msg: "Error getting template by center..",
+    }); // Handle undefined or empty result
   }
 
   res.status(200).json({
@@ -317,6 +398,13 @@ app.post("/template-id-from-center", async (req, res) => {
 
 // create submissions
 app.post("/submissions", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const { fixed__email, fixed__name, fixed__number } = req.body;
 
   const data = {
@@ -357,6 +445,13 @@ const postATemplate = (con, data) => {
 };
 
 app.post("/templates", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const { template_name, template_config } = req.body;
 
   const data = {
@@ -382,6 +477,13 @@ app.post("/templates", async (req, res) => {
 
 // create a center
 app.post("/centers", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const data = {
     center_name: req.body.center_name,
     address: req.body.center_address,
@@ -412,6 +514,13 @@ const getTemplates = async (con, { id = null } = {}) => {
 
 // create a center
 app.post("/post-center", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const filterOptions = {
     id: req.body.id,
   };
@@ -440,12 +549,21 @@ const getSubmissionById = (dbConnection, submissionId) => {
 };
 
 app.post("/get-submission-as-file", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const sID = 31;
   const response = getSubmissionById(con, sID);
   // res.json({
   //   data:
   // });
-  res.sendStatus(200);
+  res.sendStatus(200).json({
+    msg: "",
+  });
 });
 
 // app.post("/upload-image", async (req, res) => {
@@ -474,6 +592,13 @@ app.post("/get-submission-as-file", async (req, res) => {
 // });
 
 app.post("/upload-image", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const { imgData } = req.body;
 
   try {
@@ -499,6 +624,13 @@ app.post("/upload-image", async (req, res) => {
 });
 
 app.get("/submission/ack/:id", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const { id } = req.params;
 
   con.query(
@@ -537,6 +669,13 @@ const getTemplateBySubmissionId = async (con, { submissionId = null } = {}) => {
 
 // Endpoint to fetch template by submission ID
 app.post("/template-from-sid", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
   const { submissionId } = req.body;
 
   if (!submissionId) {
@@ -557,4 +696,4 @@ app.post("/template-from-sid", async (req, res) => {
   }
 });
 
-module.exports.handler = serverless(app);
+// module.exports.handler = serverless(app);

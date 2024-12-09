@@ -107,6 +107,7 @@ function App() {
         setViewParticipant,
         err,
         setErr,
+        awsURI,
       }}
     >
       <Router>
