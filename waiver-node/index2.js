@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const app = express();
-const port = process.env.PORT || 5050;
+// const port = process.env.PORT || 5050;
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv");
@@ -11,7 +11,7 @@ const serverless = require("serverless-http");
 
 env.config();
 
-const dbPORT = 3306;
+// const dbPORT = 3306;
 
 const con = mysql.createConnection({
   host: process.env.MY_HOST,
@@ -209,7 +209,7 @@ app.use(cors());
 // });
 
 app.get("/", (req, res) => {
-  res.send("hello world");
+  res.send("hello world 3");
 });
 
 app.get("/submissions", async (req, res) => {
