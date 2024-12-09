@@ -1,13 +1,13 @@
 const express = require("express");
 const mysql = require("mysql");
 const app = express();
-const port = process.env.PORT || 5050;
+// const port = process.env.PORT || 5050;
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv");
 const { google } = require("googleapis");
 const fs = require("fs");
-// const serverless = require("serverless-http");
+const serverless = require("serverless-http");
 
 env.config();
 
@@ -21,9 +21,9 @@ env.config();
 //   port: process.env.AWS_DATABASE_PORT,
 // });
 
-const connectToDatabase = () => {
-  return new Promise((resolve, reject) => {
     const connectionObj = mysql.createConnection({
+  return new Promise(async (resolve, reject) => {
+    const connectionObj = await mysql.createConnection({
       host: process.env.MY_HOST,
       user: process.env.MY_USER,
       password: process.env.MY_PASSWORD,
@@ -32,7 +32,7 @@ const connectToDatabase = () => {
     });
 
     // Attempt to connect
-    connectionObj.connect((err) => {
+    await connectionObj.connect((err) => {
       if (err) {
         return reject(
           new Error("Failed to connect to database: " + err.message)
@@ -44,7 +44,7 @@ const connectToDatabase = () => {
     // Timeout if connection takes too long
     setTimeout(() => {
       reject(new Error("Database connection timeout"));
-    }, 10 * 1000); // Timeout after 10 seconds
+    }, 15 * 1000); // Timeout after 10 seconds
   });
 };
 
@@ -247,9 +247,9 @@ const generateJWT = async (key) => {
 
 app.use(cors());
 
-app.listen(port, () => {
-  console.log(`app running on port: ${port}..`);
-});
+// app.listen(port, () => {
+//   console.log(`app running on port: ${port}..`);
+// });
 
 app.get("/", (req, res) => {
   res.send("hello world 3");
@@ -696,4 +696,4 @@ app.post("/template-from-sid", async (req, res) => {
   }
 });
 
-// module.exports.handler = serverless(app);
+module.exports.handler = serverless(app);
