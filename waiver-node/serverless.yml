@@ -2,8 +2,11 @@ service: my-service
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x   
 
 functions:
   hello:
     handler: handler.hello
+
+plugins:
+  - serverless-offline
