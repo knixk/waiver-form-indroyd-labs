@@ -159,7 +159,7 @@
         "question_id": "soasdasmesdsas41dsdsd52_id4",
         "input_placeholder": "Phone Number..",
         "required": true,
-        "variant": "text"
+        "variant": "number"
       },
       {
         "label": "Adult Gender",

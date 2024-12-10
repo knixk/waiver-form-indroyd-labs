@@ -473,6 +473,9 @@ const Form = () => {
                           type="date"
                           variant="outlined"
                           fullWidth
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                           value={formData[question.question_id] || ""}
                           onChange={(e) =>
                             handleInputChange(
@@ -483,9 +486,6 @@ const Form = () => {
                           sx={{
                             mt: 2,
                             ...question.customDateStyles,
-                          }}
-                          InputLabelProps={{
-                            shrink: true,
                           }}
                         />
                       </FormControl>
