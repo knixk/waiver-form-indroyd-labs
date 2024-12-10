@@ -60,7 +60,7 @@ function Home() {
 
             <Button
               variant="contained"
-              onClick={() => navigate("/form?center=3")}
+              onClick={() => navigate("/form?center=1")}
               sx={{ mt: 2.5 }}
             >
               Get Started

@@ -10,7 +10,6 @@ import template_config from "../../template_config.json";
 
 import { useContext } from "react";
 import { MyContext } from "../App";
-
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -70,7 +69,7 @@ const Form = () => {
   const centerParams = queryParameters.get("center");
 
   const handleInputChange = (id, value) => {
-    console.log(value);
+    // console.log(value);
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
