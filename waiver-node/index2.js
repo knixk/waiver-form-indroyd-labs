@@ -358,6 +358,29 @@ app.get("/centers", async (req, res) => {
   });
 });
 
+// get all the templates
+app.get("/centers", async (req, res) => {
+  // get this from query params
+
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
+  const filterOptions = {
+    center_name: "game",
+    days: 2,
+  };
+
+  const result = await getCenters(con, filterOptions);
+
+  res.status(200).json({
+    data: result,
+  });
+});
+
 const getTemplateByCenter = async (con, centerId) => {
   const query = `
     SELECT * 
@@ -515,7 +538,7 @@ const getTemplates = async (con, { id = null } = {}) => {
 };
 
 // create a center
-app.post("/post-center", async (req, res) => {
+app.post("/center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
     return res
@@ -523,14 +546,17 @@ app.post("/post-center", async (req, res) => {
       .json({ error: "Database connection not established" });
   }
 
-  const filterOptions = {
-    id: req.body.id,
+  const data = {
+    center_name: req.body.center_name,
+    address: req.body.center_address,
+    contact_info: req.body.contact_info,
+    template_id: req.body.template_id,
   };
 
-  const result = await getTemplates(con, filterOptions);
+  postACenter(con, data);
 
   res.status(200).json({
-    data: result,
+    msg: "center was saved",
   });
 });
 
@@ -549,6 +575,48 @@ const getSubmissionById = (dbConnection, submissionId) => {
     });
   });
 };
+
+// center controller
+const getCenterByID = (dbConnection, centerId) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT * FROM centers WHERE id = ?";
+
+    dbConnection.query(query, [centerId], (err, result) => {
+      if (err) {
+        reject(err); // Reject promise on query error
+      } else if (result.length === 0) {
+        reject(new Error(`Center with ID ${centerId} not found.`)); // Handle no result
+      } else {
+        resolve(result[0]); // Resolve promise with the first result
+      }
+    });
+  });
+};
+
+// post a center id
+app.post("/post-center", async (req, res) => {
+  console.log(req.body)
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
+  const { center_id } = req.body;
+
+  const result = await getCenterByID(con, center_id);
+
+  if (!result || !result[0]) {
+    return res.sendStatus(404).json({
+      msg: "Error getting info by center..",
+    }); // Handle undefined or empty result
+  }
+
+  res.status(200).json({
+    center_id: result[0].center_id,
+  });
+});
 
 app.post("/get-submission-as-file", async (req, res) => {
   const con = global.dbConnection;
