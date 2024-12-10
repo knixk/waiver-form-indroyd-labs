@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import { nanoid } from "nanoid";
 import axios from "axios";
@@ -64,6 +64,7 @@ const Form = () => {
     awsURI,
   } = myState;
 
+  const canvasContainerRef = useRef(null);
   const navigate = useNavigate();
   const queryParameters = new URLSearchParams(window.location.search);
   const centerParams = queryParameters.get("center");
@@ -163,6 +164,23 @@ const Form = () => {
     };
     reader.readAsDataURL(pdfBlob);
   };
+
+  // useEffect(() => {
+  //   const resizeCanvas = () => {
+  //     if (canvasContainerRef.current && sign) {
+  //       const width = canvasContainerRef.current.offsetWidth;
+  //       const height = width / 2.5; // Maintain aspect ratio (e.g., 2:5)
+  //       sign.clear();
+  //       sign.off(); // Reset canvas events
+  //       sign.canvas.width = width;
+  //       sign.canvas.height = height;
+  //     }
+  //   };
+
+  //   resizeCanvas();
+  //   window.addEventListener("resize", resizeCanvas);
+  //   return () => window.removeEventListener("resize", resizeCanvas);
+  // }, [sign]);
 
   useEffect(() => {
     const getTemplateIdFromCenterID = async (id) => {
@@ -522,14 +540,24 @@ const Form = () => {
                 </Button>
               </Box>
 
-              <Box sx={{ mt: 3 }}>
+              <Box
+                // ref={canvasContainerRef}
+                // style={{ width: "100%", maxWidth: "500px" }}
+                sx={{ mt: 3 }}
+              >
                 <Typography variant="h6">Signature</Typography>
                 <SignatureCanvas
                   ref={(ref) => setSign(ref)}
                   penColor="black"
                   canvasProps={{
-                    width: 500,
-                    height: 200,
+                    // width: 500,
+                    // height: 200,
+                    style: {
+                      maxWidth: "330px",
+                      height: 200,
+                      display: "block",
+                      marginBottom: 10,
+                    },
                     className: "sigCanvas",
                   }}
                 />
