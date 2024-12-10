@@ -35,6 +35,7 @@ const aws_url =
 import deleteIcon from "../assets/delete.png";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+let stage = "dev";
 
 const Form = () => {
   const myState = useContext(MyContext);
@@ -62,6 +63,8 @@ const Form = () => {
     companyLogo,
     setCompanyLogo,
     awsURI,
+    wantParticipants,
+    setWantParticipants,
   } = myState;
 
   const canvasContainerRef = useRef(null);
@@ -192,9 +195,17 @@ const Form = () => {
       };
 
       try {
-        const response = await axios.post(templates, options);
-        ans = response.data.template_id;
-        setTemplateId(ans);
+        if (stage == "prod") {
+          const response = await axios.post(templates, options);
+          ans = response.data.template_id;
+          setTemplateId(ans);
+        }
+
+        if (stage == "dev") {
+          // const response = await axios.post(templates, options);
+          // ans = response.data.template_id;
+          setTemplateId(1);
+        }
       } catch (error) {
         console.error(error);
         toast("No form found...");
@@ -212,16 +223,7 @@ const Form = () => {
       };
 
       try {
-        const response = await axios.post(templates, options);
-        const myData = JSON.parse(response.data.data[0].template_config);
-
-        if (myData) {
-          // setQuestions(myData.questions);
-          // setCompanyLogo(myData.company_logo);
-          // setExtraFields(myData.extra_participants_form_fields);
-          // setDisplayForm(true);
-          // setCompanyName(myData.company_name);
-
+        if (stage == "dev") {
           // use local template
           setQuestions(template_config.template_config.questions);
           setCompanyLogo(template_config.template_config.company_logo);
@@ -230,9 +232,26 @@ const Form = () => {
           );
           setDisplayForm(true);
           setCompanyName(template_config.template_config.company_name);
-
-          setLoading(false);
+          setWantParticipants(
+            template_config.template_config.want_to_add_participants
+          );
+          console.log("no req being made to fetch");
         }
+
+        if (stage == "prod") {
+          const response = await axios.post(templates, options);
+          const myData = JSON.parse(response.data.data[0].template_config);
+
+          if (myData) {
+            setQuestions(myData.questions);
+            setCompanyLogo(myData.company_logo);
+            setExtraFields(myData.extra_participants_form_fields);
+            setDisplayForm(true);
+            setCompanyName(myData.company_name);
+          }
+        }
+
+        setLoading(false);
       } catch (error) {
         toast("template doesn't exist");
         console.error(
@@ -492,53 +511,55 @@ const Form = () => {
                   </Box>
                 ))}
 
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="h6">Participants</Typography>
+              {wantParticipants && (
+                <Box sx={{ mt: 3 }}>
+                  <Typography variant="h6">Participants</Typography>
 
-                {participants.map((participant, index) => (
-                  <Grid
-                    container
-                    spacing={2}
-                    style={{ marginTop: 10 }}
-                    alignItems="center"
-                    key={participant.id}
-                  >
-                    {extraFields.map((field, fieldIndex) => (
-                      <Grid item xs={5} key={fieldIndex}>
-                        <TextField
-                          fullWidth
-                          label={field.label}
-                          type={field.type}
-                          value={participant[field.label] || ""}
-                          onChange={(e) =>
-                            updateParticipant(
-                              index,
-                              field.label,
-                              e.target.value
-                            )
-                          }
-                        />
+                  {participants.map((participant, index) => (
+                    <Grid
+                      container
+                      spacing={2}
+                      style={{ marginTop: 10 }}
+                      alignItems="center"
+                      key={participant.id}
+                    >
+                      {extraFields.map((field, fieldIndex) => (
+                        <Grid item xs={5} key={fieldIndex}>
+                          <TextField
+                            fullWidth
+                            label={field.label}
+                            type={field.type}
+                            value={participant[field.label] || ""}
+                            onChange={(e) =>
+                              updateParticipant(
+                                index,
+                                field.label,
+                                e.target.value
+                              )
+                            }
+                          />
+                        </Grid>
+                      ))}
+                      <Grid item xs={2}>
+                        <IconButton
+                          color="red"
+                          onClick={() => deleteParticipant(participant.id)}
+                        >
+                          {/* <HighlightOffIcon fontSize="large" /> */}
+                          <img style={{ width: 30 }} src={deleteIcon} />
+                        </IconButton>
                       </Grid>
-                    ))}
-                    <Grid item xs={2}>
-                      <IconButton
-                        color="red"
-                        onClick={() => deleteParticipant(participant.id)}
-                      >
-                        {/* <HighlightOffIcon fontSize="large" /> */}
-                        <img style={{ width: 30 }} src={deleteIcon} />
-                      </IconButton>
                     </Grid>
-                  </Grid>
-                ))}
-                <Button
-                  variant="outlined"
-                  onClick={addParticipant}
-                  sx={{ mt: 2 }}
-                >
-                  Add Participant
-                </Button>
-              </Box>
+                  ))}
+                  <Button
+                    variant="outlined"
+                    onClick={addParticipant}
+                    sx={{ mt: 2 }}
+                  >
+                    Add Participant
+                  </Button>
+                </Box>
+              )}
 
               <Box
                 // ref={canvasContainerRef}

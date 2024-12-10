@@ -15,6 +15,17 @@
         }
       },
       {
+        "label": "Fun City Adventure Park",
+        "input_type": "label",
+        "question_id": "some_i23423sdd6",
+        "fontSize": "1rem",
+        "color": "red",
+        "bold": true,
+        "customStyles": {
+          "textAlign": "center"
+        }
+      },
+      {
         "label": "Blackwood, New Jersey",
         "input_type": "label",
         "question_id": "some_i23423sdd6",
@@ -23,11 +34,12 @@
         "bold": true,
         "customStyles": {
           "textAlign": "center",
-          "marginBottom": "10px"
+          "marginBottom": "10px",
+          "width": "calc(100vw - 100%)"
         }
       },
       {
-        "label": "Waiver is for.",
+        "label": "Waiver is for?",
         "input_type": "radio",
         "values": ["Me and my kids!", "Just me"],
         "question_id": "some_id32",
@@ -38,6 +50,8 @@
     "company_logo": "https://lilypadpos1.com/funcityblackwood/productpics/default.jpg",
     "company_name": "Fun City Adventure Park",
     "company_address": "Blackwood, New Jersey",
+
+    "want_to_add_participants": false,
 
     "user_data": {
       "name": {
