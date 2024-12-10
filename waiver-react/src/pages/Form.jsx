@@ -216,20 +216,20 @@ const Form = () => {
         const myData = JSON.parse(response.data.data[0].template_config);
 
         if (myData) {
-          setQuestions(myData.questions);
-          setCompanyLogo(myData.company_logo);
-          setExtraFields(myData.extra_participants_form_fields);
-          setDisplayForm(true);
-          setCompanyName(myData.company_name);
+          // setQuestions(myData.questions);
+          // setCompanyLogo(myData.company_logo);
+          // setExtraFields(myData.extra_participants_form_fields);
+          // setDisplayForm(true);
+          // setCompanyName(myData.company_name);
 
           // use local template
-          // setQuestions(template_config.template_config.questions);
-          // setCompanyLogo(template_config.template_config.company_logo);
-          // setExtraFields(
-          //   template_config.template_config.extra_participants_form_fields
-          // );
-          // setDisplayForm(true);
-          // setCompanyName(template_config.template_config.company_name);
+          setQuestions(template_config.template_config.questions);
+          setCompanyLogo(template_config.template_config.company_logo);
+          setExtraFields(
+            template_config.template_config.extra_participants_form_fields
+          );
+          setDisplayForm(true);
+          setCompanyName(template_config.template_config.company_name);
 
           setLoading(false);
         }
