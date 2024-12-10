@@ -35,7 +35,6 @@ const aws_url =
 import deleteIcon from "../assets/delete.png";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-let stage = "dev";
 
 const Form = () => {
   const myState = useContext(MyContext);
@@ -195,17 +194,9 @@ const Form = () => {
       };
 
       try {
-        if (stage == "prod") {
-          const response = await axios.post(templates, options);
-          ans = response.data.template_id;
-          setTemplateId(ans);
-        }
-
-        if (stage == "dev") {
-          // const response = await axios.post(templates, options);
-          // ans = response.data.template_id;
-          setTemplateId(1);
-        }
+        // const response = await axios.post(templates, options);
+        // ans = response.data.template_id;
+        setTemplateId(1);
       } catch (error) {
         console.error(error);
         toast("No form found...");
@@ -223,7 +214,17 @@ const Form = () => {
       };
 
       try {
-        if (stage == "dev") {
+        // const response = await axios.post(templates, options);
+        // const myData = JSON.parse(response.data.data[0].template_config);
+
+        if (true) {
+          console.log("sinde");
+          // setQuestions(myData.questions);
+          // setCompanyLogo(myData.company_logo);
+          // setExtraFields(myData.extra_participants_form_fields);
+          // setDisplayForm(true);
+          // setCompanyName(myData.company_name);
+
           // use local template
           setQuestions(template_config.template_config.questions);
           setCompanyLogo(template_config.template_config.company_logo);
@@ -235,23 +236,9 @@ const Form = () => {
           setWantParticipants(
             template_config.template_config.want_to_add_participants
           );
-          console.log("no req being made to fetch");
+
+          setLoading(false);
         }
-
-        if (stage == "prod") {
-          const response = await axios.post(templates, options);
-          const myData = JSON.parse(response.data.data[0].template_config);
-
-          if (myData) {
-            setQuestions(myData.questions);
-            setCompanyLogo(myData.company_logo);
-            setExtraFields(myData.extra_participants_form_fields);
-            setDisplayForm(true);
-            setCompanyName(myData.company_name);
-          }
-        }
-
-        setLoading(false);
       } catch (error) {
         toast("template doesn't exist");
         console.error(
@@ -267,7 +254,8 @@ const Form = () => {
       data && (await fetchTemplate(data));
     };
 
-    asyncFnStitch();
+    // asyncFnStitch();
+    fetchTemplate();
   }, []);
 
   return (
@@ -338,6 +326,27 @@ const Form = () => {
                         </Typography>
                       </FormControl>
                     )}
+                    {/* 
+                    {question.input_type === "checkbox" && (
+                      <FormControl component="fieldset">
+                        <Typography>{question.label}</Typography>
+                        <FormControlLabel
+                          key={question.question_id}
+                          control={
+                            <Checkbox
+                              value={formData[question.question_id] || ""}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  question.question_id,
+                                  e.target.checked
+                                )
+                              }
+                            />
+                          }
+                          label={option}
+                        />
+                      </FormControl>
+                    )} */}
 
                     {question.image && (
                       <img className="question__image" src={question.image} />
@@ -347,7 +356,7 @@ const Form = () => {
                       <FormControl component="fieldset" sx={{ mb: 2 }}>
                         <Typography>{question.label}</Typography>
                         <TextField
-                          type="text"
+                          type={question.variant || "text"}
                           variant="outlined"
                           fullWidth
                           value={formData[question.question_id] || ""}
