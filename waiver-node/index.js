@@ -595,7 +595,7 @@ const getCenterById = (dbConnection, centerId) => {
   });
 };
 
-app.get("/get-center", async (req, res) => {
+app.post("/get-center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
     return res

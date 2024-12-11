@@ -1,19 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const logo = "https://dypdvfcjkqkg2.cloudfront.net/large/5862799-1989.jpg";
 // import logo from "../assets/unicef.png";
+import { useContext } from "react";
+import { MyContext } from "../App";
 
 function Home() {
   const [layer, setLayer] = useState(1);
   const navigate = useNavigate();
+  const queryParameters = new URLSearchParams(window.location.search);
+  const centerParams = queryParameters.get("center");
+
+  const myState = useContext(MyContext);
+  const { centerInfo, setCenterInfo } = myState;
+
+  console.log(centerParams);
 
   const handleNext = () => {
     if (layer < 3) {
       setLayer(layer + 1);
     }
   };
+
+  useEffect(() => {
+    const postCenter = async (centerId) => {
+      const center = `http://localhost:5050/get-center`;
+      const options = {
+        center_id: centerId,
+      };
+
+      try {
+        const response = await axios.post(center, options);
+        console.log("Response:", response.data.data);
+        setCenterInfo(response.data.data);
+        return response.data.data; // Return the response data
+      } catch (error) {
+        console.error(
+          "Error posting center:",
+          error.response?.data || error.message // Handle error gracefully
+        );
+        throw error; // Rethrow the error for further handling
+      }
+    };
+
+    centerParams && postCenter(centerParams);
+  }, []);
 
   return (
     <Box
@@ -52,7 +86,9 @@ function Home() {
           <Box>
             {/* <Typography variant="h4">company name</Typography> */}
 
-            <Typography variant="h4">Company name</Typography>
+            <Typography variant="h4">
+              {centerInfo && centerInfo.center_name}
+            </Typography>
 
             <Typography color={"gainsboro"} sx={{ mt: 2 }}>
               Don't let queues eat up your time, use online forms instead!
