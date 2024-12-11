@@ -11,16 +11,6 @@ const fs = require("fs");
 
 env.config();
 
-// const dbPORT = 3306;
-
-// const con = mysql.createConnection({
-//   host: process.env.MY_HOST,
-//   user: process.env.MY_USER,
-//   password: process.env.MY_PASSWORD,
-//   database: process.env.DB_NAME,
-//   port: process.env.AWS_DATABASE_PORT,
-// });
-
 const connectToDatabase = () => {
   return new Promise(async (resolve, reject) => {
     const connectionObj = await mysql.createConnection({
@@ -70,12 +60,6 @@ app.use(async (req, res, next) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// connect db
-// con.connect(function (err) {
-//   if (err) throw err;
-//   console.log("mysql db connected!");
-// });
 
 const folder__id = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
@@ -358,31 +342,6 @@ app.get("/centers", async (req, res) => {
   });
 });
 
-/*
-// get all the templates
-app.get("/centers", async (req, res) => {
-  // get this from query params
-
-  const con = global.dbConnection;
-  if (!con) {
-    return res
-      .status(500)
-      .json({ error: "Database connection not established" });
-  }
-
-  const filterOptions = {
-    center_name: "game",
-    days: 2,
-  };
-
-  const result = await getCenters(con, filterOptions);
-
-  res.status(200).json({
-    data: result,
-  });
-});
-*/
-
 const getTemplateByCenter = async (con, centerId) => {
   const query = `
     SELECT * 
@@ -663,6 +622,7 @@ app.post("/get-submission-as-file", async (req, res) => {
 });
 
 // app.post("/upload-image", async (req, res) => {
+
 //   const { imgData } = req.body;
 
 //   try {
@@ -687,8 +647,8 @@ app.post("/get-submission-as-file", async (req, res) => {
 //   }
 // });
 
-
 // create a center
+
 app.post("/post-center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {

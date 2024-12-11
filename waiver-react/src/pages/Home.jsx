@@ -75,8 +75,8 @@ function Home() {
         transition: "background-color 0.5s ease",
       }}
     >
-      {/* First Screen */}
-      <Box
+      {
+        centerInfo && <Box
         sx={{
           opacity: layer === 1 ? 1 : 0, // Fade in for the first screen
           transition: "opacity 0.5s ease",
@@ -85,11 +85,13 @@ function Home() {
           maxWidth: "600px",
         }}
       >
-        <img
-          src={centerInfo && JSON.parse(centerInfo.additional_info).img}
-          style={{ width: 200, borderRadius: 5, marginBottom: 10 }}
-          alt="logo"
-        />
+        {centerInfo && (
+          <img
+            src={JSON.parse(centerInfo.additional_info).img}
+            style={{ width: 200, borderRadius: 5, marginBottom: 10 }}
+            alt="logo"
+          />
+        )}
 
         {layer === 1 && (
           <Box>
@@ -121,6 +123,7 @@ function Home() {
           </Box>
         )}
       </Box>
+      }
     </Box>
   );
 }

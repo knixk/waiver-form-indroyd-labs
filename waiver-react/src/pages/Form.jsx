@@ -196,32 +196,35 @@ const Form = () => {
       const templates = `${local}/template-id-from-center`;
 
       const options = {
-        center_id: 5,
+        center_id: id,
       };
 
       try {
         const response = await axios.post(templates, options);
-        ans = response.data.template_id;
-        console.log(ans);
-        setTemplateId(1);
+        // ans = response.data.template_id;
+        console.log(response.data.template_id);
+        setTemplateId(response.data.template_id);
+        return response.data.template_id;
       } catch (error) {
         console.error(error);
         toast("No form found...");
-        setTimeout(() => navigate("/"), 3000);
+        // setTimeout(() => navigate("/"), 3000);
       }
 
-      return ans;
+      return response;
     };
 
     const fetchTemplate = async (t_id) => {
-      const templates = `${local}/template-id-from-center`;
+      console.log("called?");
+      const templates = `${local}/templates`;
 
       const options = {
-        center_id: t_id,
+        id: t_id,
       };
 
       try {
-        const response = await axios.post(templates, options);
+        const response = await axios.get(templates, options);
+        console.log(response);
         const myData = JSON.parse(response.data.data[0].template_config);
 
         if (true) {
@@ -231,9 +234,12 @@ const Form = () => {
           setExtraFields(myData.extra_participants_form_fields);
           setDisplayForm(true);
           setCompanyName(myData.company_name);
+          // setWantParticipants(
+          //   template_config.template_config.want_to_add_participants
+          // );
 
           // use local template
-          setQuestions(template_config.template_config.questions);
+          // setQuestions(template_config.template_config.questions);
           // setCompanyLogo(template_config.template_config.company_logo);
           // setExtraFields(
           //   template_config.template_config.extra_participants_form_fields
@@ -256,13 +262,12 @@ const Form = () => {
     };
 
     const asyncFnStitch = async () => {
-      let data = await getTemplateIdFromCenterID(5);
-      console.log(data);
-
-      data && (await fetchTemplate(data));
+      const data = centerParams && await getTemplateIdFromCenterID(centerParams);
+      console.log("fetching tm which one", data);
+      data && (await fetchTemplate(5));
     };
+
     asyncFnStitch();
-    // fetchTemplate();
   }, []);
 
   return (
