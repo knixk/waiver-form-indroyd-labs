@@ -54,8 +54,14 @@ function Home() {
         throw error; // Rethrow the error for further handling
       }
     };
-    centerParams && setCenterID(centerParams);
-    centerParams && postCenter(centerParams);
+    if (!centerParams) {
+      setCenterID(centerParams)
+      postCenter(1)
+    } else {
+      centerParams && setCenterID(centerParams);
+      centerParams && postCenter(centerParams);
+    }
+   
   }, []);
 
   return (

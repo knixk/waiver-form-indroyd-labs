@@ -27,6 +27,7 @@ import {
   FormControlLabel,
   Radio,
   TextareaAutosize,
+  Checkbox,
 } from "@mui/material";
 
 const aws_url =
@@ -37,6 +38,37 @@ const local = "http://localhost:5050";
 import deleteIcon from "../assets/delete.png";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+
+const CheckboxQuestion = ({ question, formData, handleInputChange }) => {
+  return (
+    question.input_type === "checkbox" &&
+    question.label && (
+      <FormControl component="fieldset" sx={{ mb: 2 }}>
+        <Checkbox
+          checked={formData[question.question_id] || false} // Ensures it shows the correct state
+          onChange={(e) =>
+            handleInputChange(question.question_id, e.target.checked)
+          } // Updates state on change
+          sx={question.customStyles} // Optional custom styles
+        />
+        <Typography
+          sx={{
+            fontSize: question.fontSize,
+            color: question.color,
+            fontWeight: question.bold ? "bold" : "normal",
+            textAlign: question.customStyles?.textAlign,
+            marginLeft: question.customStyles?.marginLeft,
+          }}
+        >
+          {question.label}
+        </Typography>
+      </FormControl>
+    )
+  );
+};
+
+// add signature cecks
+// create a template builder
 
 const Form = () => {
   const myState = useContext(MyContext);
@@ -75,11 +107,16 @@ const Form = () => {
   const queryParameters = new URLSearchParams(window.location.search);
   const centerParams = queryParameters.get("center");
 
-  console.log(centerParams);
-
   const handleInputChange = (id, value) => {
-    // console.log(value);
+
     setFormData((prev) => ({ ...prev, [id]: value }));
+
+
+    if (formData["want_participant_id"] == "Me and my kids!") {
+      setWantParticipants(true);
+    } else {
+      setWantParticipants(false);
+    }
   };
 
   const handleRadioChange = (questionId, value) => {
@@ -87,6 +124,15 @@ const Form = () => {
       ...prev,
       [questionId]: value,
     }));
+
+    if (value == "Me and my kids!") {
+      setWantParticipants(true);
+    } else {
+      setWantParticipants(false);
+      setParticipants([]);
+    }
+
+
   };
 
   const addParticipant = () => {
@@ -164,7 +210,7 @@ const Form = () => {
 
         await axios.post(`${local}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
-        setTimeout(() => navigate("/"), 3000);
+        setTimeout(() => navigate(`/?center=${centerID}`), 3000);
       } catch (error) {
         toast.error("Submission failed!");
         console.error(error);
@@ -173,103 +219,81 @@ const Form = () => {
     reader.readAsDataURL(pdfBlob);
   };
 
-  // useEffect(() => {
-  //   const resizeCanvas = () => {
-  //     if (canvasContainerRef.current && sign) {
-  //       const width = canvasContainerRef.current.offsetWidth;
-  //       const height = width / 2.5; // Maintain aspect ratio (e.g., 2:5)
-  //       sign.clear();
-  //       sign.off(); // Reset canvas events
-  //       sign.canvas.width = width;
-  //       sign.canvas.height = height;
-  //     }
-  //   };
+  /*
+  useEffect(() => {
+    const getTemplateIdFromCenterID = async (id) => {
+      let ans = null;
+      const templates = "http://localhost:5050/template-id-from-center";
 
-  //   resizeCanvas();
-  //   window.addEventListener("resize", resizeCanvas);
-  //   return () => window.removeEventListener("resize", resizeCanvas);
-  // }, [sign]);
+      const options = {
+        center_id: id,
+      };
 
-  // useEffect(() => {
-  //   const getTemplateIdFromCenterID = async (id) => {
-  //     let ans = null;
-  //     const templates = `${local}/template-id-from-center`;
+      try {
+        const response = await axios.post(templates, options);
+        ans = response.data.template_id;
+        setTemplateId(ans);
+      } catch (error) {
+        console.error(error);
+        toast("No form found...");
+        setTimeout(() => navigate("/"), 5000);
+      }
 
-  //     const options = {
-  //       center_id: id,
-  //     };
+      return ans;
+    };
 
-  //     try {
-  //       const response = await axios.post(templates, options);
-  //       // ans = response.data.template_id;
-  //       console.log(response.data.template_id);
-  //       setTemplateId(response.data.template_id);
-  //       return response.data.template_id;
-  //     } catch (error) {
-  //       console.error(error);
-  //       toast("No form found...");
-  //       // setTimeout(() => navigate("/"), 3000);
-  //     }
+    const fetchTemplate = async (t_id) => {};
+    // const templates = "http://localhost:5050/post-center";
 
-  //     return response;
-  //   };
+    // const options = {
+    //   id: t_id,
+    // };
 
-  //   const fetchTemplate = async (t_id) => {
-  //     console.log("called?");
-  //     const templates = `${local}/templates`;
+    try {
+      // const response = await axios.post(templates, options);
+      // const myData = JSON.parse(response.data.data[0].template_config);
 
-  //     const options = {
-  //       id: t_id,
-  //     };
+      // if (myData) {
+      //   setQuestions(myData.questions);
+      //   setCompanyLogo(myData.company_logo);
+      //   setExtraFields(myData.extra_participants_form_fields);
+      //   setDisplayForm(true);
+      //   setCompanyName(myData.company_name);
 
-  //     try {
-  //       const response = await axios.get(templates, options);
-  //       console.log(response);
-  //       const myData = JSON.parse(response.data.data[0].template_config);
+      // use local template
+      setQuestions(template_config.template_config.questions);
+      setCompanyLogo(template_config.template_config.company_logo);
+      setExtraFields(
+        template_config.template_config.extra_participants_form_fields
+      );
+      setDisplayForm(true);
+      setCompanyName(template_config.template_config.company_name);
+      // setWantParticipants(
+      //   template_config.template_config.want_to_add_participants
+      // );
 
-  //       if (true) {
-  //         console.log("sinde");
-  //         // setQuestions(myData.questions);
-  //         // setCompanyLogo(myData.company_logo);
-  //         // setExtraFields(myData.extra_participants_form_fields);
-  //         // setDisplayForm(true);
-  //         // setCompanyName(myData.company_name);
-  //         // setWantParticipants(
-  //         //   template_config.template_config.want_to_add_participants
-  //         // );
+      setLoading(false);
+    } catch (error) {
+      toast("template doesn't exist");
+      console.error(
+        "Error:",
+        error.response ? error.response.data : error.message
+      );
+    }
 
-  //         // use local template
-  //         setQuestions(template_config.template_config.questions);
-  //         setCompanyLogo(template_config.template_config.company_logo);
-  //         setExtraFields(
-  //           template_config.template_config.extra_participants_form_fields
-  //         );
-  //         setDisplayForm(true);
-  //         setCompanyName(template_config.template_config.company_name);
-  //         setWantParticipants(
-  //           template_config.template_config.want_to_add_participants
-  //         );
+    const asyncFnStitch = async () => {
+      setCenterID(centerParams);
 
-  //         setLoading(false);
-  //       }
-  //     } catch (error) {
-  //       toast("template doesn't exist");
-  //       console.error(
-  //         "Error:",
-  //         error.response ? error.response.data : error.message
-  //       );
-  //     }
-  //   };
+      const data =
+        centerParams && (await getTemplateIdFromCenterID(centerParams));
+      data && (await fetchTemplate(data));
+    };
 
-  //   const asyncFnStitch = async () => {
-  //     const data = centerParams && await getTemplateIdFromCenterID(centerParams);
-  //     console.log("fetching tm which one", data);
-  //     data && (await fetchTemplate(5));
-  //   };
-
-  //   asyncFnStitch();
-  // }, []);
-
+    // asyncFnStitch();
+    fetchTemplate(4);
+  }, []);
+  */
+ 
   useEffect(() => {
     const getTemplateIdFromCenterID = async (id) => {
       let ans = null;
@@ -331,6 +355,8 @@ const Form = () => {
     };
 
     const asyncFnStitch = async () => {
+      setCenterID(centerParams);
+
       const data =
         centerParams && (await getTemplateIdFromCenterID(centerParams));
       data && (await fetchTemplate(data));
@@ -407,27 +433,6 @@ const Form = () => {
                         </Typography>
                       </FormControl>
                     )}
-                    {/* 
-                    {question.input_type === "checkbox" && (
-                      <FormControl component="fieldset">
-                        <Typography>{question.label}</Typography>
-                        <FormControlLabel
-                          key={question.question_id}
-                          control={
-                            <Checkbox
-                              value={formData[question.question_id] || ""}
-                              onChange={(e) =>
-                                handleInputChange(
-                                  question.question_id,
-                                  e.target.checked
-                                )
-                              }
-                            />
-                          }
-                          label={option}
-                        />
-                      </FormControl>
-                    )} */}
 
                     {question.image && (
                       <img className="question__image" src={question.image} />
@@ -568,6 +573,22 @@ const Form = () => {
                             mt: 2,
                             ...question.customDateStyles,
                           }}
+                        />
+                      </FormControl>
+                    )}
+
+                    {question.input_type === "checkbox" && question.label && (
+                      <FormControl component="fieldset" sx={{ mb: 2 }}>
+                        <Typography>{question.label}</Typography>
+                        <Checkbox
+                          checked={formData[question.question_id] || false} // Ensures it shows the correct state
+                          onChange={(e) =>
+                            handleInputChange(
+                              question.question_id,
+                              e.target.checked
+                            )
+                          } // Updates state on change
+                          sx={question.customStyles} // Optional custom styles
                         />
                       </FormControl>
                     )}

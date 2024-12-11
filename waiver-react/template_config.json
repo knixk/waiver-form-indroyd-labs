@@ -11,7 +11,7 @@
         "bold": true,
         "customStyles": {
           "textAlign": "center",
-          "position": "relative",
+          "position": "relative",   
           "marginBottom": "10px"
         }
       },
@@ -25,30 +25,10 @@
         "bold": true,
         "customStyles": {
           "textAlign": "center",
-          "marginLeft": "10px"
+          "marginLeft": "10px"  
         }
-      },
-      {
-        "label": "Waiver is for?",
-        "input_type": "radio",
-        "values": ["Me and my kids!", "Just me"],
-        "question_id": "some_isdad32",
-        "required": true
       },
 
-      {
-        "label": "I wish to receive special offers and discounts",
-        "input_type": "checkbox",
-        "question_id": "some_iasd2253423d6",
-        "fontSize": "1rem",
-        "color": "black",
-        "bold": true,
-        "required": true,
-        "customStyles": {
-          "textAlign": "center",
-          "marginLeft": "10px"
-        }
-      },
       {
         "label": "Please enter your password",
         "required": false,
@@ -165,15 +145,22 @@
         "label": "Adult Gender",
         "values": ["Male", "Female", "Not Specified"],
         "required": true,
-
         "input_type": "dropdown",
         "question_id": "some_idsda5sd32"
+      },
+      {
+        "label": "I wish to receive special offers and discounts",
+        "input_type": "checkbox",
+        "question_id": "wantasd_asdasdparticipant_id",
+        "fontSize": "1rem",
+        "color": "black",
+        "required": true
       },
       {
         "label": "Waiver is for?",
         "input_type": "radio",
         "values": ["Me and my kids!", "Just me"],
-        "question_id": "some_id32",
+        "question_id": "want_participant_id",
         "required": true
       }
     ],
