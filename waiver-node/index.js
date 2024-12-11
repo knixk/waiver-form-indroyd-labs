@@ -358,6 +358,7 @@ app.get("/centers", async (req, res) => {
   });
 });
 
+/*
 // get all the templates
 app.get("/centers", async (req, res) => {
   // get this from query params
@@ -380,6 +381,7 @@ app.get("/centers", async (req, res) => {
     data: result,
   });
 });
+*/
 
 const getTemplateByCenter = async (con, centerId) => {
   const query = `
@@ -577,25 +579,23 @@ const getSubmissionById = (dbConnection, submissionId) => {
 };
 
 // center controller
-const getCenterByID = (dbConnection, centerId) => {
+// this works
+const getCenterById = (dbConnection, centerId) => {
   return new Promise((resolve, reject) => {
     const query = "SELECT * FROM centers WHERE id = ?";
-
     dbConnection.query(query, [centerId], (err, result) => {
       if (err) {
-        reject(err); // Reject promise on query error
+        reject(err); // Reject on query error
       } else if (result.length === 0) {
         reject(new Error(`Center with ID ${centerId} not found.`)); // Handle no result
       } else {
-        resolve(result[0]); // Resolve promise with the first result
+        resolve(result[0]); // Resolve with the first result
       }
     });
   });
 };
 
-// post a center id
-app.post("/post-center", async (req, res) => {
-  console.log(req.body)
+app.get("/get-center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
     return res
@@ -604,19 +604,45 @@ app.post("/post-center", async (req, res) => {
   }
 
   const { center_id } = req.body;
+  console.log(req.body);
+  // console.log(centerId)
 
-  const result = await getCenterByID(con, center_id);
-
-  if (!result || !result[0]) {
-    return res.sendStatus(404).json({
-      msg: "Error getting info by center..",
-    }); // Handle undefined or empty result
+  try {
+    const center = await getCenterById(con, center_id);
+    res.status(200).json({
+      success: true,
+      data: center,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
   }
-
-  res.status(200).json({
-    center_id: result[0].center_id,
-  });
 });
+
+// post a center id
+// app.post("/center-by-id", async (req, res) => {
+//   console.log(req.body);
+//   const con = global.dbConnection;
+//   if (!con) {
+//     return res
+//       .status(500)
+//       .json({ error: "Database connection not established" });
+//   }
+
+//   const { center_id } = req.body;
+
+//   const result = await getCenterByID(con, center_id);
+//   console.log(result)
+
+//   // if (!result || !result[0]) {
+//   //   return res.sendStatus(404).json({
+//   //     msg: "Error getting info by center..",
+//   //   }); // Handle undefined or empty result
+//   // }
+
+//   res.status(200).json({
+//     center_id: result[0],
+//   });
+// });
 
 app.post("/get-submission-as-file", async (req, res) => {
   const con = global.dbConnection;

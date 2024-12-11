@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ViewForm from "./pages/ViewForm";
 import Error from "./pages/Error";
+import axios from "axios";
 
 import { createContext } from "react";
 
@@ -80,27 +81,46 @@ function App() {
   };
 
   useEffect(() => {
-    const getCenterByID = async (id) => {
-      let ans = null;
-      const center_url = `${AWS_URI}/template-id-from-center`;
+    // const getCenterByID = async (id) => {
+    //   let ans = null;
+    //   const center_url = `http://localhost:5050/center-by-id`;
 
+    //   const options = {
+    //     center_id: id,
+    //   };
+
+    //   try {
+    //     // const response = await axios.post(templates, options);
+    //     // ans = response.data.template_id;
+    //     setTemplateId(1);
+    //   } catch (error) {
+    //     console.error(error);
+    //     toast("No form found...");
+    //     setTimeout(() => navigate("/"), 3000);
+    //   }
+
+    //   return ans;
+    // };
+
+    const postCenter = async (centerId) => {
+
+      const center = `http://localhost:5050/get-center`;
       const options = {
-        center_id: id,
+        center_id: centerId,
       };
 
       try {
-        // const response = await axios.post(templates, options);
-        // ans = response.data.template_id;
-        setTemplateId(1);
+        const response = await axios.post(center, options);
+        console.log("Response:", response.data);
+        return response; // Return the response data
       } catch (error) {
-        console.error(error);
-        toast("No form found...");
-        setTimeout(() => navigate("/"), 3000);
+        console.error(
+          "Error posting center:",
+          error.response?.data || error.message // Handle error gracefully
+        );
+        throw error; // Rethrow the error for further handling
       }
-
-      return ans;
     };
-
     const fetchTemplate = async (t_id) => {
       const templates = `${aws_url}/post-center`;
 
@@ -151,6 +171,8 @@ function App() {
 
     // asyncFnStitch();
     // fetchTemplate();
+
+    postCenter(1);
   }, []);
 
   return (
