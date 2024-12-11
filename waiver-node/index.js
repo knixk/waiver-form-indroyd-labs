@@ -687,6 +687,27 @@ app.post("/get-submission-as-file", async (req, res) => {
 //   }
 // });
 
+
+// create a center
+app.post("/post-center", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res
+      .status(500)
+      .json({ error: "Database connection not established" });
+  }
+
+  const filterOptions = {
+    id: req.body.id,
+  };
+
+  const result = await getTemplates(con, filterOptions);
+
+  res.status(200).json({
+    data: result,
+  });
+});
+
 app.post("/upload-image", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {

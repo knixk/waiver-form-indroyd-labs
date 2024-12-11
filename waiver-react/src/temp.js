@@ -98,17 +98,17 @@ const data3 = {
   "select\n    *\nfrom\n    centers": [
     {
       id: 1,
-      center_name: "science park",
+      center_name: "adventure park",
       address: null,
       contact_info:
         '{"email": "shrivastavakanishk3@gmail.com", "phone": 9820042672}',
-      template_id: 1,
+      template_id: 4,
       additional_info: {
         intro:
-          "Don't let queues eat up your time, use OUR online forms instead",
-        img: "https://ugc.production.linktr.ee/89d1512e-17ae-4438-8d83-e799279a7eef_lg7KdovRjixdZs7nekTpsBRztRo5uLJzF7OJ0rr40TswsvOpmJr1DGNjLVfYDzJerpha---jnw-s900-c-k-c0x00ffffff-no-r.jpeg",
+          "Visit our adventure park with your family and have fun.",
+        img: "https://lilypadpos1.com/funcityblackwood/productpics/default.jpg",
       },
-    },
+    },  
   ],
 };
 
@@ -198,3 +198,6 @@ const tempdata = {
     { id: 12312233, type: "text", label: "phone" },
   ],
 };
+
+
+const arr = [1, 2, 4]

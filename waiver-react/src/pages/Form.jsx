@@ -75,6 +75,8 @@ const Form = () => {
   const queryParameters = new URLSearchParams(window.location.search);
   const centerParams = queryParameters.get("center");
 
+  console.log(centerParams);
+
   const handleInputChange = (id, value) => {
     // console.log(value);
     setFormData((prev) => ({ ...prev, [id]: value }));
@@ -218,28 +220,28 @@ const Form = () => {
       };
 
       try {
-        // const response = await axios.post(templates, options);
-        // const myData = JSON.parse(response.data.data[0].template_config);
+        const response = await axios.post(templates, options);
+        const myData = JSON.parse(response.data.data[0].template_config);
 
         if (true) {
           console.log("sinde");
-          // setQuestions(myData.questions);
-          // setCompanyLogo(myData.company_logo);
-          // setExtraFields(myData.extra_participants_form_fields);
-          // setDisplayForm(true);
-          // setCompanyName(myData.company_name);
+          setQuestions(myData.questions);
+          setCompanyLogo(myData.company_logo);
+          setExtraFields(myData.extra_participants_form_fields);
+          setDisplayForm(true);
+          setCompanyName(myData.company_name);
 
           // use local template
           setQuestions(template_config.template_config.questions);
-          setCompanyLogo(template_config.template_config.company_logo);
-          setExtraFields(
-            template_config.template_config.extra_participants_form_fields
-          );
-          setDisplayForm(true);
-          setCompanyName(template_config.template_config.company_name);
-          setWantParticipants(
-            template_config.template_config.want_to_add_participants
-          );
+          // setCompanyLogo(template_config.template_config.company_logo);
+          // setExtraFields(
+          //   template_config.template_config.extra_participants_form_fields
+          // );
+          // setDisplayForm(true);
+          // setCompanyName(template_config.template_config.company_name);
+          // setWantParticipants(
+          //   template_config.template_config.want_to_add_participants
+          // );
 
           setLoading(false);
         }
@@ -253,18 +255,14 @@ const Form = () => {
     };
 
     const asyncFnStitch = async () => {
-      if (centerID) {
-        await fetchTemplate(data);
-      } else {
-        const data =
-          centerParams && (await getTemplateIdFromCenterID(centerParams));
+      let data = await getTemplateIdFromCenterID(centerParams);
+      console.log(data);
 
-        data && (await fetchTemplate(data));
-      }
+      data && (await fetchTemplate(data));
     };
 
-    // asyncFnStitch();
-    fetchTemplate();
+    centerParams && asyncFnStitch();
+    // fetchTemplate();
   }, []);
 
   return (

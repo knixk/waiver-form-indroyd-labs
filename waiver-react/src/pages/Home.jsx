@@ -54,9 +54,8 @@ function Home() {
         throw error; // Rethrow the error for further handling
       }
     };
-
-    centerParams && postCenter(centerParams);
     centerParams && setCenterID(centerParams);
+    centerParams && postCenter(centerParams);
   }, []);
 
   return (
@@ -106,7 +105,7 @@ function Home() {
 
             <Button
               variant="contained"
-              onClick={() => navigate("/form?center=1")}
+              onClick={() => navigate(`/form?center=${centerID}`)}
               sx={{ mt: 2.5 }}
             >
               Get Started
