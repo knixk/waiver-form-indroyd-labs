@@ -122,10 +122,79 @@ const data4 = {
         '{"email": "shrivastavakanishk3@gmail.com", "phone": 9820042673}',
       template_id: 2,
       additional_info: {
-        intro:
-          "Every donation counts, please save a life with your donation.",
-        img: "https://ugc.production.linktr.ee/89d1512e-17ae-4438-8d83-e799279a7eef_lg7KdovRjixdZs7nekTpsBRztRo5uLJzF7OJ0rr40TswsvOpmJr1DGNjLVfYDzJerpha---jnw-s900-c-k-c0x00ffffff-no-r.jpeg",
+        intro: "Every donation counts, please save a life with your donation.",
+        img: "https://dypdvfcjkqkg2.cloudfront.net/large/5862799-1989.jpg",
       },
     },
+  ],
+};
+
+const tempdata = {
+  questions: [
+    {
+      label: "I am above 18 years of age.",
+      values: ["no", "yes"],
+      required: false,
+      input_type: "dropdown",
+      question_id: "some_id32",
+    },
+    {
+      image: "https://logowik.com/content/uploads/images/930_unicef.jpg",
+      label:
+        "We at unicef, believe that every children should have the right for education",
+      required: false,
+      input_type: "label",
+      question_id: "some_id4",
+      input_placeholder: "Enter your text..",
+    },
+    {
+      label: "Please attach your file here..",
+      input_type: "file",
+      question_id: "some_id5",
+    },
+    {
+      label: "Any message you would like to leave us?",
+      input_type: "textarea",
+      question_id: "some_id6",
+    },
+    {
+      label: "When did u first hear about us??",
+      input_type: "date",
+      question_id: "someassdasd_id6",
+    },
+    {
+      bold: false,
+      color: "black",
+      label:
+        "Any message you would like to leave us? Any message you would like to leave us? Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?",
+      fontSize: "1rem",
+      input_type: "label",
+      question_id: "some_i2342s3d6",
+      customStyles: { textAlign: "center", marginBottom: "10px" },
+    },
+    {
+      bold: true,
+      color: "blue",
+      image:
+        "https://lssparle.org.in/wp-content/uploads/2021/10/hub_12_18_charity-Hero-1200x900-1.jpg",
+      label:
+        "Bold disclaimer, to leave us? Any message you would like to leave us?",
+      fontSize: "1.5rem",
+      input_type: "label",
+      question_id: "some_i23423d6",
+      customStyles: { textAlign: "center", marginBottom: "10px" },
+    },
+  ],
+  user_data: {
+    age: { label: "Enter your age.", question_id: "some_id1" },
+    name: { label: "Enter your name.", question_id: "some_id" },
+    email: { label: "Enter your email.", question_id: "some_id2" },
+  },
+  company_logo: "https://dypdvfcjkqkg2.cloudfront.net/large/5862799-1989.jpg",
+  company_name: "Best gaming",
+  extra_participants_form_fields: [
+    { id: 123123, type: "text", label: "name" },
+    { id: 12312323, type: "text", label: "age" },
+    { id: 12312233, type: "text", label: "phone" },
   ],
 };

@@ -15,7 +15,14 @@ function Home() {
   const centerParams = queryParameters.get("center");
 
   const myState = useContext(MyContext);
-  const { centerInfo, setCenterInfo } = myState;
+  const {
+    centerInfo,
+    setCenterInfo,
+    centerAddInfo,
+    setCenterAddInfo,
+    centerID,
+    setCenterID,
+  } = myState;
 
   console.log(centerParams);
 
@@ -36,6 +43,8 @@ function Home() {
         const response = await axios.post(center, options);
         console.log("Response:", response.data.data);
         setCenterInfo(response.data.data);
+        // const jsonData = J
+        setCenterAddInfo(response.data.data);
         return response.data.data; // Return the response data
       } catch (error) {
         console.error(
@@ -47,6 +56,7 @@ function Home() {
     };
 
     centerParams && postCenter(centerParams);
+    centerParams && setCenterID(centerParams);
   }, []);
 
   return (
@@ -77,7 +87,7 @@ function Home() {
         }}
       >
         <img
-          src={logo}
+          src={centerInfo && JSON.parse(centerInfo.additional_info).img}
           style={{ width: 200, borderRadius: 5, marginBottom: 10 }}
           alt="logo"
         />
@@ -91,7 +101,7 @@ function Home() {
             </Typography>
 
             <Typography color={"gainsboro"} sx={{ mt: 2 }}>
-              Don't let queues eat up your time, use online forms instead!
+              {centerInfo && JSON.parse(centerInfo.additional_info).intro}
             </Typography>
 
             <Button

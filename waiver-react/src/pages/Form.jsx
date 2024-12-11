@@ -32,6 +32,8 @@ import {
 const aws_url =
   "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
 
+const local = "http://localhost:5050";
+
 import deleteIcon from "../assets/delete.png";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
@@ -64,6 +66,8 @@ const Form = () => {
     awsURI,
     wantParticipants,
     setWantParticipants,
+    centerID,
+    setCenterID,
   } = myState;
 
   const canvasContainerRef = useRef(null);
@@ -103,7 +107,7 @@ const Form = () => {
   };
 
   const uploadImageToBackend = async (imgData) => {
-    const response = await axios.post(`${aws_url}/upload-image`, {
+    const response = await axios.post(`${local}/upload-image`, {
       imgData,
     });
     return response.data.link; // Backend returns the Google Drive link
@@ -156,7 +160,7 @@ const Form = () => {
           signature_data: sign?.getTrimmedCanvas().toDataURL("image/png"),
         };
 
-        await axios.post(`${aws_url}/submissions`, submissionPayload);
+        await axios.post(`${local}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
         setTimeout(() => navigate("/"), 3000);
       } catch (error) {
@@ -187,7 +191,7 @@ const Form = () => {
   useEffect(() => {
     const getTemplateIdFromCenterID = async (id) => {
       let ans = null;
-      const templates = `${aws_url}/template-id-from-center`;
+      const templates = `${local}/template-id-from-center`;
 
       const options = {
         center_id: id,
@@ -207,7 +211,7 @@ const Form = () => {
     };
 
     const fetchTemplate = async (t_id) => {
-      const templates = `${aws_url}/post-center`;
+      const templates = `${local}/post-center`;
 
       const options = {
         id: t_id,
@@ -249,9 +253,14 @@ const Form = () => {
     };
 
     const asyncFnStitch = async () => {
-      const data =
-        centerParams && (await getTemplateIdFromCenterID(centerParams));
-      data && (await fetchTemplate(data));
+      if (centerID) {
+        await fetchTemplate(data);
+      } else {
+        const data =
+          centerParams && (await getTemplateIdFromCenterID(centerParams));
+
+        data && (await fetchTemplate(data));
+      }
     };
 
     // asyncFnStitch();

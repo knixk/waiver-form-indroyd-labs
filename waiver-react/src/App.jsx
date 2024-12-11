@@ -22,8 +22,6 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
 
-
-
 // context api allows us to use state from one place in every component, which is very handy
 
 function App() {
@@ -45,8 +43,8 @@ function App() {
   const [awsURI, setAWSURI] = useState(AWS_URI);
   const [wantParticipants, setWantParticipants] = useState(true);
   const [centerInfo, setCenterInfo] = useState();
-
-
+  const [centerAddInfo, setCenterAddInfo] = useState();
+  const [centerID, setCenterID] = useState();
 
   const handleDownload = async () => {
     const formElement = document.querySelector(".form__container__main");
@@ -117,7 +115,12 @@ function App() {
         awsURI,
         wantParticipants,
         setWantParticipants,
-        centerInfo, setCenterInfo
+        centerInfo,
+        setCenterInfo,
+        centerAddInfo,
+        setCenterAddInfo,
+        centerID,
+        setCenterID,
       }}
     >
       <Router>
