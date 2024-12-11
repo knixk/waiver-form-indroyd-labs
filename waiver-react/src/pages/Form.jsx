@@ -196,12 +196,13 @@ const Form = () => {
       const templates = `${local}/template-id-from-center`;
 
       const options = {
-        center_id: id,
+        center_id: 5,
       };
 
       try {
-        // const response = await axios.post(templates, options);
-        // ans = response.data.template_id;
+        const response = await axios.post(templates, options);
+        ans = response.data.template_id;
+        console.log(ans);
         setTemplateId(1);
       } catch (error) {
         console.error(error);
@@ -213,10 +214,10 @@ const Form = () => {
     };
 
     const fetchTemplate = async (t_id) => {
-      const templates = `${local}/post-center`;
+      const templates = `${local}/template-id-from-center`;
 
       const options = {
-        id: t_id,
+        center_id: t_id,
       };
 
       try {
@@ -255,13 +256,12 @@ const Form = () => {
     };
 
     const asyncFnStitch = async () => {
-      let data = await getTemplateIdFromCenterID(centerParams);
+      let data = await getTemplateIdFromCenterID(5);
       console.log(data);
 
       data && (await fetchTemplate(data));
     };
-
-    centerParams && asyncFnStitch();
+    asyncFnStitch();
     // fetchTemplate();
   }, []);
 
