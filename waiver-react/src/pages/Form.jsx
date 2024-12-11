@@ -229,26 +229,26 @@ const Form = () => {
 
         if (true) {
           console.log("sinde");
-          setQuestions(myData.questions);
-          setCompanyLogo(myData.company_logo);
-          setExtraFields(myData.extra_participants_form_fields);
-          setDisplayForm(true);
-          setCompanyName(myData.company_name);
+          // setQuestions(myData.questions);
+          // setCompanyLogo(myData.company_logo);
+          // setExtraFields(myData.extra_participants_form_fields);
+          // setDisplayForm(true);
+          // setCompanyName(myData.company_name);
           // setWantParticipants(
           //   template_config.template_config.want_to_add_participants
           // );
 
           // use local template
-          // setQuestions(template_config.template_config.questions);
-          // setCompanyLogo(template_config.template_config.company_logo);
-          // setExtraFields(
-          //   template_config.template_config.extra_participants_form_fields
-          // );
-          // setDisplayForm(true);
-          // setCompanyName(template_config.template_config.company_name);
-          // setWantParticipants(
-          //   template_config.template_config.want_to_add_participants
-          // );
+          setQuestions(template_config.template_config.questions);
+          setCompanyLogo(template_config.template_config.company_logo);
+          setExtraFields(
+            template_config.template_config.extra_participants_form_fields
+          );
+          setDisplayForm(true);
+          setCompanyName(template_config.template_config.company_name);
+          setWantParticipants(
+            template_config.template_config.want_to_add_participants
+          );
 
           setLoading(false);
         }
