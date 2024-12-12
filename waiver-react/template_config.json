@@ -1,7 +1,7 @@
 {
   "template_name": "adventure park",
   "template_config": {
-    "questions": [
+    "questions": [  
       {
         "label": "Blackwood, New Jersey",
         "input_type": "label",

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1733915730860",
+    "type": "TextField",
+    "props": {
+      "label": "Please enter the things u wanna"
+    }
+  },
+  {
+    "id": "1733915750643",
+    "type": "Checkbox",
+    "props": {
+      "label": "Damn it looks so cool, surely it is progress"
+    }
+  },
+  {
+    "id": "1733915764160",
+    "type": "Dropdown",
+    "props": {
+      "label": "This is a label alr?",
+      "options": ["india", "pakistani", "afghanistan"]
+    }
+  }
+]

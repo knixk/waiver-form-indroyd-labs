@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import ViewForm from "./pages/ViewForm";
 import Error from "./pages/Error";
 import axios from "axios";
+import FormBuilder from "./pages/FormBuilder";
 
 import { createContext } from "react";
 
@@ -130,6 +131,8 @@ function App() {
           <Route path="/form" element={<Form />} />
           <Route path="/search" element={<Search />} />
           <Route path="/view-form" element={<ViewForm />} />
+          <Route path="/form-builder" element={<FormBuilder />} />
+
           <Route path="*" element={<Error />} />
         </Routes>
         <Footer />
