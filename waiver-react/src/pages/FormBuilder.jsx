@@ -1,26 +1,26 @@
 import React, { useState } from "react";
 import {
-  TextField,
+  Box,
   Button,
-  Grid,
   Typography,
+  TextField,
   Select,
   MenuItem,
-  FormControl,
-  InputLabel,
   Checkbox,
   FormControlLabel,
+  IconButton,
+  Paper,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
+import { Delete } from "@mui/icons-material";
 
 const FormBuilder = () => {
-  const [templateInfo, setTemplateInfo] = useState({
-    templateName: "",
-    companyLogo: "",
-    companyAddress: "",
-  });
-
   const [questions, setQuestions] = useState([]);
-  const [extraParticipants, setExtraParticipants] = useState([]);
+  const [extraParticipantFields, setExtraParticipantFields] = useState([]);
+  const [templateName, setTemplateName] = useState("");
+  const [companyLogo, setCompanyLogo] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
 
   const handleAddQuestion = () => {
     setQuestions([
@@ -29,205 +29,208 @@ const FormBuilder = () => {
         label: "",
         input_type: "text",
         question_id: `question_${Date.now()}`,
-        values: [],
+        required: false,
         image: "",
+        options: [],
       },
     ]);
+  };
+
+  const handleRemoveQuestion = (index) => {
+    setQuestions(questions.filter((_, i) => i !== index));
   };
 
   const handleAddParticipantField = () => {
-    setExtraParticipants([
-      ...extraParticipants,
-      {
-        id: `participant_field_${Date.now()}`,
-        type: "text",
-        label: "",
-      },
+    setExtraParticipantFields([
+      ...extraParticipantFields,
+      { id: `field_${Date.now()}`, type: "text", label: "" },
     ]);
   };
 
-  const handleQuestionChange = (index, field, value) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index][field] = value;
-    setQuestions(updatedQuestions);
+  const handleRemoveParticipantField = (index) => {
+    setExtraParticipantFields(extraParticipantFields.filter((_, i) => i !== index));
   };
 
-  const handleParticipantChange = (index, field, value) => {
-    const updatedParticipants = [...extraParticipants];
-    updatedParticipants[index][field] = value;
-    setExtraParticipants(updatedParticipants);
-  };
-
-  const handleGenerateConfig = () => {
+  const handleDownloadConfig = () => {
     const config = {
-      template_name: templateInfo.templateName,
+      template_name: templateName,
       template_config: {
-        company_logo: templateInfo.companyLogo,
-        company_address: templateInfo.companyAddress,
         questions,
-        extra_participants_form_fields: extraParticipants,
+        extra_participants_form_fields: extraParticipantFields,
+        company_logo: companyLogo,
+        company_name: "Fun City Adventure Park",
+        company_address: companyAddress,
+        want_to_add_participants: true,
       },
     };
-    console.log(JSON.stringify(config, null, 2));
+    console.log(config);
   };
 
   return (
-    <Grid container spacing={3} padding={3}>
-      {/* Template Info */}
-      <Grid item xs={12}>
-        <Typography variant="h5">Template Information</Typography>
+    <Box p={2}>
+      <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Template Configuration
+        </Typography>
         <TextField
+          fullWidth
           label="Template Name"
-          fullWidth
-          margin="normal"
-          value={templateInfo.templateName}
-          onChange={(e) =>
-            setTemplateInfo({ ...templateInfo, templateName: e.target.value })
-          }
+          value={templateName}
+          onChange={(e) => setTemplateName(e.target.value)}
+          sx={{ mb: 2 }}
         />
         <TextField
+          fullWidth
           label="Company Logo URL"
-          fullWidth
-          margin="normal"
-          value={templateInfo.companyLogo}
-          onChange={(e) =>
-            setTemplateInfo({ ...templateInfo, companyLogo: e.target.value })
-          }
+          value={companyLogo}
+          onChange={(e) => setCompanyLogo(e.target.value)}
+          sx={{ mb: 2 }}
         />
         <TextField
-          label="Company Address"
           fullWidth
-          margin="normal"
-          value={templateInfo.companyAddress}
-          onChange={(e) =>
-            setTemplateInfo({ ...templateInfo, companyAddress: e.target.value })
-          }
+          label="Company Address"
+          value={companyAddress}
+          onChange={(e) => setCompanyAddress(e.target.value)}
+          sx={{ mb: 2 }}
         />
-      </Grid>
+      </Paper>
 
-      {/* Questions Section */}
-      <Grid item xs={12}>
-        <Typography variant="h5">Form Questions</Typography>
+      <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Questions
+        </Typography>
         {questions.map((question, index) => (
-          <Grid container spacing={2} key={question.question_id}>
-            <Grid item xs={12} sm={6}>
+          <Box key={index} sx={{ mb: 2, p: 2, border: "1px solid #ccc", borderRadius: "4px" }}>
+            <TextField
+              fullWidth
+              label="Question Label"
+              value={question.label}
+              onChange={(e) => {
+                const newQuestions = [...questions];
+                newQuestions[index].label = e.target.value;
+                setQuestions(newQuestions);
+              }}
+              sx={{ mb: 2 }}
+            />
+
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel>Input Type</InputLabel>
+              <Select
+                value={question.input_type}
+                onChange={(e) => {
+                  const newQuestions = [...questions];
+                  newQuestions[index].input_type = e.target.value;
+                  setQuestions(newQuestions);
+                }}
+              >
+                <MenuItem value="text">Text</MenuItem>
+                <MenuItem value="dropdown">Dropdown</MenuItem>
+                <MenuItem value="checkbox">Checkbox</MenuItem>
+                <MenuItem value="radio">Radio</MenuItem>
+                <MenuItem value="date">Date</MenuItem>
+                <MenuItem value="file">File</MenuItem>
+                <MenuItem value="label">Label</MenuItem>
+              </Select>
+            </FormControl>
+
+            {question.input_type === "dropdown" || question.input_type === "radio" ? (
               <TextField
-                label="Question Label"
                 fullWidth
-                value={question.label}
-                onChange={(e) =>
-                  handleQuestionChange(index, "label", e.target.value)
-                }
+                label="Options (comma separated)"
+                value={question.options.join(",")}
+                onChange={(e) => {
+                  const newQuestions = [...questions];
+                  newQuestions[index].options = e.target.value.split(",").map((opt) => opt.trim());
+                  setQuestions(newQuestions);
+                }}
+                sx={{ mb: 2 }}
               />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <FormControl fullWidth>
-                <InputLabel>Input Type</InputLabel>
-                <Select
-                  value={question.input_type}
-                  onChange={(e) =>
-                    handleQuestionChange(index, "input_type", e.target.value)
-                  }
-                >
-                  <MenuItem value="text">Text</MenuItem>
-                  <MenuItem value="dropdown">Dropdown</MenuItem>
-                  <MenuItem value="date">Date</MenuItem>
-                  <MenuItem value="file">File</MenuItem>
-                  <MenuItem value="label">Label Only</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            {question.input_type === "dropdown" && (
-              <Grid item xs={12}>
-                <TextField
-                  label="Dropdown Options (comma-separated)"
-                  fullWidth
-                  value={question.values.join(", ")}
-                  onChange={(e) =>
-                    handleQuestionChange(
-                      index,
-                      "values",
-                      e.target.value.split(",").map((v) => v.trim())
-                    )
-                  }
+            ) : null}
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={question.required}
+                  onChange={(e) => {
+                    const newQuestions = [...questions];
+                    newQuestions[index].required = e.target.checked;
+                    setQuestions(newQuestions);
+                  }}
                 />
-              </Grid>
-            )}
-            <Grid item xs={12}>
-              <TextField
-                label="Image URL (Optional)"
-                fullWidth
-                value={question.image}
-                onChange={(e) =>
-                  handleQuestionChange(index, "image", e.target.value)
-                }
-              />
-            </Grid>
-          </Grid>
+              }
+              label="Required"
+              sx={{ mb: 2 }}
+            />
+
+            <TextField
+              fullWidth
+              label="Image URL (Optional)"
+              value={question.image}
+              onChange={(e) => {
+                const newQuestions = [...questions];
+                newQuestions[index].image = e.target.value;
+                setQuestions(newQuestions);
+              }}
+              sx={{ mb: 2 }}
+            />
+
+            <IconButton color="error" onClick={() => handleRemoveQuestion(index)}>
+              <Delete />
+            </IconButton>
+          </Box>
         ))}
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleAddQuestion}
-          style={{ marginTop: "10px" }}
-        >
+        <Button variant="contained" onClick={handleAddQuestion}>
           Add Question
         </Button>
-      </Grid>
+      </Paper>
 
-      {/* Extra Participants Section */}
-      <Grid item xs={12}>
-        <Typography variant="h5">Extra Participants Form Fields</Typography>
-        {extraParticipants.map((field, index) => (
-          <Grid container spacing={2} key={field.id}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Field Label"
-                fullWidth
-                value={field.label}
-                onChange={(e) =>
-                  handleParticipantChange(index, "label", e.target.value)
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <FormControl fullWidth>
-                <InputLabel>Field Type</InputLabel>
-                <Select
-                  value={field.type}
-                  onChange={(e) =>
-                    handleParticipantChange(index, "type", e.target.value)
-                  }
-                >
-                  <MenuItem value="text">Text</MenuItem>
-                  <MenuItem value="date">Date</MenuItem>
-                  <MenuItem value="file">File</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
+      <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Extra Participant Fields
+        </Typography>
+        {extraParticipantFields.map((field, index) => (
+          <Box key={index} sx={{ mb: 2, p: 2, border: "1px solid #ccc", borderRadius: "4px" }}>
+            <TextField
+              fullWidth
+              label="Field Label"
+              value={field.label}
+              onChange={(e) => {
+                const newFields = [...extraParticipantFields];
+                newFields[index].label = e.target.value;
+                setExtraParticipantFields(newFields);
+              }}
+              sx={{ mb: 2 }}
+            />
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel>Field Type</InputLabel>
+              <Select
+                value={field.type}
+                onChange={(e) => {
+                  const newFields = [...extraParticipantFields];
+                  newFields[index].type = e.target.value;
+                  setExtraParticipantFields(newFields);
+                }}
+              >
+                <MenuItem value="text">Text</MenuItem>
+                <MenuItem value="dropdown">Dropdown</MenuItem>
+                <MenuItem value="date">Date</MenuItem>
+                <MenuItem value="file">File</MenuItem>
+              </Select>
+            </FormControl>
+            <IconButton color="error" onClick={() => handleRemoveParticipantField(index)}>
+              <Delete />
+            </IconButton>
+          </Box>
         ))}
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleAddParticipantField}
-          style={{ marginTop: "10px" }}
-        >
+        <Button variant="contained" onClick={handleAddParticipantField}>
           Add Participant Field
         </Button>
-      </Grid>
+      </Paper>
 
-      {/* Generate Config */}
-      <Grid item xs={12}>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleGenerateConfig}
-        >
-          Generate Config
-        </Button>
-      </Grid>
-    </Grid>
+      <Button variant="contained" color="primary" onClick={handleDownloadConfig}>
+        Log Config
+      </Button>
+    </Box>
   );
 };
 
