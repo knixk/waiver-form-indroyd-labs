@@ -30,12 +30,13 @@ const FormBuilder = () => {
     setExtraParticipantsFields(updatedFields);
   };
 
-  const addOptionToField = (index, option) => {
+  const addOptionsToField = (index, options) => {
     const updatedFields = [...formFields];
-    if (!updatedFields[index].values) {
-      updatedFields[index].values = [];
-    }
-    updatedFields[index].values.push(option);
+    const parsedOptions = options
+      .split(",")
+      .map((option) => option.trim())
+      .filter((option) => option); // Remove empty strings
+    updatedFields[index].values = parsedOptions;
     setFormFields(updatedFields);
   };
 
@@ -61,7 +62,7 @@ const FormBuilder = () => {
       },
     };
 
-    console.log(JSON.stringify(template, null, 2));
+    console.log(JSON.stringify(template, null, 2)); // Log the template to the console
     return template;
   };
 
@@ -104,21 +105,17 @@ const FormBuilder = () => {
               type="text"
               placeholder="Label"
               value={field.label}
-              onChange={(e) =>
-                updateField(index, "label", e.target.value)
-              }
+              onChange={(e) => updateField(index, "label", e.target.value)}
               style={{ marginRight: "10px" }}
             />
             {["dropdown", "radio"].includes(field.input_type) && (
               <div>
                 <input
                   type="text"
-                  placeholder="Add Option"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      addOptionToField(index, e.target.value);
-                      e.target.value = "";
-                    }
+                  placeholder="Add Options (comma-separated)"
+                  onBlur={(e) => {
+                    addOptionsToField(index, e.target.value);
+                    e.target.value = ""; // Clear the input after adding options
                   }}
                   style={{ marginRight: "10px" }}
                 />
@@ -199,14 +196,7 @@ const FormBuilder = () => {
       </div>
       <button
         onClick={() => {
-          const template = generateTemplate();
-          const blob = new Blob([JSON.stringify(template, null, 2)], {
-            type: "application/json",
-          });
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(blob);
-          link.download = "template.json";
-          link.click();
+          generateTemplate();
         }}
         style={{ marginTop: "20px" }}
       >
