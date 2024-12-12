@@ -1,62 +1,48 @@
 {
-  "template_name": "Artsy",
+  "template_name": "asdasd",
   "template_config": {
+    "company_logo": "asdasd",
+    "company_address": "asdasd",
     "questions": [
-      {
-        "label": "asdasdasd",
-        "input_type": "text",
-        "question_id": "field_1733997958710",
-        "optional_date": null,
-        "optional_file": null,
-        "optional_image": "https://img.freepik.com/free-photo/abstract-nature-painted-with-watercolor-autumn-leaves-backdrop-generated-by-ai_188544-9806.jpg?semt=ais_hybrid"
-      },
-      {
-        "label": "asdasdasd",
-        "input_type": "text",
-        "question_id": "field_1733997969551",
-        "optional_date": "2024-12-27",
-        "optional_file": null,
-        "optional_image": null
-      },
       {
         "label": "asdasd",
         "input_type": "dropdown",
-        "question_id": "field_1733997976447",
-        "optional_date": null,
-        "optional_file": null,
-        "optional_image": null,
+        "question_id": "question_1734003834709",
         "values": [
-          "asd",
-          "dsd",
-          "23"
-        ]
+          "asda",
+          "asdasd",
+          "asd2"
+        ],
+        "image": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
       },
       {
-        "label": "dasda",
-        "input_type": "radio",
-        "question_id": "field_1733997983784",
-        "optional_date": null,
-        "optional_file": null,
-        "optional_image": "https://img.freepik.com/free-photo/abstract-nature-painted-with-watercolor-autumn-leaves-backdrop-generated-by-ai_188544-9806.jpg?semt=ais_hybrid",
-        "values": [
-          "d2",
-          "32",
-          "asd"
-        ]
+        "label": "asdasdasdad",
+        "input_type": "date",
+        "question_id": "question_1734003889082",
+        "values": [],
+        "image": ""
       },
       {
-        "label": "asdasdsad",
-        "input_type": "checkbox",
-        "question_id": "field_1733998009281",
-        "optional_date": null,
-        "optional_file": null,
-        "optional_image": null
+        "label": "asdasd",
+        "input_type": "file",
+        "question_id": "question_1734003894316",
+        "values": [],
+        "image": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
+      },
+      {
+        "label": "asdasdasdasd",
+        "input_type": "label",
+        "question_id": "question_1734003903195",
+        "values": [],
+        "image": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
       }
     ],
-    "extra_participants_form_fields": [],
-    "company_logo": "https://img.freepik.com/free-photo/abstract-nature-painted-with-watercolor-autumn-leaves-backdrop-generated-by-ai_188544-9806.jpg?semt=ais_hybrid",
-    "company_name": "art",
-    "company_address": "asd",
-    "want_to_add_participants": false
+    "extra_participants_form_fields": [
+      {
+        "id": "participant_field_1734003910272",
+        "type": "text",
+        "label": "asdasda"
+      }
+    ]
   }
 }
