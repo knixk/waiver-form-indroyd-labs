@@ -1,4 +1,15 @@
 import React, { useState } from "react";
+import {
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  Box,
+  Typography,
+  IconButton,
+  Paper,
+} from "@mui/material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 
 const FormBuilder = () => {
   const [formFields, setFormFields] = useState([]);
@@ -13,6 +24,9 @@ const FormBuilder = () => {
       label: "",
       input_type: type,
       question_id: `field_${Date.now()}`,
+      optional_date: null,
+      optional_file: null,
+      optional_image: null,
       ...(type === "dropdown" || type === "radio" ? { values: [] } : {}),
     };
     setFormFields([...formFields, newField]);
@@ -24,29 +38,14 @@ const FormBuilder = () => {
     setFormFields(updatedFields);
   };
 
-  const updateExtraParticipantField = (index, key, value) => {
-    const updatedFields = [...extraParticipantsFields];
-    updatedFields[index][key] = value;
-    setExtraParticipantsFields(updatedFields);
-  };
-
   const addOptionsToField = (index, options) => {
     const updatedFields = [...formFields];
     const parsedOptions = options
       .split(",")
       .map((option) => option.trim())
-      .filter((option) => option); // Remove empty strings
+      .filter((option) => option);
     updatedFields[index].values = parsedOptions;
     setFormFields(updatedFields);
-  };
-
-  const addExtraParticipantField = () => {
-    const newField = {
-      id: `extra_${Date.now()}`,
-      type: "text",
-      label: "",
-    };
-    setExtraParticipantsFields([...extraParticipantsFields, newField]);
   };
 
   const generateTemplate = () => {
@@ -67,142 +66,138 @@ const FormBuilder = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Form Builder</h2>
-      <input
-        type="text"
-        placeholder="Template Name"
+    <Box sx={{ padding: "20px", maxWidth: "800px", margin: "auto" }}>
+      <Typography variant="h4" gutterBottom>
+        Form Builder
+      </Typography>
+      <TextField
+        fullWidth
+        label="Template Name"
         value={templateName}
         onChange={(e) => setTemplateName(e.target.value)}
-        style={{ display: "block", marginBottom: "10px" }}
+        sx={{ marginBottom: "10px" }}
       />
-      <input
-        type="text"
-        placeholder="Company Logo URL"
+      <TextField
+        fullWidth
+        label="Company Logo URL"
         value={companyLogo}
         onChange={(e) => setCompanyLogo(e.target.value)}
-        style={{ display: "block", marginBottom: "10px" }}
+        sx={{ marginBottom: "10px" }}
       />
-      <input
-        type="text"
-        placeholder="Company Name"
+      <TextField
+        fullWidth
+        label="Company Name"
         value={companyName}
         onChange={(e) => setCompanyName(e.target.value)}
-        style={{ display: "block", marginBottom: "10px" }}
+        sx={{ marginBottom: "10px" }}
       />
-      <input
-        type="text"
-        placeholder="Company Address"
+      <TextField
+        fullWidth
+        label="Company Address"
         value={companyAddress}
         onChange={(e) => setCompanyAddress(e.target.value)}
-        style={{ display: "block", marginBottom: "10px" }}
+        sx={{ marginBottom: "20px" }}
       />
-      <div>
-        <h3>Form Fields</h3>
-        {formFields.map((field, index) => (
-          <div key={field.question_id} style={{ marginBottom: "10px" }}>
-            <input
-              type="text"
-              placeholder="Label"
-              value={field.label}
-              onChange={(e) => updateField(index, "label", e.target.value)}
-              style={{ marginRight: "10px" }}
+
+      <Typography variant="h6" gutterBottom>
+        Form Fields
+      </Typography>
+      {formFields.map((field, index) => (
+        <Paper key={field.question_id} sx={{ padding: "10px", marginBottom: "10px" }}>
+          <TextField
+            fullWidth
+            label="Label"
+            value={field.label}
+            onChange={(e) => updateField(index, "label", e.target.value)}
+            sx={{ marginBottom: "10px" }}
+          />
+          {["dropdown", "radio"].includes(field.input_type) && (
+            <TextField
+              fullWidth
+              label="Add Options (comma-separated)"
+              onBlur={(e) => {
+                addOptionsToField(index, e.target.value);
+                e.target.value = ""; // Clear input after adding options
+              }}
+              sx={{ marginBottom: "10px" }}
             />
-            {["dropdown", "radio"].includes(field.input_type) && (
-              <div>
-                <input
-                  type="text"
-                  placeholder="Add Options (comma-separated)"
-                  onBlur={(e) => {
-                    addOptionsToField(index, e.target.value);
-                    e.target.value = ""; // Clear the input after adding options
+          )}
+          {field.values && (
+            <Box sx={{ marginBottom: "10px" }}>
+              {field.values.map((value, i) => (
+                <Typography
+                  key={i}
+                  variant="body2"
+                  sx={{
+                    display: "inline-block",
+                    marginRight: "5px",
+                    padding: "2px 5px",
+                    background: "#ddd",
+                    borderRadius: "4px",
                   }}
-                  style={{ marginRight: "10px" }}
-                />
-                <div>
-                  {field.values?.map((value, i) => (
-                    <span
-                      key={i}
-                      style={{
-                        display: "inline-block",
-                        marginRight: "5px",
-                        padding: "2px 5px",
-                        background: "#ddd",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      {value}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-            <button
-              onClick={() =>
-                setFormFields(formFields.filter((_, i) => i !== index))
-              }
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-        <button onClick={() => addFormField("text")}>Add Text Field</button>
-        <button onClick={() => addFormField("dropdown")}>
+                >
+                  {value}
+                </Typography>
+              ))}
+            </Box>
+          )}
+          <TextField
+            fullWidth
+            type="date"
+            label="Optional Date"
+            InputLabelProps={{ shrink: true }}
+            onChange={(e) => updateField(index, "optional_date", e.target.value)}
+            sx={{ marginBottom: "10px" }}
+          />
+          <TextField
+            fullWidth
+            type="file"
+            onChange={(e) =>
+              updateField(index, "optional_file", e.target.files[0]?.name || null)
+            }
+            sx={{ marginBottom: "10px" }}
+          />
+          <TextField
+            fullWidth
+            type="text"
+            label="Optional Image URL"
+            onChange={(e) => updateField(index, "optional_image", e.target.value)}
+            sx={{ marginBottom: "10px" }}
+          />
+          <IconButton
+            onClick={() =>
+              setFormFields(formFields.filter((_, i) => i !== index))
+            }
+            color="error"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Paper>
+      ))}
+
+      <Box sx={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        <Button variant="outlined" onClick={() => addFormField("text")}>
+          Add Text Field
+        </Button>
+        <Button variant="outlined" onClick={() => addFormField("dropdown")}>
           Add Dropdown Field
-        </button>
-        <button onClick={() => addFormField("radio")}>Add Radio Field</button>
-        <button onClick={() => addFormField("checkbox")}>
+        </Button>
+        <Button variant="outlined" onClick={() => addFormField("radio")}>
+          Add Radio Field
+        </Button>
+        <Button variant="outlined" onClick={() => addFormField("checkbox")}>
           Add Checkbox Field
-        </button>
-        <button onClick={() => addFormField("label")}>Add Label</button>
-      </div>
-      <div>
-        <h3>Extra Participants Form Fields</h3>
-        {extraParticipantsFields.map((field, index) => (
-          <div key={field.id} style={{ marginBottom: "10px" }}>
-            <input
-              type="text"
-              placeholder="Label"
-              value={field.label}
-              onChange={(e) =>
-                updateExtraParticipantField(index, "label", e.target.value)
-              }
-              style={{ marginRight: "10px" }}
-            />
-            <select
-              value={field.type}
-              onChange={(e) =>
-                updateExtraParticipantField(index, "type", e.target.value)
-              }
-            >
-              <option value="text">Text</option>
-              <option value="dropdown">Dropdown</option>
-              <option value="date">Date</option>
-            </select>
-            <button
-              onClick={() =>
-                setExtraParticipantsFields(
-                  extraParticipantsFields.filter((_, i) => i !== index)
-                )
-              }
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-        <button onClick={addExtraParticipantField}>
-          Add Extra Participant Field
-        </button>
-      </div>
-      <button
-        onClick={() => {
-          generateTemplate();
-        }}
-        style={{ marginTop: "20px" }}
+        </Button>
+      </Box>
+
+      <Button
+        variant="contained"
+        onClick={() => generateTemplate()}
+        sx={{ marginTop: "20px" }}
       >
         Generate Template
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 };
 

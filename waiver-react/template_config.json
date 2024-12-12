@@ -1,56 +1,62 @@
 {
-  "template_name": "",
+  "template_name": "Artsy",
   "template_config": {
     "questions": [
       {
-        "label": "",
-        "input_type": "dropdown",
-        "question_id": "field_1733994355916",
-        "values": []
-      },
-      {
-        "label": "eter ur password",
+        "label": "asdasdasd",
         "input_type": "text",
-        "question_id": "field_1733994366930"
+        "question_id": "field_1733997958710",
+        "optional_date": null,
+        "optional_file": null,
+        "optional_image": "https://img.freepik.com/free-photo/abstract-nature-painted-with-watercolor-autumn-leaves-backdrop-generated-by-ai_188544-9806.jpg?semt=ais_hybrid"
+      },
+      {
+        "label": "asdasdasd",
+        "input_type": "text",
+        "question_id": "field_1733997969551",
+        "optional_date": "2024-12-27",
+        "optional_file": null,
+        "optional_image": null
       },
       {
         "label": "asdasd",
         "input_type": "dropdown",
-        "question_id": "field_1733994372669",
-        "values": []
+        "question_id": "field_1733997976447",
+        "optional_date": null,
+        "optional_file": null,
+        "optional_image": null,
+        "values": [
+          "asd",
+          "dsd",
+          "23"
+        ]
       },
       {
-        "label": "asdasd",
+        "label": "dasda",
         "input_type": "radio",
-        "question_id": "field_1733994378197",
-        "values": []
+        "question_id": "field_1733997983784",
+        "optional_date": null,
+        "optional_file": null,
+        "optional_image": "https://img.freepik.com/free-photo/abstract-nature-painted-with-watercolor-autumn-leaves-backdrop-generated-by-ai_188544-9806.jpg?semt=ais_hybrid",
+        "values": [
+          "d2",
+          "32",
+          "asd"
+        ]
       },
       {
-        "label": "ad12d",
+        "label": "asdasdsad",
         "input_type": "checkbox",
-        "question_id": "field_1733994388860"
-      },
-      {
-        "label": "asdasdas",
-        "input_type": "label",
-        "question_id": "field_1733994390798"
+        "question_id": "field_1733998009281",
+        "optional_date": null,
+        "optional_file": null,
+        "optional_image": null
       }
     ],
-    "extra_participants_form_fields": [
-      {
-        "id": "extra_1733994392541",
-        "type": "text",
-        "label": "as21dasd"
-      },
-      {
-        "id": "extra_1733994396947",
-        "type": "text",
-        "label": "asdasda2sd"
-      }
-    ],
-    "company_logo": "dsda",
-    "company_name": "asdasd",
-    "company_address": "asdasd",
-    "want_to_add_participants": true
+    "extra_participants_form_fields": [],
+    "company_logo": "https://img.freepik.com/free-photo/abstract-nature-painted-with-watercolor-autumn-leaves-backdrop-generated-by-ai_188544-9806.jpg?semt=ais_hybrid",
+    "company_name": "art",
+    "company_address": "asd",
+    "want_to_add_participants": false
   }
 }
