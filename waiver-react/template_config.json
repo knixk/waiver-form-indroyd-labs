@@ -1,197 +1,56 @@
 {
-  "template_name": "adventure park",
+  "template_name": "",
   "template_config": {
-    "questions": [  
+    "questions": [
       {
-        "label": "Blackwood, New Jersey",
-        "input_type": "label",
-        "question_id": "some_i23423sdd6",
-        "fontSize": "1.5rem",
-        "color": "red",
-        "bold": true,
-        "customStyles": {
-          "textAlign": "center",
-          "position": "relative",   
-          "marginBottom": "10px"
-        }
-      },
-
-      {
-        "label": "Please fill in the information below to complete your waiver...",
-        "input_type": "label",
-        "question_id": "some_i23423d6",
-        "fontSize": "1rem",
-        "color": "black",
-        "bold": true,
-        "customStyles": {
-          "textAlign": "center",
-          "marginLeft": "10px"  
-        }
-      },
-
-      {
-        "label": "Please enter your password",
-        "required": false,
-        "input_type": "text",
-        "question_id": "somesds3asdsd52_id4",
-        "input_placeholder": "password..",
-        "variant": "password"
-      },
-      {
-        "label": "Address",
-        "required": false,
-        "input_type": "text",
-        "question_id": "somesdsa53sdsdsd52_id4",
-        "input_placeholder": "Address..",
-        "variant": "text",
-        "required": true
-      },
-      {
-        "label": "City",
-        "required": false,
-        "input_type": "text",
-        "question_id": "soasdasme4sdsasdsdsd52_id4",
-        "input_placeholder": "City..",
-        "variant": "text",
-        "required": true
-      },
-      {
-        "label": "State",
-        "values": [
-          "Alabama",
-          "Alaska",
-          "American Samoa",
-          "Arizona",
-          "Arkansas",
-          "California",
-          "Colorado",
-          "Connecticut",
-          "Delaware",
-          "District of Columbia",
-          "Federated States of Micronesia",
-          "Florida",
-          "Georgia",
-          "Guam",
-          "Hawaii",
-          "Idaho",
-          "Illinois",
-          "Indiana",
-          "Iowa",
-          "Kansas",
-          "Kentucky",
-          "Louisiana",
-          "Maine",
-          "Marshall Islands",
-          "Maryland",
-          "Massachusetts",
-          "Michigan",
-          "Minnesota",
-          "Mississippi",
-          "Missouri",
-          "Montana",
-          "Nebraska",
-          "Nevada",
-          "New Hampshire",
-          "New Jersey",
-          "New Mexico",
-          "New York",
-          "North Carolina",
-          "North Dakota",
-          "Northern Mariana Islands",
-          "Ohio",
-          "Oklahoma",
-          "Oregon",
-          "Palau",
-          "Pennsylvania",
-          "Puerto Rico",
-          "Rhode Island",
-          "South Carolina",
-          "South Dakota",
-          "Tennessee",
-          "Texas",
-          "Utah",
-          "Vermont",
-          "Virgin Island",
-          "Virginia",
-          "Washington",
-          "West Virginia",
-          "Wisconsin",
-          "Wyoming"
-        ],
-        "required": false,
+        "label": "",
         "input_type": "dropdown",
-        "question_id": "some_idsdasd32",
-        "required": true
+        "question_id": "field_1733994355916",
+        "values": []
       },
       {
-        "label": "Zip Code",
-        "required": false,
+        "label": "eter ur password",
         "input_type": "text",
-        "question_id": "soasdasme23sdsasdsdsd52_id4",
-        "input_placeholder": "Zip Code..",
-        "variant": "number",
-        "required": true
+        "question_id": "field_1733994366930"
       },
       {
-        "label": "Phone Number",
-        "required": false,
-        "input_type": "text",
-        "question_id": "soasdasmesdsas41dsdsd52_id4",
-        "input_placeholder": "Phone Number..",
-        "required": true,
-        "variant": "number"
-      },
-      {
-        "label": "Adult Gender",
-        "values": ["Male", "Female", "Not Specified"],
-        "required": true,
+        "label": "asdasd",
         "input_type": "dropdown",
-        "question_id": "some_idsda5sd32"
+        "question_id": "field_1733994372669",
+        "values": []
       },
       {
-        "label": "I wish to receive special offers and discounts",
-        "input_type": "checkbox",
-        "question_id": "wantasd_asdasdparticipant_id",
-        "fontSize": "1rem",
-        "color": "black",
-        "required": true
-      },
-      {
-        "label": "Waiver is for?",
+        "label": "asdasd",
         "input_type": "radio",
-        "values": ["Me and my kids!", "Just me"],
-        "question_id": "want_participant_id",
-        "required": true
+        "question_id": "field_1733994378197",
+        "values": []
+      },
+      {
+        "label": "ad12d",
+        "input_type": "checkbox",
+        "question_id": "field_1733994388860"
+      },
+      {
+        "label": "asdasdas",
+        "input_type": "label",
+        "question_id": "field_1733994390798"
       }
     ],
     "extra_participants_form_fields": [
-      { "id": 1423123, "type": "text", "label": "Enter your full name" },
-      { "id": 123123523, "type": "dropdown", "label": "Enter your gender" },
       {
-        "id": 12242312233,
-        "type": "date",
-        "label": "Birth date"
+        "id": "extra_1733994392541",
+        "type": "text",
+        "label": "as21dasd"
+      },
+      {
+        "id": "extra_1733994396947",
+        "type": "text",
+        "label": "asdasda2sd"
       }
     ],
-    "company_logo": "https://lilypadpos1.com/funcityblackwood/productpics/default.jpg",
-    "company_name": "Fun City Adventure Park",
-    "company_address": "Blackwood, New Jersey",
-
-    "want_to_add_participants": true,
-
-    "user_data": {
-      "name": {
-        "label": "Enter your name.",
-        "question_id": "some_id"
-      },
-      "age": {
-        "label": "Enter your age.",
-        "question_id": "some_id1"
-      },
-      "email": {
-        "label": "Enter your email.",
-        "question_id": "some_id2"
-      }
-    }
+    "company_logo": "dsda",
+    "company_name": "asdasd",
+    "company_address": "asdasd",
+    "want_to_add_participants": true
   }
 }

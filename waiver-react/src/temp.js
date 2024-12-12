@@ -317,39 +317,38 @@ const latestTemplate = {
   ],
 };
 
-
 function generateForm(config) {
-  const form = document.createElement('form');
+  const form = document.createElement("form");
 
   // Add company logo
   if (config.company_logo) {
-    const logo = document.createElement('img');
+    const logo = document.createElement("img");
     logo.src = config.company_logo;
     logo.alt = config.company_name;
-    logo.style.display = 'block';
-    logo.style.margin = '0 auto';
+    logo.style.display = "block";
+    logo.style.margin = "0 auto";
     form.appendChild(logo);
   }
 
   // Add company name and address
   if (config.company_name) {
-    const companyName = document.createElement('h1');
+    const companyName = document.createElement("h1");
     companyName.textContent = config.company_name;
-    companyName.style.textAlign = 'center';
+    companyName.style.textAlign = "center";
     form.appendChild(companyName);
   }
 
   if (config.company_address) {
-    const companyAddress = document.createElement('p');
+    const companyAddress = document.createElement("p");
     companyAddress.textContent = config.company_address;
-    companyAddress.style.textAlign = 'center';
+    companyAddress.style.textAlign = "center";
     form.appendChild(companyAddress);
   }
 
   // Add questions
   config.questions.forEach((question) => {
-    const wrapper = document.createElement('div');
-    wrapper.style.marginBottom = '15px';
+    const wrapper = document.createElement("div");
+    wrapper.style.marginBottom = "15px";
 
     // Apply custom styles if provided
     if (question.customStyles) {
@@ -357,50 +356,50 @@ function generateForm(config) {
     }
 
     if (question.label) {
-      const label = document.createElement('label');
+      const label = document.createElement("label");
       label.textContent = question.label;
-      label.style.fontWeight = question.bold ? 'bold' : 'normal';
-      label.style.color = question.color || 'inherit';
-      label.style.fontSize = question.fontSize || 'inherit';
+      label.style.fontWeight = question.bold ? "bold" : "normal";
+      label.style.color = question.color || "inherit";
+      label.style.fontSize = question.fontSize || "inherit";
       wrapper.appendChild(label);
     }
 
     let input;
     switch (question.input_type) {
-      case 'label':
+      case "label":
         // Labels are already handled above
         break;
-      case 'text':
-        input = document.createElement('input');
-        input.type = question.variant || 'text';
-        input.placeholder = question.input_placeholder || '';
+      case "text":
+        input = document.createElement("input");
+        input.type = question.variant || "text";
+        input.placeholder = question.input_placeholder || "";
         input.required = question.required || false;
         break;
-      case 'dropdown':
-        input = document.createElement('select');
+      case "dropdown":
+        input = document.createElement("select");
         question.values.forEach((value) => {
-          const option = document.createElement('option');
+          const option = document.createElement("option");
           option.value = value;
           option.textContent = value;
           input.appendChild(option);
         });
         input.required = question.required || false;
         break;
-      case 'checkbox':
-        input = document.createElement('input');
-        input.type = 'checkbox';
+      case "checkbox":
+        input = document.createElement("input");
+        input.type = "checkbox";
         input.required = question.required || false;
         break;
-      case 'radio':
+      case "radio":
         question.values.forEach((value) => {
-          const radioWrapper = document.createElement('div');
-          const radio = document.createElement('input');
-          radio.type = 'radio';
+          const radioWrapper = document.createElement("div");
+          const radio = document.createElement("input");
+          radio.type = "radio";
           radio.name = question.question_id;
           radio.value = value;
           radio.required = question.required || false;
 
-          const radioLabel = document.createElement('label');
+          const radioLabel = document.createElement("label");
           radioLabel.textContent = value;
 
           radioWrapper.appendChild(radio);
@@ -420,27 +419,30 @@ function generateForm(config) {
   });
 
   // Add extra participant fields if enabled
-  if (config.want_to_add_participants && config.extra_participants_form_fields) {
-    const extraFieldsWrapper = document.createElement('div');
-    extraFieldsWrapper.style.marginTop = '20px';
+  if (
+    config.want_to_add_participants &&
+    config.extra_participants_form_fields
+  ) {
+    const extraFieldsWrapper = document.createElement("div");
+    extraFieldsWrapper.style.marginTop = "20px";
 
     config.extra_participants_form_fields.forEach((field) => {
-      const fieldWrapper = document.createElement('div');
-      const label = document.createElement('label');
+      const fieldWrapper = document.createElement("div");
+      const label = document.createElement("label");
       label.textContent = field.label;
 
       let input;
       switch (field.type) {
-        case 'text':
-          input = document.createElement('input');
-          input.type = 'text';
+        case "text":
+          input = document.createElement("input");
+          input.type = "text";
           break;
-        case 'dropdown':
-          input = document.createElement('select');
+        case "dropdown":
+          input = document.createElement("select");
           break;
-        case 'date':
-          input = document.createElement('input');
-          input.type = 'date';
+        case "date":
+          input = document.createElement("input");
+          input.type = "date";
           break;
         default:
           console.warn(`Unsupported field type: ${field.type}`);
@@ -461,3 +463,112 @@ function generateForm(config) {
 
 // Example usage
 document.body.appendChild(generateForm(yourConfig));
+
+const questionsToGenerate = [
+  {
+    label: "Blackwood, New Jersey",
+    input_type: "label",
+    question_id: "some_i23423sdd6",
+    fontSize: "1.5rem",
+    color: "red",
+    bold: true,
+    customStyles: {
+      textAlign: "center",
+      position: "relative",
+      marginBottom: "10px",
+    },
+  },
+
+  {
+    label: "Please fill in the information below to complete your waiver...",
+    input_type: "label",
+    question_id: "some_i23423d6",
+    fontSize: "1rem",
+    color: "black",
+    bold: true,
+    customStyles: {
+      textAlign: "center",
+      marginLeft: "10px",
+    },
+  },
+
+  {
+    label: "Please enter your password",
+    required: false,
+    input_type: "text",
+    question_id: "somesds3asdsd52_id4",
+    input_placeholder: "password..",
+    variant: "password",
+  },
+  {
+    label: "Address",
+    required: false,
+    input_type: "text",
+    question_id: "somesdsa53sdsdsd52_id4",
+    input_placeholder: "Address..",
+    variant: "text",
+    required: true,
+  },
+  {
+    label: "City",
+    required: false,
+    input_type: "text",
+    question_id: "soasdasme4sdsasdsdsd52_id4",
+    input_placeholder: "City..",
+    variant: "text",
+    required: true,
+  },
+  {
+    label: "State",
+    values: [
+      "Alabama",
+      "Alaska",
+      "Wisconsin",
+      "Wyoming",
+    ],
+    required: false,
+    input_type: "dropdown",
+    question_id: "some_idsdasd32",
+    required: true,
+  },
+  {
+    label: "Zip Code",
+    required: false,
+    input_type: "text",
+    question_id: "soasdasme23sdsasdsdsd52_id4",
+    input_placeholder: "Zip Code..",
+    variant: "number",
+    required: true,
+  },
+  {
+    label: "Phone Number",
+    required: false,
+    input_type: "text",
+    question_id: "soasdasmesdsas41dsdsd52_id4",
+    input_placeholder: "Phone Number..",
+    required: true,
+    variant: "number",
+  },
+  {
+    label: "Adult Gender",
+    values: ["Male", "Female", "Not Specified"],
+    required: true,
+    input_type: "dropdown",
+    question_id: "some_idsda5sd32",
+  },
+  {
+    label: "I wish to receive special offers and discounts",
+    input_type: "checkbox",
+    question_id: "wantasd_asdasdparticipant_id",
+    fontSize: "1rem",
+    color: "black",
+    required: true,
+  },
+  {
+    label: "Waiver is for?",
+    input_type: "radio",
+    values: ["Me and my kids!", "Just me"],
+    question_id: "want_participant_id",
+    required: true,
+  },
+];
