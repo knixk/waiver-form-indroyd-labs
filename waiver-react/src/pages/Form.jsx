@@ -293,56 +293,132 @@ const Form = () => {
   // }, []);
 
   useEffect(() => {
-    const getTemplateIdFromCenterID = async (id) => {
-      let ans = null;
-      const templates = `${aws_url}/template-id-from-center`;
+    if (import.meta.env.VITE_MODE == "prod") {
+      const getTemplateIdFromCenterID = async (id) => {
+        let ans = null;
+        const templates = `${aws_url}/template-id-from-center`;
 
-      const options = {
-        center_id: id,
-      };
+        const options = {
+          center_id: id,
+        };
 
-      try {
-        const response = await axios.post(templates, options);
-        ans = response.data.template_id;
-        setTemplateId(ans);
-      } catch (error) {
-        console.error(error);
-        toast("No form found...");
-        setTimeout(() => navigate("/"), 5000);
-      }
-
-      return ans;
-    };
-
-    const fetchTemplate = async (t_id) => {
-      const templates = `${aws_url}/post-center`;
-
-      const options = {
-        id: t_id,
-      };
-
-      try {
-        const response = await axios.post(templates, options);
-        const myData = JSON.parse(response.data.data[0].template_config);
-
-        if (myData) {
-          setQuestions(myData.questions);
-          setCompanyLogo(myData.company_logo);
-          setExtraFields(myData.extra_participants_form_fields);
-          setDisplayForm(true);
-          setCompanyName(myData.company_name);
-
-          // use local template
-          // setQuestions(template_config.template_config.questions);
-          // setCompanyLogo(template_config.template_config.company_logo);
-          // setExtraFields(
-          //   template_config.template_config.extra_participants_form_fields
-          // );
-          // setDisplayForm(true);
-          // setCompanyName(template_config.template_config.company_name);
-
-          setLoading(false);
+        try {
+          const response = await axios.post(templates, options);
+          ans = response.data.template_id;
+          setTemplateId(ans);
+        } catch (error) {
+          console.error(error);
+          toast("No form found...");
+          setTimeout(() => navigate("/"), 5000);
         }
+
+        return ans;
+      };
+
+      const fetchTemplate = async (t_id) => {
+        const templates = `${aws_url}/post-center`;
+
+        const options = {
+          id: t_id,
+        };
+
+        try {
+          const response = await axios.post(templates, options);
+          const myData = JSON.parse(response.data.data[0].template_config);
+
+          if (myData) {
+            setQuestions(myData.questions);
+            setCompanyLogo(myData.company_logo);
+            setExtraFields(myData.extra_participants_form_fields);
+            setDisplayForm(true);
+            setCompanyName(myData.company_name);
+
+            // use local template
+            // setQuestions(template_config.template_config.questions);
+            // setCompanyLogo(template_config.template_config.company_logo);
+            // setExtraFields(
+            //   template_config.template_config.extra_participants_form_fields
+            // );
+            // setDisplayForm(true);
+            // setCompanyName(template_config.template_config.company_name);
+
+            setLoading(false);
+          }
+        } catch (error) {
+          toast("template doesn't exist");
+          console.error(
+            "Error:",
+            error.response ? error.response.data : error.message
+          );
+        }
+      };
+
+      const asyncFnStitch = async () => {
+        if (!centerID) {
+          setCenterID(centerParams);
+        }
+
+        const data =
+          centerParams && (await getTemplateIdFromCenterID(centerParams));
+        data && (await fetchTemplate(data));
+      };
+
+      asyncFnStitch();
+    }
+
+    if (import.meta.env.VITE_MODE == "dev") {
+      const getTemplateIdFromCenterID = async (id) => {
+        let ans = null;
+        const templates = "http://localhost:5050/template-id-from-center";
+
+        const options = {
+          center_id: id,
+        };
+
+        try {
+          const response = await axios.post(templates, options);
+          ans = response.data.template_id;
+          setTemplateId(ans);
+        } catch (error) {
+          console.error(error);
+          toast("No form found...");
+          setTimeout(() => navigate("/"), 5000);
+        }
+
+        return ans;
+      };
+
+      const fetchTemplate = async (t_id) => {};
+      // const templates = "http://localhost:5050/post-center";
+
+      // const options = {
+      //   id: t_id,
+      // };
+
+      try {
+        // const response = await axios.post(templates, options);
+        // const myData = JSON.parse(response.data.data[0].template_config);
+
+        // if (myData) {
+        //   setQuestions(myData.questions);
+        //   setCompanyLogo(myData.company_logo);
+        //   setExtraFields(myData.extra_participants_form_fields);
+        //   setDisplayForm(true);
+        //   setCompanyName(myData.company_name);
+
+        // use local template
+        setQuestions(template_config.template_config.questions);
+        setCompanyLogo(template_config.template_config.company_logo);
+        setExtraFields(
+          template_config.template_config.extra_participants_form_fields
+        );
+        setDisplayForm(true);
+        setCompanyName(template_config.template_config.company_name);
+        // setWantParticipants(
+        //   template_config.template_config.want_to_add_participants
+        // );
+
+        setLoading(false);
       } catch (error) {
         toast("template doesn't exist");
         console.error(
@@ -350,20 +426,18 @@ const Form = () => {
           error.response ? error.response.data : error.message
         );
       }
-    };
 
-    const asyncFnStitch = async () => {
-      if (!centerID) {
+      const asyncFnStitch = async () => {
         setCenterID(centerParams);
 
-      }
+        const data =
+          centerParams && (await getTemplateIdFromCenterID(centerParams));
+        data && (await fetchTemplate(data));
+      };
 
-      const data =
-        centerParams && (await getTemplateIdFromCenterID(centerParams));
-      data && (await fetchTemplate(data));
-    };
-
-    asyncFnStitch();
+      // asyncFnStitch();
+      fetchTemplate(4);
+    }
   }, []);
 
   return (

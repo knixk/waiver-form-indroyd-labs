@@ -18,6 +18,8 @@ function Home() {
   const navigate = useNavigate();
   const queryParameters = new URLSearchParams(window.location.search);
   const centerParams = queryParameters.get("center");
+
+  console.log(import.meta.env.VITE_MODE);
   // const history = useHistory();
   // const location = useLocation();
 
@@ -30,7 +32,6 @@ function Home() {
     centerID,
     setCenterID,
   } = myState;
-
 
   const handleNext = () => {
     if (layer < 3) {
