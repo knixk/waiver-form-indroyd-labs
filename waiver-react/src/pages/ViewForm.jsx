@@ -237,7 +237,7 @@ const ViewForm = () => {
                             <MenuItem onChange={handleChange} value="" disabled>
                               Choose
                             </MenuItem>
-                            {question.values.map((option) => (
+                            {question.values.split(",").map((option) => (
                               <MenuItem
                                 key={option}
                                 onChange={handleChange}
@@ -255,8 +255,9 @@ const ViewForm = () => {
                           <Typography>{question.label}</Typography>
 
                           <RadioGroup>
-                            {question.values.map((option) => (
+                            {question.values.split(",").map((option) => (
                               <FormControlLabel
+                                disabled
                                 key={option}
                                 onChange={handleChange}
                                 value={option}
