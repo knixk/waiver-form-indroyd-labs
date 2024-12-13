@@ -147,7 +147,7 @@ const Form = () => {
   };
 
   const uploadImageToBackend = async (imgData) => {
-    const response = await axios.post(`${local}/upload-image`, {
+    const response = await axios.post(`${aws_url}/upload-image`, {
       imgData,
     });
     return response.data.link; // Backend returns the Google Drive link
@@ -208,7 +208,7 @@ const Form = () => {
           signature_data: sign?.getTrimmedCanvas().toDataURL("image/png"),
         };
 
-        await axios.post(`${local}/submissions`, submissionPayload);
+        await axios.post(`${aws_url}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
         setTimeout(() => navigate(`/?center=${centerID}`), 3000);
       } catch (error) {
@@ -218,79 +218,6 @@ const Form = () => {
     };
     reader.readAsDataURL(pdfBlob);
   };
-
-  useEffect(() => {
-    const getTemplateIdFromCenterID = async (id) => {
-      let ans = null;
-      const templates = "http://localhost:5050/template-id-from-center";
-
-      const options = {
-        center_id: id,
-      };
-
-      try {
-        const response = await axios.post(templates, options);
-        ans = response.data.template_id;
-        setTemplateId(ans);
-      } catch (error) {
-        console.error(error);
-        toast("No form found...");
-        setTimeout(() => navigate("/"), 5000);
-      }
-
-      return ans;
-    };
-
-    const fetchTemplate = async (t_id) => {};
-    // const templates = "http://localhost:5050/post-center";
-
-    // const options = {
-    //   id: t_id,
-    // };
-
-    try {
-      // const response = await axios.post(templates, options);
-      // const myData = JSON.parse(response.data.data[0].template_config);
-
-      // if (myData) {
-      //   setQuestions(myData.questions);
-      //   setCompanyLogo(myData.company_logo);
-      //   setExtraFields(myData.extra_participants_form_fields);
-      //   setDisplayForm(true);
-      //   setCompanyName(myData.company_name);
-
-      // use local template
-      setQuestions(template_config.template_config.questions);
-      setCompanyLogo(template_config.template_config.company_logo);
-      setExtraFields(
-        template_config.template_config.extra_participants_form_fields
-      );
-      setDisplayForm(true);
-      setCompanyName(template_config.template_config.company_name);
-      // setWantParticipants(
-      //   template_config.template_config.want_to_add_participants
-      // );
-
-      setLoading(false);
-    } catch (error) {
-      toast("template doesn't exist");
-      console.error(
-        "Error:",
-        error.response ? error.response.data : error.message
-      );
-    }
-
-    const asyncFnStitch = async () => {
-      setCenterID(centerParams);
-
-      const data =
-        centerParams && (await getTemplateIdFromCenterID(centerParams));
-      data && (await fetchTemplate(data));
-    };
-
-    // asyncFnStitch();
-    fetchTemplate(4);
-  }, []);
 
   // useEffect(() => {
   //   const getTemplateIdFromCenterID = async (id) => {
@@ -314,43 +241,44 @@ const Form = () => {
   //     return ans;
   //   };
 
-  //   const fetchTemplate = async (t_id) => {
-  //     const templates = "http://localhost:5050/post-center";
+  //   const fetchTemplate = async (t_id) => {};
+  //   // const templates = "http://localhost:5050/post-center";
 
-  //     const options = {
-  //       id: t_id,
-  //     };
+  //   // const options = {
+  //   //   id: t_id,
+  //   // };
 
-  //     try {
-  //       const response = await axios.post(templates, options);
-  //       const myData = JSON.parse(response.data.data[0].template_config);
+  //   try {
+  //     // const response = await axios.post(templates, options);
+  //     // const myData = JSON.parse(response.data.data[0].template_config);
 
-  //       if (myData) {
-  //         setQuestions(myData.questions);
-  //         setCompanyLogo(myData.company_logo);
-  //         setExtraFields(myData.extra_participants_form_fields);
-  //         setDisplayForm(true);
-  //         setCompanyName(myData.company_name);
+  //     // if (myData) {
+  //     //   setQuestions(myData.questions);
+  //     //   setCompanyLogo(myData.company_logo);
+  //     //   setExtraFields(myData.extra_participants_form_fields);
+  //     //   setDisplayForm(true);
+  //     //   setCompanyName(myData.company_name);
 
-  //         // use local template
-  //         // setQuestions(template_config.template_config.questions);
-  //         // setCompanyLogo(template_config.template_config.company_logo);
-  //         // setExtraFields(
-  //         //   template_config.template_config.extra_participants_form_fields
-  //         // );
-  //         // setDisplayForm(true);
-  //         // setCompanyName(template_config.template_config.company_name);
+  //     // use local template
+  //     setQuestions(template_config.template_config.questions);
+  //     setCompanyLogo(template_config.template_config.company_logo);
+  //     setExtraFields(
+  //       template_config.template_config.extra_participants_form_fields
+  //     );
+  //     setDisplayForm(true);
+  //     setCompanyName(template_config.template_config.company_name);
+  //     // setWantParticipants(
+  //     //   template_config.template_config.want_to_add_participants
+  //     // );
 
-  //         setLoading(false);
-  //       }
-  //     } catch (error) {
-  //       toast("template doesn't exist");
-  //       console.error(
-  //         "Error:",
-  //         error.response ? error.response.data : error.message
-  //       );
-  //     }
-  //   };
+  //     setLoading(false);
+  //   } catch (error) {
+  //     toast("template doesn't exist");
+  //     console.error(
+  //       "Error:",
+  //       error.response ? error.response.data : error.message
+  //     );
+  //   }
 
   //   const asyncFnStitch = async () => {
   //     setCenterID(centerParams);
@@ -360,8 +288,80 @@ const Form = () => {
   //     data && (await fetchTemplate(data));
   //   };
 
-  //   asyncFnStitch();
+  //   // asyncFnStitch();
+  //   fetchTemplate(4);
   // }, []);
+
+  useEffect(() => {
+    const getTemplateIdFromCenterID = async (id) => {
+      let ans = null;
+      const templates = `${aws_url}/template-id-from-center`;
+
+      const options = {
+        center_id: id,
+      };
+
+      try {
+        const response = await axios.post(templates, options);
+        ans = response.data.template_id;
+        setTemplateId(ans);
+      } catch (error) {
+        console.error(error);
+        toast("No form found...");
+        setTimeout(() => navigate("/"), 5000);
+      }
+
+      return ans;
+    };
+
+    const fetchTemplate = async (t_id) => {
+      const templates = `${aws_url}/post-center`;
+
+      const options = {
+        id: t_id,
+      };
+
+      try {
+        const response = await axios.post(templates, options);
+        const myData = JSON.parse(response.data.data[0].template_config);
+
+        if (myData) {
+          setQuestions(myData.questions);
+          setCompanyLogo(myData.company_logo);
+          setExtraFields(myData.extra_participants_form_fields);
+          setDisplayForm(true);
+          setCompanyName(myData.company_name);
+
+          // use local template
+          // setQuestions(template_config.template_config.questions);
+          // setCompanyLogo(template_config.template_config.company_logo);
+          // setExtraFields(
+          //   template_config.template_config.extra_participants_form_fields
+          // );
+          // setDisplayForm(true);
+          // setCompanyName(template_config.template_config.company_name);
+
+          setLoading(false);
+        }
+      } catch (error) {
+        toast("template doesn't exist");
+        console.error(
+          "Error:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    };
+
+    const asyncFnStitch = async () => {
+      setCenterID(centerParams);
+
+      const data =
+        centerParams && (await getTemplateIdFromCenterID(centerParams));
+      data && (await fetchTemplate(data));
+    };
+
+    asyncFnStitch();
+  }, []);
 
   return (
     <div className="form__container__main">

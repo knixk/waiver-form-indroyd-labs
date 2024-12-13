@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const logo = "https://dypdvfcjkqkg2.cloudfront.net/large/5862799-1989.jpg";
+
+const aws_url =
+  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
+
 // import logo from "../assets/unicef.png";
 import { useContext } from "react";
 import { MyContext } from "../App";
@@ -34,7 +38,7 @@ function Home() {
 
   useEffect(() => {
     const postCenter = async (centerId) => {
-      const center = `http://localhost:5050/get-center`;
+      const center = `${aws_url}/get-center`;
       const options = {
         center_id: centerId,
       };
@@ -55,13 +59,12 @@ function Home() {
       }
     };
     if (!centerParams) {
-      setCenterID(centerParams)
-      postCenter(1)
+      setCenterID(centerParams);
+      postCenter(1);
     } else {
       centerParams && setCenterID(centerParams);
       centerParams && postCenter(centerParams);
     }
-   
   }, []);
 
   return (
@@ -81,55 +84,55 @@ function Home() {
         transition: "background-color 0.5s ease",
       }}
     >
-      {
-        centerInfo && <Box
-        sx={{
-          opacity: layer === 1 ? 1 : 0, // Fade in for the first screen
-          transition: "opacity 0.5s ease",
-          position: "absolute",
-          width: "100%",
-          maxWidth: "600px",
-        }}
-      >
-        {centerInfo && (
-          <img
-            src={JSON.parse(centerInfo.additional_info).img}
-            style={{ width: 200, borderRadius: 5, marginBottom: 10 }}
-            alt="logo"
-          />
-        )}
+      {centerInfo && (
+        <Box
+          sx={{
+            opacity: layer === 1 ? 1 : 0, // Fade in for the first screen
+            transition: "opacity 0.5s ease",
+            position: "absolute",
+            width: "100%",
+            maxWidth: "600px",
+          }}
+        >
+          {centerInfo && (
+            <img
+              src={JSON.parse(centerInfo.additional_info).img}
+              style={{ width: 200, borderRadius: 5, marginBottom: 10 }}
+              alt="logo"
+            />
+          )}
 
-        {layer === 1 && (
-          <Box>
-            {/* <Typography variant="h4">company name</Typography> */}
+          {layer === 1 && (
+            <Box>
+              {/* <Typography variant="h4">company name</Typography> */}
 
-            <Typography variant="h4">
-              {centerInfo && centerInfo.center_name}
-            </Typography>
+              <Typography variant="h4">
+                {centerInfo && centerInfo.center_name}
+              </Typography>
 
-            <Typography color={"gainsboro"} sx={{ mt: 2 }}>
-              {centerInfo && JSON.parse(centerInfo.additional_info).intro}
-            </Typography>
+              <Typography color={"gainsboro"} sx={{ mt: 2 }}>
+                {centerInfo && JSON.parse(centerInfo.additional_info).intro}
+              </Typography>
 
-            <Button
-              variant="contained"
-              onClick={() => navigate(`/form?center=${centerID}`)}
-              sx={{ mt: 2.5 }}
-            >
-              Get Started
-            </Button>
+              <Button
+                variant="contained"
+                onClick={() => navigate(`/form?center=${centerID}`)}
+                sx={{ mt: 2.5 }}
+              >
+                Get Started
+              </Button>
 
-            {/* <Button
+              {/* <Button
               variant="contained"
               onClick={() => navigate("/search")}
               sx={{ mt: 2.5, ml: 2 }}
             >
               Search forms
             </Button> */}
-          </Box>
-        )}
-      </Box>
-      }
+            </Box>
+          )}
+        </Box>
+      )}
     </Box>
   );
 }
