@@ -72,7 +72,10 @@ const FormBuilder = () => {
   const handleAddQuestion = () => {
     setFormConfig((prev) => ({
       ...prev,
-      questions: [...prev.questions, { ...currentQuestion, id: Date.now() }],
+      questions: [
+        ...prev.questions,
+        { ...currentQuestion, question_id: Date.now() },
+      ],
     }));
     setCurrentQuestion({
       label: "",
@@ -92,7 +95,7 @@ const FormBuilder = () => {
   const handleRemoveQuestion = (id) => {
     setFormConfig((prev) => ({
       ...prev,
-      questions: prev.questions.filter((q) => q.id !== id),
+      questions: prev.questions.filter((q) => q.question_id !== id),
     }));
   };
 
@@ -345,7 +348,7 @@ const FormBuilder = () => {
           Preview
         </Typography>
         {formConfig.questions.map((question) => (
-          <div key={question.id} style={{ marginBottom: "20px" }}>
+          <div key={question.question_id} style={{ marginBottom: "20px" }}>
             {question.image && (
               <img src={question.image} alt="" style={{ maxWidth: "100%" }} />
             )}
@@ -388,7 +391,7 @@ const FormBuilder = () => {
             <Button
               variant="outlined"
               color="error"
-              onClick={() => handleRemoveQuestion(question.id)}
+              onClick={() => handleRemoveQuestion(question.question_id)}
             >
               Remove
             </Button>
