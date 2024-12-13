@@ -1,27 +1,54 @@
 {
-  "template_name": "sdasdasd",
+  "template_name": "asdasdasdasd",
   "template_config": {
-      "company_logo": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
-      "company_address": "asdasdasd",
+      "company_logo": "sadasdasdasd",
+      "company_address": "asdasdas",
       "questions": [
           {
-              "label": "asdasdasdasdasdasdasdasdasd",
-              "input_type": "label",
+              "label": "asdasdasdasd",
+              "input_type": "text",
               "values": "",
-              "image": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
-              "fontSize": "2rem",
-              "color": "red",
-              "bold": true,
-              "italic": true,
-              "alignment": "center",
+              "image": "",
               "customStyles": {
                   "fontSize": "2rem",
                   "color": "red",
                   "fontWeight": "bold",
                   "fontStyle": "italic",
+                  "textAlign": "right"
+              },
+              "fontSize": "2rem",
+              "color": "red",
+              "italic": true,
+              "bold": true,
+              "alignment": "right",
+              "id": 1734065078954
+          },
+          {
+              "label": "asdasdas dasd asd asd asd",
+              "input_type": "file",
+              "values": "",
+              "image": "",
+              "customStyles": {
+                  "fontWeight": "bold",
+                  "fontStyle": "italic"
+              },
+              "italic": true,
+              "bold": true,
+              "color": "",
+              "id": 1734065089674
+          },
+          {
+              "label": "asdasdasdasdasdasdasdasd",
+              "input_type": "file",
+              "values": "",
+              "image": "",
+              "customStyles": {
+                  "fontSize": "1rem",
                   "textAlign": "center"
               },
-              "id": 1734064409621
+              "fontSize": "1rem",
+              "alignment": "center",
+              "id": 1734065104377
           }
       ]
   }

@@ -23,11 +23,11 @@ const FormBuilder = () => {
     input_type: "text",
     values: "",
     image: "",
-    fontSize: "",
-    color: "",
-    bold: false,
-    italic: false,
-    alignment: "",
+    // fontSize: "",
+    // color: "",
+    // bold: false,
+    // italic: false,
+    // alignment: "",
     customStyles: {},
   });
 
@@ -41,11 +41,11 @@ const FormBuilder = () => {
       input_type: "text",
       values: "",
       image: "",
-      fontSize: "",
-      color: "",
-      bold: false,
-      italic: false,
-      alignment: "",
+      // fontSize: "",
+      // color: "",
+      // bold: false,
+      // italic: false,
+      // alignment: "",
       customStyles: {},
     });
   };

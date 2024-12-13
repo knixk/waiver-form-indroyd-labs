@@ -108,9 +108,7 @@ const Form = () => {
   const centerParams = queryParameters.get("center");
 
   const handleInputChange = (id, value) => {
-
     setFormData((prev) => ({ ...prev, [id]: value }));
-
 
     if (formData["want_participant_id"] == "Me and my kids!") {
       // setWantParticipants(true);
@@ -131,8 +129,6 @@ const Form = () => {
       setWantParticipants(false);
       setParticipants([]);
     }
-
-
   };
 
   const addParticipant = () => {
@@ -291,7 +287,7 @@ const Form = () => {
     // asyncFnStitch();
     fetchTemplate(4);
   }, []);
- 
+
   // useEffect(() => {
   //   const getTemplateIdFromCenterID = async (id) => {
   //     let ans = null;
@@ -421,9 +417,6 @@ const Form = () => {
                       <FormControl component="fieldset" sx={{ mb: 2 }}>
                         <Typography
                           sx={{
-                            fontSize: question.fontSize || "1rem", // Default size if not provided
-                            color: question.color || "black", // Default color if not provided
-                            fontWeight: question.bold ? "bold" : "normal", // Bold if specified
                             ...question.customStyles, // Any additional custom styles
                           }}
                         >
@@ -438,7 +431,13 @@ const Form = () => {
 
                     {question.input_type === "text" && question.label && (
                       <FormControl component="fieldset" sx={{ mb: 2 }}>
-                        <Typography>{question.label}</Typography>
+                        <Typography
+                          sx={{
+                            ...question.customStyles, // Any additional custom styles
+                          }}
+                        >
+                          {question.label}
+                        </Typography>
                         <TextField
                           type={question.variant || "text"}
                           variant="outlined"
@@ -460,7 +459,13 @@ const Form = () => {
 
                     {question.input_type === "dropdown" && (
                       <FormControl fullWidth margin="normal">
-                        <Typography>{question.label}</Typography>
+                        <Typography
+                          sx={{
+                            ...question.customStyles, // Any additional custom styles
+                          }}
+                        >
+                          {question.label}
+                        </Typography>
 
                         <Select
                           value={formData[question.question_id] || ""}
@@ -486,7 +491,13 @@ const Form = () => {
 
                     {question.input_type === "radio" && (
                       <FormControl component="fieldset">
-                        <Typography>{question.label}</Typography>
+                        <Typography
+                          sx={{
+                            ...question.customStyles, // Any additional custom styles
+                          }}
+                        >
+                          {question.label}
+                        </Typography>
 
                         <RadioGroup
                           onChange={(e) =>
@@ -512,9 +523,6 @@ const Form = () => {
                       <FormControl component="fieldset" sx={{ mb: 2 }}>
                         <Typography
                           sx={{
-                            fontSize: question.fontSize || "1rem",
-                            color: question.color || "black",
-                            fontWeight: question.bold ? "bold" : "normal",
                             ...question.customStyles,
                           }}
                         >
@@ -545,9 +553,6 @@ const Form = () => {
                       <FormControl component="fieldset" sx={{ mb: 2 }}>
                         <Typography
                           sx={{
-                            fontSize: question.fontSize || "1rem",
-                            color: question.color || "black",
-                            fontWeight: question.bold ? "bold" : "normal",
                             ...question.customStyles,
                           }}
                         >
@@ -577,7 +582,13 @@ const Form = () => {
 
                     {question.input_type === "checkbox" && question.label && (
                       <FormControl component="fieldset" sx={{ mb: 2 }}>
-                        <Typography>{question.label}</Typography>
+                        <Typography
+                          sx={{
+                            ...question.customStyles, // Any additional custom styles
+                          }}
+                        >
+                          {question.label}
+                        </Typography>
                         <Checkbox
                           checked={formData[question.question_id] || false} // Ensures it shows the correct state
                           onChange={(e) =>
@@ -593,6 +604,13 @@ const Form = () => {
 
                     {question.input_type === "file" && (
                       <FormControl fullWidth margin="normal">
+                        <Typography
+                          sx={{
+                            ...question.customStyles, // Any additional custom styles
+                          }}
+                        >
+                          {question.label}
+                        </Typography>
                         <Button
                           variant="contained"
                           component="label"
