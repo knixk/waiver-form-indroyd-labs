@@ -1,55 +1,29 @@
 {
-  "template_name": "asdasdasdasd",
+  "template_name": "asdasdasd",
   "template_config": {
-      "company_logo": "sadasdasdasd",
-      "company_address": "asdasdas",
       "questions": [
           {
-              "label": "asdasdasdasd",
-              "input_type": "text",
-              "values": "",
-              "image": "",
-              "customStyles": {
-                  "fontSize": "2rem",
-                  "color": "red",
-                  "fontWeight": "bold",
-                  "fontStyle": "italic",
-                  "textAlign": "right"
-              },
-              "fontSize": "2rem",
-              "color": "red",
-              "italic": true,
-              "bold": true,
-              "alignment": "right",
-              "id": 1734065078954
-          },
-          {
-              "label": "asdasdas dasd asd asd asd",
-              "input_type": "file",
-              "values": "",
-              "image": "",
-              "customStyles": {
-                  "fontWeight": "bold",
-                  "fontStyle": "italic"
-              },
-              "italic": true,
-              "bold": true,
-              "color": "",
-              "id": 1734065089674
-          },
-          {
-              "label": "asdasdasdasdasdasdasdasd",
-              "input_type": "file",
-              "values": "",
-              "image": "",
-              "customStyles": {
-                  "fontSize": "1rem",
-                  "textAlign": "center"
-              },
-              "fontSize": "1rem",
-              "alignment": "center",
-              "id": 1734065104377
+              "label": "asdasd",
+              "input_type": "radio",
+              "question_id": "question_1734068198784",
+              "required": true,
+              "image": "asdasd",
+              "options": [
+                  "asasd",
+                  "213"
+              ]
           }
-      ]
+      ],
+      "extra_participants_form_fields": [
+          {
+              "id": "field_1734068211272",
+              "type": "date",
+              "label": "aasdasd"
+          }
+      ],
+      "company_logo": "asdasd",
+      "company_name": "Fun City Adventure Park",
+      "company_address": "asdasd",
+      "want_to_add_participants": true
   }
 }
