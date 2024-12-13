@@ -143,10 +143,10 @@ const FormBuilder = () => {
   };
 
   return (
-    <div>
+    <Box p={2}>
       <Typography variant="h4">Form Builder</Typography>
 
-      <div>
+      <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
         <TextField
           label="Template Name"
           value={formConfig.templateName}
@@ -177,9 +177,9 @@ const FormBuilder = () => {
           fullWidth
           margin="normal"
         />
-      </div>
+      </Paper>
 
-      <div>
+      <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
         <Typography variant="h5">Add Question</Typography>
         <TextField
           label="Label"
@@ -338,10 +338,12 @@ const FormBuilder = () => {
         <Button variant="contained" onClick={handleAddQuestion}>
           Add Question
         </Button>
-      </div>
+      </Paper>
 
       <div>
-        <Typography variant="h5">Preview</Typography>
+        <Typography sx={{ mb: 2, mt: 3 }} variant="h5">
+          Preview
+        </Typography>
         {formConfig.questions.map((question) => (
           <div key={question.id} style={{ marginBottom: "20px" }}>
             {question.image && (
@@ -451,7 +453,7 @@ const FormBuilder = () => {
       >
         Generate and Log Config
       </Button>
-    </div>
+    </Box>
   );
 };
 
