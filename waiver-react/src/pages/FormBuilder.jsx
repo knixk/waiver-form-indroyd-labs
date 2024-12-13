@@ -100,7 +100,7 @@ const FormBuilder = () => {
   };
 
   function downloadObjectAsJSON(obj, filename = "template_config.json") {
-    console.log("inside")
+    // console.log("inside")
     const blob = new Blob([JSON.stringify(obj, null, 2)], {
       type: "application/json",
     });

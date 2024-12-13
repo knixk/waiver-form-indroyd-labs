@@ -159,7 +159,7 @@ const Form = () => {
 
     if (sign?.getTrimmedCanvas().width == 1) {
       toast.error("You must sign the form!");
-      console.log("empty");
+      // console.log("empty");
       return;
     }
 
@@ -353,7 +353,10 @@ const Form = () => {
     };
 
     const asyncFnStitch = async () => {
-      setCenterID(centerParams);
+      if (!centerID) {
+        setCenterID(centerParams);
+
+      }
 
       const data =
         centerParams && (await getTemplateIdFromCenterID(centerParams));

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+// import { useHistory, useLocation } from "react-router";
 
 const logo = "https://dypdvfcjkqkg2.cloudfront.net/large/5862799-1989.jpg";
 
@@ -17,6 +18,8 @@ function Home() {
   const navigate = useNavigate();
   const queryParameters = new URLSearchParams(window.location.search);
   const centerParams = queryParameters.get("center");
+  // const history = useHistory();
+  // const location = useLocation();
 
   const myState = useContext(MyContext);
   const {
@@ -28,7 +31,6 @@ function Home() {
     setCenterID,
   } = myState;
 
-  console.log(centerParams);
 
   const handleNext = () => {
     if (layer < 3) {
@@ -45,7 +47,7 @@ function Home() {
 
       try {
         const response = await axios.post(center, options);
-        console.log("Response:", response.data.data);
+        // console.log("Response:", response.data.data);
         setCenterInfo(response.data.data);
         // const jsonData = J
         setCenterAddInfo(response.data.data);
@@ -59,8 +61,15 @@ function Home() {
       }
     };
     if (!centerParams) {
-      setCenterID(centerParams);
-      postCenter(1);
+      setCenterID(5);
+      // const params = new URLSearchParams({ ["center"]: 5 });
+      // history.replace({
+      //   pathname: location.pathname,
+      //   search: params.toString(),
+      // });
+
+      // console.log("no paramss");
+      postCenter(5);
     } else {
       centerParams && setCenterID(centerParams);
       centerParams && postCenter(centerParams);
