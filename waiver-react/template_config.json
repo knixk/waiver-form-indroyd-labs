@@ -1,26 +1,109 @@
 {
-  "template_name": "asdasdad",
+  "template_name": "photography",
   "template_config": {
+      "company_logo": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
+      "company_address": "Pune",
       "questions": [
           {
-              "label": "asdasdasdas",
+              "label": "best",
+              "input_type": "text",
+              "values": "",
+              "image": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
+              "required": false,
+              "customStyles": {
+                  "fontSize": "2rem",
+                  "color": "red",
+                  "fontWeight": "bold",
+                  "fontStyle": "italic",
+                  "textAlign": "right"
+              },
+              "fontSize": "2rem",
+              "color": "red",
+              "italic": true,
+              "bold": true,
+              "alignment": "right",
+              "id": 1734069728375
+          },
+          {
+              "label": "asdasd",
+              "input_type": "textarea",
+              "values": "",
+              "image": "",
+              "required": false,
+              "customStyles": {
+                  "fontSize": "1rem"
+              },
+              "fontSize": "1rem",
+              "id": 1734069740708
+          },
+          {
+              "label": "asdasd",
+              "input_type": "dropdown",
+              "values": "23, 21, 233",
+              "image": "",
+              "required": false,
+              "customStyles": {
+                  "color": "blue"
+              },
+              "color": "blue",
+              "id": 1734069763895
+          },
+          {
+              "label": "dasdasdasd",
+              "input_type": "date",
+              "values": "",
+              "image": "",
+              "required": false,
+              "customStyles": {
+                  "textAlign": "center"
+              },
+              "alignment": "center",
+              "id": 1734069773595
+          },
+          {
+              "label": "",
+              "input_type": "file",
+              "values": "",
+              "image": "",
+              "required": false,
+              "customStyles": {
+                  "textAlign": "left"
+              },
+              "alignment": "left",
+              "italic": false,
+              "bold": false,
+              "id": 1734069782107
+          },
+          {
+              "label": "asdasdasd BOLD LABEL NICE AND WIDE",
               "input_type": "label",
-              "question_id": "question_1734068615179",
-              "required": true,
-              "image": "asdasdasdasd",
-              "options": []
+              "values": "",
+              "image": "",
+              "required": false,
+              "customStyles": {
+                  "fontSize": "2rem",
+                  "fontWeight": "bold",
+                  "fontStyle": "italic",
+                  "textAlign": "center"
+              },
+              "fontSize": "2rem",
+              "bold": true,
+              "italic": true,
+              "alignment": "center",
+              "id": 1734069799573
           }
       ],
       "extra_participants_form_fields": [
           {
-              "id": "field_1734068631922",
+              "id": "field_1734069802071",
               "type": "text",
-              "label": "asdasdasd"
+              "label": "name"
+          },
+          {
+              "id": "field_1734069804981",
+              "type": "dropdown",
+              "label": "age"
           }
-      ],
-      "company_logo": "asdasdas",
-      "company_name": "Fun City Adventure Park",
-      "company_address": "dasdasd",
-      "want_to_add_participants": true
+      ]
   }
 }

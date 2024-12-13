@@ -488,7 +488,7 @@ const Form = () => {
                           <MenuItem value="" disabled>
                             Choose
                           </MenuItem>
-                          {question.values.map((option) => (
+                          {question.values.split(",").map((option) => (
                             <MenuItem key={option} value={option}>
                               {option}
                             </MenuItem>
