@@ -99,6 +99,17 @@ const FormBuilder = () => {
     }));
   };
 
+  function downloadObjectAsJSON(obj, filename = "template_config.json") {
+    console.log("inside")
+    const blob = new Blob([JSON.stringify(obj, null, 2)], {
+      type: "application/json",
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+  }
+
   const handleCustomStylesChange = (field, value) => {
     setCurrentQuestion((prev) => ({
       ...prev,
@@ -108,6 +119,7 @@ const FormBuilder = () => {
       },
     }));
   };
+
 
   const handleGenerateConfig = () => {
     setCurrentQuestion((currentQuestion) => ({
@@ -141,6 +153,8 @@ const FormBuilder = () => {
         extra_participants_form_fields: extraParticipantFields,
       },
     };
+
+    downloadObjectAsJSON(config)
 
     console.log(config);
   };

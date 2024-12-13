@@ -1,24 +1,35 @@
 {
-  "template_name": "asdasd",
+  "template_name": "",
   "template_config": {
-    "company_logo": "asdasd",
-    "company_address": "asdasd",
+    "company_logo": "",
+    "company_address": "",
     "questions": [
       {
-        "label": "asdasdasd",
-        "input_type": "dropdown",
-        "values": "asd, asdas, 231",
-        "image": "",
+        "label": "asdasdasdasdasdasd",
+        "input_type": "text",
+        "values": "",
+        "image": "asdasd",
         "required": false,
-        "customStyles": {},
-        "question_id": 1734074198998
+        "customStyles": {
+          "fontSize": "2rem",
+          "color": "blue",
+          "fontWeight": "bold",
+          "fontStyle": "italic",
+          "textAlign": "center"
+        },
+        "fontSize": "2rem",
+        "color": "blue",
+        "italic": true,
+        "bold": true,
+        "alignment": "center",
+        "question_id": 1734074921101
       }
     ],
     "extra_participants_form_fields": [
       {
-        "id": "field_1734074200474",
-        "type": "text",
-        "label": "dasdasd"
+        "id": "field_1734074923586",
+        "type": "dropdown",
+        "label": "asdasd"
       }
     ]
   }

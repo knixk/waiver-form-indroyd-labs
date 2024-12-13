@@ -100,6 +100,17 @@ const FormBuilder = () => {
     }));
   };
 
+  function downloadObjectAsJSON(obj, filename = "template_config.json") {
+    console.log("inside")
+    const blob = new Blob([JSON.stringify(obj, null, 2)], {
+      type: "application/json",
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+  }
+
   const handleGenerateConfig = () => {
     setCurrentQuestion((currentQuestion) => ({
       ...currentQuestion,
@@ -134,6 +145,8 @@ const FormBuilder = () => {
     };
 
     console.log(config);
+
+    downloadObjectAsJSON(config);
   };
 
   return (
