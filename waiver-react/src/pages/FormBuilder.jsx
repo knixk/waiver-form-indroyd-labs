@@ -23,6 +23,7 @@ const FormBuilder = () => {
     input_type: "text",
     values: "",
     image: "",
+    required: false,
     // fontSize: "",
     // color: "",
     // bold: false,
@@ -30,6 +31,8 @@ const FormBuilder = () => {
     // alignment: "",
     customStyles: {},
   });
+
+  const [check, setCheck] = useState(false);
 
   const handleAddQuestion = () => {
     setFormConfig((prev) => ({
@@ -41,6 +44,7 @@ const FormBuilder = () => {
       input_type: "text",
       values: "",
       image: "",
+      required: false,
       // fontSize: "",
       // color: "",
       // bold: false,
@@ -68,6 +72,11 @@ const FormBuilder = () => {
   };
 
   const handleGenerateConfig = () => {
+    setCurrentQuestion((currentQuestion) => ({
+      ...currentQuestion,
+      required: check, // Use the string "required" as the key
+    }));
+
     const processedQuestions = formConfig.questions.map((question) => {
       // Merge predefined styles into customStyles
       const mergedStyles = {
@@ -78,13 +87,13 @@ const FormBuilder = () => {
         ...(question.italic && { fontStyle: "italic" }),
         ...(question.alignment && { textAlign: question.alignment }),
       };
-  
+
       return {
         ...question,
         customStyles: mergedStyles,
       };
     });
-  
+
     const config = {
       template_name: formConfig.templateName,
       template_config: {
@@ -94,17 +103,13 @@ const FormBuilder = () => {
         extra_participants_form_fields: formConfig.extraParticipants,
       },
     };
-  
+
     console.log(config);
   };
-  
-  
 
   return (
     <div>
-      <Typography variant="h4">
-        Form Builder
-      </Typography>
+      <Typography variant="h4">Form Builder</Typography>
 
       <div>
         <TextField
@@ -183,6 +188,18 @@ const FormBuilder = () => {
             margin="normal"
           />
         )}
+        <Typography>
+          Required
+          <Checkbox
+            name="required__check"
+            onChange={() => {
+              setCheck(!check);
+            }}
+            checked={check} // Ensures it shows the correct state
+            // onChange={() => }
+          />
+        </Typography>
+
         <TextField
           label="Image URL (optional)"
           value={currentQuestion.image}

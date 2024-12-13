@@ -158,7 +158,15 @@ const Form = () => {
   };
 
   const handleSubmit = async (e) => {
+    // console.log(sign?.getTrimmedCanvas().width == 1)
     e.preventDefault();
+
+    if (sign?.getTrimmedCanvas().width == 1) {
+      toast.error("You must sign the form!");
+      console.log("empty");
+      return;
+    }
+
     toast("Submitting form, please wait...");
     setDisabled(true);
 
