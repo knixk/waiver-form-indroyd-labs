@@ -1,40 +1,73 @@
 {
-  "template_name": "jhgjhg",
+  "template_name": "art ",
   "template_config": {
+    "company_logo": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
+    "company_address": "asdasdsd",
     "questions": [
-      {
-        "label": "kjhkjh",
-        "input_type": "dropdown",
-        "question_id": "",
-        "required": true
-      }
-    ],
+    {
+      "label": "I am above 22 years of age.",
+      "values": ["no", "yes", "prefer not to answer"],
+      "required": false,
+      "input_type": "dropdown",
+      "question_id": "some_id32"
+    },
+    {
+      "image": "https://www.euroschoolindia.com/wp-content/uploads/2023/08/importance-of-learning-science.jpg",
+      "label": "I had to make a second template to make sure it works..",
+      "required": false,
+      "input_type": "label",
+      "question_id": "some_id4",
+      "input_placeholder": "Enter your text.."
+    },
+    {
+      "label": "Custom input label type put anything here..",
+      "required": false,
+      "input_type": "text",
+      "question_id": "somesdsad52_id4",
+      "input_placeholder": "Enter your text.."
+    },
+    {
+      "label": "Please attach your file here..",
+      "input_type": "file",
+      "question_id": "some_id5"
+    },
+    {
+      "image": "https://www.training.com.au/wp-content/uploads/science-stem-feature.png?width=720&height=420",
+      "label": "Any message you would like to leave us?",
+      "input_type": "textarea",
+      "question_id": "some_id6"
+    },
+    {
+      "label": "When did u first hear about us??",
+      "input_type": "date",
+      "question_id": "someassdasd_id6"
+    },
+    {
+      "bold": false,
+      "color": "black",
+      "label": "Any message you would like to leave us? Any message you would like to leave us? Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?Any message you would like to leave us?",
+      "fontSize": "1rem",
+      "input_type": "label",
+      "question_id": "some_i2342s3d6",
+      "customStyles": { "textAlign": "center", "marginBottom": "10px" }
+    },
+    {
+      "bold": true,
+      "color": "red",
+      "image": "https://cdn.britannica.com/09/92009-050-122EC720/Enterprise-from-Star-Trek-III-The-Search.jpg",
+      "label": "Bold disclaimer, to leave us? Any message you would like to leave us?",
+      "fontSize": "1.5rem",
+      "input_type": "label",
+      "question_id": "some_i23423d6",
+      "customStyles": { "textAlign": "start", "marginBottom": "10px" }
+    }
+  ],
     "extra_participants_form_fields": [
       {
-        "id": 1733992243608,
+        "id": "participant_field_1734060441734",
         "type": "text",
-        "label": "New Field"
-      },
-      {
-        "id": 1733992244218,
-        "type": "text",
-        "label": "New Field"
-      },
-      {
-        "id": 1733992244392,
-        "type": "text",
-        "label": "New Field"
-      },
-      {
-        "id": 1733992244568,
-        "type": "text",
-        "label": "New Field"
+        "label": "asdasdasd"
       }
-    ],
-    "company_logo": "jkhkhkjh400092",
-    "company_name": "jhkjh",
-    "company_address": "ljlkjlk",
-    "want_to_add_participants": true
-
+    ]
   }
 }

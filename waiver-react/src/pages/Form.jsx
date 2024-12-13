@@ -113,9 +113,9 @@ const Form = () => {
 
 
     if (formData["want_participant_id"] == "Me and my kids!") {
-      setWantParticipants(true);
+      // setWantParticipants(true);
     } else {
-      setWantParticipants(false);
+      // setWantParticipants(false);
     }
   };
 
@@ -453,7 +453,7 @@ const Form = () => {
                           placeholder={
                             question.input_placeholder || "Enter your response"
                           }
-                          sx={{ mt: 2, ...question.customInputStyles }}
+                          sx={{ mt: 2, ...question.customStyles }}
                         />
                       </FormControl>
                     )}

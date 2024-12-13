@@ -1,181 +1,235 @@
 import React, { useState } from "react";
 import {
-  TextField,
+  Box,
   Button,
+  Typography,
+  TextField,
   Select,
   MenuItem,
-  FormControl,
-  InputLabel,
   Checkbox,
   FormControlLabel,
-  Typography,
-  Box,
-  Stack,
+  IconButton,
+  Paper,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
+import { Delete } from "@mui/icons-material";
 
 const FormBuilder = () => {
-  const [formFields, setFormFields] = useState([]);
-  const [extraFields, setExtraFields] = useState([]);
-  const [currentField, setCurrentField] = useState({
-    label: "",
-    input_type: "",
-    required: false,
-    image: "",
-    values: "",
-  });
+  const [questions, setQuestions] = useState([]);
+  const [extraParticipantFields, setExtraParticipantFields] = useState([]);
+  const [templateName, setTemplateName] = useState("");
+  const [companyLogo, setCompanyLogo] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
 
-  const inputTypes = [
-    { value: "text", label: "Text Input" },
-    { value: "dropdown", label: "Dropdown" },
-    { value: "checkbox", label: "Checkbox" },
-    { value: "radio", label: "Radio" },
-    { value: "date", label: "Date" },
-    { value: "file", label: "File" },
-    { value: "label", label: "Label Only" },
-  ];
-
-  const handleAddField = () => {
-    const newField = { ...currentField };
-
-    // Handle values for dropdown or radio
-    if (currentField.input_type === "dropdown" || currentField.input_type === "radio") {
-      newField.values = currentField.values.split(",").map((v) => v.trim());
-    }
-
-    setFormFields([...formFields, newField]);
-    setCurrentField({ label: "", input_type: "", required: false, image: "", values: "" });
+  const handleAddQuestion = () => {
+    setQuestions([
+      ...questions,
+      {
+        label: "",
+        input_type: "text",
+        question_id: `question_${Date.now()}`,
+        required: false,
+        image: "",
+        options: [],
+      },
+    ]);
   };
 
-  const handleAddExtraField = () => {
-    setExtraFields([...extraFields, { label: "", type: "" }]);
+  const handleRemoveQuestion = (index) => {
+    setQuestions(questions.filter((_, i) => i !== index));
   };
 
-  const handleExtraFieldChange = (index, field, value) => {
-    const updatedExtraFields = [...extraFields];
-    updatedExtraFields[index][field] = value;
-    setExtraFields(updatedExtraFields);
+  const handleAddParticipantField = () => {
+    setExtraParticipantFields([
+      ...extraParticipantFields,
+      { id: `field_${Date.now()}`, type: "text", label: "" },
+    ]);
   };
 
-  const handleSaveConfig = () => {
+  const handleRemoveParticipantField = (index) => {
+    setExtraParticipantFields(extraParticipantFields.filter((_, i) => i !== index));
+  };
+
+  const handleDownloadConfig = () => {
     const config = {
-      template_name: "My Form Template",
+      template_name: templateName,
       template_config: {
-        questions: formFields,
-        extra_participants_form_fields: extraFields,
+        questions,
+        extra_participants_form_fields: extraParticipantFields,
+        company_logo: companyLogo,
+        company_name: "Fun City Adventure Park",
+        company_address: companyAddress,
+        want_to_add_participants: true,
       },
     };
-
-    console.log("Generated Config:", JSON.stringify(config, null, 2));
+    console.log(config);
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Form Builder
-      </Typography>
-
-      {/* Field Inputs */}
-      <Stack spacing={2}>
-        <TextField
-          label="Label"
-          value={currentField.label}
-          onChange={(e) => setCurrentField({ ...currentField, label: e.target.value })}
-        />
-
-        <FormControl fullWidth>
-          <InputLabel>Input Type</InputLabel>
-          <Select
-            value={currentField.input_type}
-            onChange={(e) => setCurrentField({ ...currentField, input_type: e.target.value })}
-          >
-            {inputTypes.map((type) => (
-              <MenuItem key={type.value} value={type.value}>
-                {type.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        {(currentField.input_type === "dropdown" || currentField.input_type === "radio") && (
-          <TextField
-            label="Options (comma-separated)"
-            value={currentField.values}
-            onChange={(e) => setCurrentField({ ...currentField, values: e.target.value })}
-          />
-        )}
-
-        {currentField.input_type !== "label" && (
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={currentField.required}
-                onChange={(e) => setCurrentField({ ...currentField, required: e.target.checked })}
-              />
-            }
-            label="Required"
-          />
-        )}
-
-        <TextField
-          label="Image URL (Optional)"
-          value={currentField.image}
-          onChange={(e) => setCurrentField({ ...currentField, image: e.target.value })}
-        />
-
-        <Button variant="contained" onClick={handleAddField}>
-          Add Field
-        </Button>
-      </Stack>
-
-      {/* Added Fields */}
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h5" gutterBottom>
-          Added Fields
+    <Box p={2}>
+      <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Template Configuration
         </Typography>
-        {formFields.map((field, index) => (
-          <Typography key={index}>{`${index + 1}. ${field.label} (${field.input_type})`}</Typography>
-        ))}
-      </Box>
+        <TextField
+          fullWidth
+          label="Template Name"
+          value={templateName}
+          onChange={(e) => setTemplateName(e.target.value)}
+          sx={{ mb: 2 }}
+        />
+        <TextField
+          fullWidth
+          label="Company Logo URL"
+          value={companyLogo}
+          onChange={(e) => setCompanyLogo(e.target.value)}
+          sx={{ mb: 2 }}
+        />
+        <TextField
+          fullWidth
+          label="Company Address"
+          value={companyAddress}
+          onChange={(e) => setCompanyAddress(e.target.value)}
+          sx={{ mb: 2 }}
+        />
+      </Paper>
 
-      {/* Extra Participants Form Fields */}
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h5" gutterBottom>
-          Extra Participants Form Fields
+      <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Questions
         </Typography>
-        {extraFields.map((field, index) => (
-          <Stack key={index} direction="row" spacing={2} sx={{ mb: 2 }}>
+        {questions.map((question, index) => (
+          <Box key={index} sx={{ mb: 2, p: 2, border: "1px solid #ccc", borderRadius: "4px" }}>
             <TextField
-              label="Field Label"
-              value={field.label}
-              onChange={(e) => handleExtraFieldChange(index, "label", e.target.value)}
+              fullWidth
+              label="Question Label"
+              value={question.label}
+              onChange={(e) => {
+                const newQuestions = [...questions];
+                newQuestions[index].label = e.target.value;
+                setQuestions(newQuestions);
+              }}
+              sx={{ mb: 2 }}
             />
 
-            <FormControl fullWidth>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel>Input Type</InputLabel>
+              <Select
+                value={question.input_type}
+                onChange={(e) => {
+                  const newQuestions = [...questions];
+                  newQuestions[index].input_type = e.target.value;
+                  setQuestions(newQuestions);
+                }}
+              >
+                <MenuItem value="text">Text</MenuItem>
+                <MenuItem value="dropdown">Dropdown</MenuItem>
+                <MenuItem value="checkbox">Checkbox</MenuItem>
+                <MenuItem value="radio">Radio</MenuItem>
+                <MenuItem value="date">Date</MenuItem>
+                <MenuItem value="file">File</MenuItem>
+                <MenuItem value="label">Label</MenuItem>
+              </Select>
+            </FormControl>
+
+            {question.input_type === "dropdown" || question.input_type === "radio" ? (
+              <TextField
+                fullWidth
+                label="Options (comma separated)"
+                value={question.options.join(",")}
+                onChange={(e) => {
+                  const newQuestions = [...questions];
+                  newQuestions[index].options = e.target.value.split(",").map((opt) => opt.trim());
+                  setQuestions(newQuestions);
+                }}
+                sx={{ mb: 2 }}
+              />
+            ) : null}
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={question.required}
+                  onChange={(e) => {
+                    const newQuestions = [...questions];
+                    newQuestions[index].required = e.target.checked;
+                    setQuestions(newQuestions);
+                  }}
+                />
+              }
+              label="Required"
+              sx={{ mb: 2 }}
+            />
+
+            <TextField
+              fullWidth
+              label="Image URL (Optional)"
+              value={question.image}
+              onChange={(e) => {
+                const newQuestions = [...questions];
+                newQuestions[index].image = e.target.value;
+                setQuestions(newQuestions);
+              }}
+              sx={{ mb: 2 }}
+            />
+
+            <IconButton color="error" onClick={() => handleRemoveQuestion(index)}>
+              <Delete />
+            </IconButton>
+          </Box>
+        ))}
+        <Button variant="contained" onClick={handleAddQuestion}>
+          Add Question
+        </Button>
+      </Paper>
+
+      <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Extra Participant Fields
+        </Typography>
+        {extraParticipantFields.map((field, index) => (
+          <Box key={index} sx={{ mb: 2, p: 2, border: "1px solid #ccc", borderRadius: "4px" }}>
+            <TextField
+              fullWidth
+              label="Field Label"
+              value={field.label}
+              onChange={(e) => {
+                const newFields = [...extraParticipantFields];
+                newFields[index].label = e.target.value;
+                setExtraParticipantFields(newFields);
+              }}
+              sx={{ mb: 2 }}
+            />
+            <FormControl fullWidth sx={{ mb: 2 }}>
               <InputLabel>Field Type</InputLabel>
               <Select
                 value={field.type}
-                onChange={(e) => handleExtraFieldChange(index, "type", e.target.value)}
+                onChange={(e) => {
+                  const newFields = [...extraParticipantFields];
+                  newFields[index].type = e.target.value;
+                  setExtraParticipantFields(newFields);
+                }}
               >
-                {inputTypes.map((type) => (
-                  <MenuItem key={type.value} value={type.value}>
-                    {type.label}
-                  </MenuItem>
-                ))}
+                <MenuItem value="text">Text</MenuItem>
+                <MenuItem value="dropdown">Dropdown</MenuItem>
+                <MenuItem value="date">Date</MenuItem>
+                <MenuItem value="file">File</MenuItem>
               </Select>
             </FormControl>
-          </Stack>
+            <IconButton color="error" onClick={() => handleRemoveParticipantField(index)}>
+              <Delete />
+            </IconButton>
+          </Box>
         ))}
-        <Button variant="outlined" onClick={handleAddExtraField}>
-          Add Extra Field
+        <Button variant="contained" onClick={handleAddParticipantField}>
+          Add Participant Field
         </Button>
-      </Box>
+      </Paper>
 
-      {/* Save Button */}
-      <Box sx={{ mt: 4 }}>
-        <Button variant="contained" color="primary" onClick={handleSaveConfig}>
-          Save Config
-        </Button>
-      </Box>
+      <Button variant="contained" color="primary" onClick={handleDownloadConfig}>
+        Log Config
+      </Button>
     </Box>
   );
 };

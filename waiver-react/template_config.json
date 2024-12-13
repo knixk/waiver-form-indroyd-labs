@@ -1,48 +1,36 @@
 {
-  "template_name": "asdasd",
+  "template_name": "photography",
   "template_config": {
-    "company_logo": "asdasd",
-    "company_address": "asdasd",
-    "questions": [
-      {
-        "label": "asdasd",
-        "input_type": "dropdown",
-        "question_id": "question_1734003834709",
-        "values": [
-          "asda",
-          "asdasd",
-          "asd2"
-        ],
-        "image": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-      },
-      {
-        "label": "asdasdasdad",
-        "input_type": "date",
-        "question_id": "question_1734003889082",
-        "values": [],
-        "image": ""
-      },
-      {
-        "label": "asdasd",
-        "input_type": "file",
-        "question_id": "question_1734003894316",
-        "values": [],
-        "image": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-      },
-      {
-        "label": "asdasdasdasd",
-        "input_type": "label",
-        "question_id": "question_1734003903195",
-        "values": [],
-        "image": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-      }
-    ],
-    "extra_participants_form_fields": [
-      {
-        "id": "participant_field_1734003910272",
-        "type": "text",
-        "label": "asdasda"
-      }
-    ]
+      "company_logo": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
+      "company_address": "pune",
+      "questions": [
+          {
+              "label": "asdasdasdas",
+              "required": false,
+              "input_type": "text",
+              "question_id": 1734063066110,
+              "image": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
+              "input_placeholder": ""
+          },
+          {
+              "label": "asdasd",
+              "values": [
+                  "asdasd",
+                  "asdasd",
+                  "asd 23asd",
+                  "asd23"
+              ],
+              "required": false,
+              "input_type": "dropdown",
+              "question_id": 1734063102841
+          },
+          {
+              "label": "sdasdasd",
+              "required": false,
+              "input_type": "date",
+              "question_id": 1734063120395
+          }
+      ],
+      "extra_participants_form_fields": []
   }
 }
