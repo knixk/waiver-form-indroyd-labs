@@ -1,29 +1,26 @@
 {
-  "template_name": "asdasdasd",
+  "template_name": "asdasdad",
   "template_config": {
       "questions": [
           {
-              "label": "asdasd",
-              "input_type": "radio",
-              "question_id": "question_1734068198784",
+              "label": "asdasdasdas",
+              "input_type": "label",
+              "question_id": "question_1734068615179",
               "required": true,
-              "image": "asdasd",
-              "options": [
-                  "asasd",
-                  "213"
-              ]
+              "image": "asdasdasdasd",
+              "options": []
           }
       ],
       "extra_participants_form_fields": [
           {
-              "id": "field_1734068211272",
-              "type": "date",
-              "label": "aasdasd"
+              "id": "field_1734068631922",
+              "type": "text",
+              "label": "asdasdasd"
           }
       ],
-      "company_logo": "asdasd",
+      "company_logo": "asdasdas",
       "company_name": "Fun City Adventure Park",
-      "company_address": "asdasd",
+      "company_address": "dasdasd",
       "want_to_add_participants": true
   }
 }

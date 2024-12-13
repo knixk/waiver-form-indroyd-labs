@@ -33,6 +33,35 @@ const FormBuilder = () => {
   });
 
   const [check, setCheck] = useState(false);
+  const [extraParticipantFields, setExtraParticipantFields] = useState([]);
+
+  const handleAddParticipantField = () => {
+    setExtraParticipantFields([
+      ...extraParticipantFields,
+      { id: `field_${Date.now()}`, type: "text", label: "" },
+    ]);
+  };
+
+  const handleRemoveParticipantField = (index) => {
+    setExtraParticipantFields(
+      extraParticipantFields.filter((_, i) => i !== index)
+    );
+  };
+
+  //   const handleDownloadConfig = () => {
+  //     const config = {
+  //       template_name: templateName,
+  //       template_config: {
+  //         questions,
+  //         extra_participants_form_fields: extraParticipantFields,
+  //         company_logo: companyLogo,
+  //         company_name: "Fun City Adventure Park",
+  //         company_address: companyAddress,
+  //         want_to_add_participants: true,
+  //       },
+  //     };
+  //     console.log(config);
+  //   };
 
   const handleAddQuestion = () => {
     setFormConfig((prev) => ({
@@ -358,6 +387,55 @@ const FormBuilder = () => {
           </div>
         ))}
       </div>
+
+      <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Extra Participant Fields
+        </Typography>
+        {extraParticipantFields.map((field, index) => (
+          <Box
+            key={index}
+            sx={{ mb: 2, p: 2, border: "1px solid #ccc", borderRadius: "4px" }}
+          >
+            <TextField
+              fullWidth
+              label="Field Label"
+              value={field.label}
+              onChange={(e) => {
+                const newFields = [...extraParticipantFields];
+                newFields[index].label = e.target.value;
+                setExtraParticipantFields(newFields);
+              }}
+              sx={{ mb: 2 }}
+            />
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel>Field Type</InputLabel>
+              <Select
+                value={field.type}
+                onChange={(e) => {
+                  const newFields = [...extraParticipantFields];
+                  newFields[index].type = e.target.value;
+                  setExtraParticipantFields(newFields);
+                }}
+              >
+                <MenuItem value="text">Text</MenuItem>
+                <MenuItem value="dropdown">Dropdown</MenuItem>
+                <MenuItem value="date">Date</MenuItem>
+                <MenuItem value="file">File</MenuItem>
+              </Select>
+            </FormControl>
+            <IconButton
+              color="error"
+              onClick={() => handleRemoveParticipantField(index)}
+            >
+              <Delete />
+            </IconButton>
+          </Box>
+        ))}
+        <Button variant="contained" onClick={handleAddParticipantField}>
+          Add Participant Field
+        </Button>
+      </Paper>
 
       <Button
         variant="contained"
