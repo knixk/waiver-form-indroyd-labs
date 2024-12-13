@@ -68,33 +68,37 @@ const FormBuilder = () => {
   };
 
   const handleGenerateConfig = () => {
-    // Building the final config object
-    const finalConfig = {
-      template_name: formConfig.templateName || "Default Template Name",
+    const processedQuestions = formConfig.questions.map((question) => {
+      // Merge predefined styles into customStyles
+      const mergedStyles = {
+        ...question.customStyles,
+        ...(question.fontSize && { fontSize: question.fontSize }),
+        ...(question.color && { color: question.color }),
+        ...(question.bold && { fontWeight: "bold" }),
+        ...(question.italic && { fontStyle: "italic" }),
+        ...(question.alignment && { textAlign: question.alignment }),
+      };
+  
+      return {
+        ...question,
+        customStyles: mergedStyles,
+      };
+    });
+  
+    const config = {
+      template_name: formConfig.templateName,
       template_config: {
-        company_logo: formConfig.companyLogo || "",
-        company_address: formConfig.companyAddress || "",
-        questions: formConfig.questions.map((q) => ({
-          label: q.label,
-          values:
-            q.input_type === "dropdown"
-              ? q.values.split(",").map((v) => v.trim())
-              : undefined,
-          required: q.required || false,
-          input_type: q.input_type,
-          question_id: q.id || `question_${Date.now()}`,
-          ...(q.image && { image: q.image }),
-          ...(q.input_type === "text" && {
-            input_placeholder: q.placeholder || "",
-          }),
-        })),
-        extra_participants_form_fields: formConfig.extraParticipants || [],
+        company_logo: formConfig.companyLogo,
+        company_address: formConfig.companyAddress,
+        questions: processedQuestions,
+        extra_participants_form_fields: formConfig.extraParticipants,
       },
     };
-
-    console.log(finalConfig); // Log the final config in the console
-    alert("Final Config has been logged to the console!"); // Notify the user
+  
+    console.log(config);
   };
+  
+  
 
   return (
     <div>

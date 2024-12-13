@@ -1,36 +1,28 @@
 {
-  "template_name": "photography",
+  "template_name": "sdasdasd",
   "template_config": {
       "company_logo": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
-      "company_address": "pune",
+      "company_address": "asdasdasd",
       "questions": [
           {
-              "label": "asdasdasdas",
-              "required": false,
-              "input_type": "text",
-              "question_id": 1734063066110,
+              "label": "asdasdasdasdasdasdasdasdasd",
+              "input_type": "label",
+              "values": "",
               "image": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
-              "input_placeholder": ""
-          },
-          {
-              "label": "asdasd",
-              "values": [
-                  "asdasd",
-                  "asdasd",
-                  "asd 23asd",
-                  "asd23"
-              ],
-              "required": false,
-              "input_type": "dropdown",
-              "question_id": 1734063102841
-          },
-          {
-              "label": "sdasdasd",
-              "required": false,
-              "input_type": "date",
-              "question_id": 1734063120395
+              "fontSize": "2rem",
+              "color": "red",
+              "bold": true,
+              "italic": true,
+              "alignment": "center",
+              "customStyles": {
+                  "fontSize": "2rem",
+                  "color": "red",
+                  "fontWeight": "bold",
+                  "fontStyle": "italic",
+                  "textAlign": "center"
+              },
+              "id": 1734064409621
           }
-      ],
-      "extra_participants_form_fields": []
+      ]
   }
 }
