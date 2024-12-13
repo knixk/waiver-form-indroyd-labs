@@ -447,6 +447,7 @@ const Form = () => {
                           variant="outlined"
                           fullWidth
                           value={formData[question.question_id] || ""}
+                          required={question.required || false}
                           onChange={(e) =>
                             handleInputChange(
                               question.question_id,
@@ -473,6 +474,7 @@ const Form = () => {
 
                         <Select
                           value={formData[question.question_id] || ""}
+                          required={question.required || false}
                           onChange={(e) =>
                             handleInputChange(
                               question.question_id,
@@ -504,6 +506,7 @@ const Form = () => {
                         </Typography>
 
                         <RadioGroup
+                          required={question.required || false}
                           onChange={(e) =>
                             handleRadioChange(
                               question.question_id,
@@ -537,6 +540,7 @@ const Form = () => {
                           rows={question.rows || 4}
                           variant="outlined"
                           fullWidth
+                          required={question.required || false}
                           value={formData[question.question_id] || ""}
                           onChange={(e) =>
                             handleInputChange(
@@ -563,6 +567,7 @@ const Form = () => {
                           {question.label}
                         </Typography>
                         <TextField
+                          required={question.required || false}
                           type="date"
                           variant="outlined"
                           fullWidth
@@ -594,6 +599,7 @@ const Form = () => {
                           {question.label}
                         </Typography>
                         <Checkbox
+                          required={question.required || false}
                           checked={formData[question.question_id] || false} // Ensures it shows the correct state
                           onChange={(e) =>
                             handleInputChange(
@@ -622,6 +628,7 @@ const Form = () => {
                         >
                           Upload File
                           <input
+                            required={question.required || false}
                             type="file"
                             hidden
                             onChange={(e) =>
