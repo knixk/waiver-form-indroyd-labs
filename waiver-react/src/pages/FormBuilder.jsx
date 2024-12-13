@@ -76,26 +76,31 @@ const FormBuilder = () => {
         company_address: formConfig.companyAddress || "",
         questions: formConfig.questions.map((q) => ({
           label: q.label,
-          values: q.input_type === "dropdown" ? q.values.split(",").map((v) => v.trim()) : undefined,
+          values:
+            q.input_type === "dropdown"
+              ? q.values.split(",").map((v) => v.trim())
+              : undefined,
           required: q.required || false,
           input_type: q.input_type,
           question_id: q.id || `question_${Date.now()}`,
           ...(q.image && { image: q.image }),
-          ...(q.input_type === "text" && { input_placeholder: q.placeholder || "" }),
+          ...(q.input_type === "text" && {
+            input_placeholder: q.placeholder || "",
+          }),
         })),
         extra_participants_form_fields: formConfig.extraParticipants || [],
       },
     };
-  
+
     console.log(finalConfig); // Log the final config in the console
     alert("Final Config has been logged to the console!"); // Notify the user
   };
-  
-  
 
   return (
     <div>
-      <Typography variant="h4">Form Builder</Typography>
+      <Typography variant="h4">
+        Form Builder
+      </Typography>
 
       <div>
         <TextField
