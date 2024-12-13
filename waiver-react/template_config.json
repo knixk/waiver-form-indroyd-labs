@@ -1,109 +1,140 @@
 {
-  "template_name": "photography",
+  "template_name": "adventure park",
   "template_config": {
-      "company_logo": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
-      "company_address": "Pune",
-      "questions": [
-          {
-              "label": "best",
-              "input_type": "text",
-              "values": "",
-              "image": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
-              "required": false,
-              "customStyles": {
-                  "fontSize": "2rem",
-                  "color": "red",
-                  "fontWeight": "bold",
-                  "fontStyle": "italic",
-                  "textAlign": "right"
-              },
-              "fontSize": "2rem",
-              "color": "red",
-              "italic": true,
-              "bold": true,
-              "alignment": "right",
-              "id": 1734069728375
-          },
-          {
-              "label": "asdasd",
-              "input_type": "textarea",
-              "values": "",
-              "image": "",
-              "required": false,
-              "customStyles": {
-                  "fontSize": "1rem"
-              },
-              "fontSize": "1rem",
-              "id": 1734069740708
-          },
-          {
-              "label": "asdasd",
-              "input_type": "dropdown",
-              "values": "23, 21, 233",
-              "image": "",
-              "required": false,
-              "customStyles": {
-                  "color": "blue"
-              },
-              "color": "blue",
-              "id": 1734069763895
-          },
-          {
-              "label": "dasdasdasd",
-              "input_type": "date",
-              "values": "",
-              "image": "",
-              "required": false,
-              "customStyles": {
-                  "textAlign": "center"
-              },
-              "alignment": "center",
-              "id": 1734069773595
-          },
-          {
-              "label": "",
-              "input_type": "file",
-              "values": "",
-              "image": "",
-              "required": false,
-              "customStyles": {
-                  "textAlign": "left"
-              },
-              "alignment": "left",
-              "italic": false,
-              "bold": false,
-              "id": 1734069782107
-          },
-          {
-              "label": "asdasdasd BOLD LABEL NICE AND WIDE",
-              "input_type": "label",
-              "values": "",
-              "image": "",
-              "required": false,
-              "customStyles": {
-                  "fontSize": "2rem",
-                  "fontWeight": "bold",
-                  "fontStyle": "italic",
-                  "textAlign": "center"
-              },
-              "fontSize": "2rem",
-              "bold": true,
-              "italic": true,
-              "alignment": "center",
-              "id": 1734069799573
-          }
-      ],
-      "extra_participants_form_fields": [
-          {
-              "id": "field_1734069802071",
-              "type": "text",
-              "label": "name"
-          },
-          {
-              "id": "field_1734069804981",
-              "type": "dropdown",
-              "label": "age"
-          }
-      ]
+    "questions": [  
+      {
+        "label": "Blackwood, New Jersey",
+        "input_type": "label",
+        "question_id": "some_i23423sdd6",
+        "fontSize": "1.5rem",
+        "color": "red",
+        "bold": true,
+        "customStyles": {
+          "textAlign": "center",
+          "position": "relative",   
+          "marginBottom": "10px"
+        }
+      },
+
+      {
+        "label": "Please fill in the information below to complete your waiver...",
+        "input_type": "label",
+        "question_id": "some_i23423d6",
+        "fontSize": "1rem",
+        "color": "black",
+        "bold": true,
+        "customStyles": {
+          "textAlign": "center",
+          "marginLeft": "10px"  
+        }
+      },
+
+      {
+        "label": "Please enter your password",
+        "required": false,
+        "input_type": "text",
+        "question_id": "somesds3asdsd52_id4",
+        "input_placeholder": "password..",
+        "variant": "password"
+      },
+      {
+        "label": "Address",
+        "required": false,
+        "input_type": "text",
+        "question_id": "somesdsa53sdsdsd52_id4",
+        "input_placeholder": "Address..",
+        "variant": "text",
+        "required": true
+      },
+      {
+        "label": "City",
+        "required": false,
+        "input_type": "text",
+        "question_id": "soasdasme4sdsasdsdsd52_id4",
+        "input_placeholder": "City..",
+        "variant": "text",
+        "required": true
+      },
+      {
+        "label": "State",
+        "values": [
+          "Alabama",
+          "Wyoming"
+        ],
+        "required": false,
+        "input_type": "dropdown",
+        "question_id": "some_idsdasd32",
+        "required": true
+      },
+      {
+        "label": "Zip Code",
+        "required": false,
+        "input_type": "text",
+        "question_id": "soasdasme23sdsasdsdsd52_id4",
+        "input_placeholder": "Zip Code..",
+        "variant": "number",
+        "required": true
+      },
+      {
+        "label": "Phone Number",
+        "required": false,
+        "input_type": "text",
+        "question_id": "soasdasmesdsas41dsdsd52_id4",
+        "input_placeholder": "Phone Number..",
+        "required": true,
+        "variant": "number"
+      },
+      {
+        "label": "Adult Gender",
+        "values": ["Male", "Female", "Not Specified"],
+        "required": true,
+        "input_type": "dropdown",
+        "question_id": "some_idsda5sd32"
+      },
+      {
+        "label": "I wish to receive special offers and discounts",
+        "input_type": "checkbox",
+        "question_id": "wantasd_asdasdparticipant_id",
+        "fontSize": "1rem",
+        "color": "black",
+        "required": true
+      },
+      {
+        "label": "Waiver is for?",
+        "input_type": "radio",
+        "values": ["Me and my kids!", "Just me"],
+        "question_id": "want_participant_id",
+        "required": true
+      }
+    ],
+    "extra_participants_form_fields": [
+      { "id": 1423123, "type": "text", "label": "Enter your full name" },
+      { "id": 123123523, "type": "dropdown", "label": "Enter your gender" },
+      {
+        "id": 12242312233,
+        "type": "date",
+        "label": "Birth date"
+      }
+    ],
+    "company_logo": "https://lilypadpos1.com/funcityblackwood/productpics/default.jpg",
+    "company_name": "Fun City Adventure Park",
+    "company_address": "Blackwood, New Jersey",
+
+    "want_to_add_participants": true,
+
+    "user_data": {
+      "name": {
+        "label": "Enter your name.",
+        "question_id": "some_id"
+      },
+      "age": {
+        "label": "Enter your age.",
+        "question_id": "some_id1"
+      },
+      "email": {
+        "label": "Enter your email.",
+        "question_id": "some_id2"
+      }
+    }
   }
 }

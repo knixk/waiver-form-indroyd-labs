@@ -53,11 +53,7 @@ const CheckboxQuestion = ({ question, formData, handleInputChange }) => {
         />
         <Typography
           sx={{
-            fontSize: question.fontSize,
-            color: question.color,
-            fontWeight: question.bold ? "bold" : "normal",
-            textAlign: question.customStyles?.textAlign,
-            marginLeft: question.customStyles?.marginLeft,
+            ...question.customStyles, // Any additional custom styles
           }}
         >
           {question.label}
@@ -488,7 +484,7 @@ const Form = () => {
                           <MenuItem value="" disabled>
                             Choose
                           </MenuItem>
-                          {question.values.split(",").map((option) => (
+                          {question.values.map((option) => (
                             <MenuItem key={option} value={option}>
                               {option}
                             </MenuItem>
