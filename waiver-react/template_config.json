@@ -1,47 +1,35 @@
 {
-  "template_name": "asdasd",
+  "template_name": "",
   "template_config": {
-    "company_logo": "asdasd",
-    "company_address": "asdasd",
+    "company_logo": "",
+    "company_address": "",
     "questions": [
       {
-        "label": "asdasd",
-        "input_type": "dropdown",
-        "question_id": "question_1734003834709",
-        "values": [
-          "asda",
-          "asdasd",
-          "asd2"
-        ],
-        "image": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-      },
-      {
-        "label": "asdasdasdad",
-        "input_type": "date",
-        "question_id": "question_1734003889082",
-        "values": [],
-        "image": ""
-      },
-      {
-        "label": "asdasd",
-        "input_type": "file",
-        "question_id": "question_1734003894316",
-        "values": [],
-        "image": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-      },
-      {
-        "label": "asdasdasdasd",
-        "input_type": "label",
-        "question_id": "question_1734003903195",
-        "values": [],
-        "image": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
+        "label": "asdasdasdasdasdasd",
+        "input_type": "text",
+        "values": "",
+        "image": "asdasd",
+        "required": false,
+        "customStyles": {
+          "fontSize": "2rem",
+          "color": "blue",
+          "fontWeight": "bold",
+          "fontStyle": "italic",
+          "textAlign": "center"
+        },
+        "fontSize": "2rem",
+        "color": "blue",
+        "italic": true,
+        "bold": true,
+        "alignment": "center",
+        "question_id": 1734074921101
       }
     ],
     "extra_participants_form_fields": [
       {
-        "id": "participant_field_1734003910272",
-        "type": "text",
-        "label": "asdasda"
+        "id": "field_1734074923586",
+        "type": "dropdown",
+        "label": "asdasd"
       }
     ]
   }

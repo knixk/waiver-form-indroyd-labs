@@ -1,24 +1,17 @@
 import React, { useState } from "react";
 import {
-  Box,
   Button,
-  Typography,
   TextField,
   Select,
   MenuItem,
-  Checkbox,
-  FormControlLabel,
-  IconButton,
-  Paper,
+  Typography,
   InputLabel,
   FormControl,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 
-import { Delete } from "@mui/icons-material";
-
 const FormBuilder = () => {
-  const [extraParticipantFields, setExtraParticipantFields] = useState([]);
-
   const [formConfig, setFormConfig] = useState({
     templateName: "",
     companyLogo: "",
@@ -40,6 +33,7 @@ const FormBuilder = () => {
   });
 
   const [check, setCheck] = useState(false);
+  const [extraParticipantFields, setExtraParticipantFields] = useState([]);
 
   const handleAddParticipantField = () => {
     setExtraParticipantFields([
@@ -72,10 +66,7 @@ const FormBuilder = () => {
   const handleAddQuestion = () => {
     setFormConfig((prev) => ({
       ...prev,
-      questions: [
-        ...prev.questions,
-        { ...currentQuestion, question_id: Date.now() },
-      ],
+      questions: [...prev.questions, { ...currentQuestion, id: Date.now() }],
     }));
     setCurrentQuestion({
       label: "",
@@ -95,7 +86,17 @@ const FormBuilder = () => {
   const handleRemoveQuestion = (id) => {
     setFormConfig((prev) => ({
       ...prev,
-      questions: prev.questions.filter((q) => q.question_id !== id),
+      questions: prev.questions.filter((q) => q.id !== id),
+    }));
+  };
+
+  const handleCustomStylesChange = (field, value) => {
+    setCurrentQuestion((prev) => ({
+      ...prev,
+      customStyles: {
+        ...prev.customStyles,
+        [field]: value, // Update the specific field in customStyles
+      },
     }));
   };
 
@@ -109,17 +110,6 @@ const FormBuilder = () => {
     link.download = filename;
     link.click();
   }
-
-  const handleCustomStylesChange = (field, value) => {
-    setCurrentQuestion((prev) => ({
-      ...prev,
-      customStyles: {
-        ...prev.customStyles,
-        [field]: value, // Update the specific field in customStyles
-      },
-    }));
-  };
-
 
   const handleGenerateConfig = () => {
     setCurrentQuestion((currentQuestion) => ({
@@ -150,20 +140,20 @@ const FormBuilder = () => {
         company_logo: formConfig.companyLogo,
         company_address: formConfig.companyAddress,
         questions: processedQuestions,
-        extra_participants_form_fields: extraParticipantFields,
+        extra_participants_form_fields: formConfig.extraParticipants,
       },
     };
 
-    downloadObjectAsJSON(config)
-
     console.log(config);
+
+    downloadObjectAsJSON(config);
   };
 
   return (
-    <Box p={2}>
+    <div>
       <Typography variant="h4">Form Builder</Typography>
 
-      <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
+      <div>
         <TextField
           label="Template Name"
           value={formConfig.templateName}
@@ -194,9 +184,9 @@ const FormBuilder = () => {
           fullWidth
           margin="normal"
         />
-      </Paper>
+      </div>
 
-      <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
+      <div>
         <Typography variant="h5">Add Question</Typography>
         <TextField
           label="Label"
@@ -355,14 +345,12 @@ const FormBuilder = () => {
         <Button variant="contained" onClick={handleAddQuestion}>
           Add Question
         </Button>
-      </Paper>
+      </div>
 
       <div>
-        <Typography sx={{ mb: 2, mt: 3 }} variant="h5">
-          Preview
-        </Typography>
+        <Typography variant="h5">Preview</Typography>
         {formConfig.questions.map((question) => (
-          <div key={question.question_id} style={{ marginBottom: "20px" }}>
+          <div key={question.id} style={{ marginBottom: "20px" }}>
             {question.image && (
               <img src={question.image} alt="" style={{ maxWidth: "100%" }} />
             )}
@@ -405,7 +393,7 @@ const FormBuilder = () => {
             <Button
               variant="outlined"
               color="error"
-              onClick={() => handleRemoveQuestion(question.question_id)}
+              onClick={() => handleRemoveQuestion(question.id)}
             >
               Remove
             </Button>
@@ -470,7 +458,7 @@ const FormBuilder = () => {
       >
         Generate and Log Config
       </Button>
-    </Box>
+    </div>
   );
 };
 
