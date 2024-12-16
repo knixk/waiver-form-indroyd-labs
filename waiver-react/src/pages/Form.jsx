@@ -294,7 +294,7 @@ const Form = () => {
 
   useEffect(() => {
     if (import.meta.env.VITE_MODE == "prod") {
-      console.log("in prod mode..")
+      console.log("in prod mode..");
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
         const templates = `${aws_url}/template-id-from-center`;
@@ -368,7 +368,7 @@ const Form = () => {
     }
 
     if (import.meta.env.VITE_MODE == "dev") {
-      console.log('in dev mode..')
+      console.log("in dev mode..");
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
         const templates = "http://localhost:5050/template-id-from-center";
@@ -755,6 +755,65 @@ const Form = () => {
                               )
                             }
                           />
+                          {/* {field.input_type === "dropdown" && (
+                            <FormControl fullWidth margin="normal">
+                              <Typography
+                              >
+                                {field.label}
+                              </Typography>
+
+                              <Select
+                                value={formData[field.field_id] || ""}
+                                required={field.required || false}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    field.field_id,
+                                    e.target.value
+                                  )
+                                }
+                                displayEmpty
+                              >
+                                <MenuItem value="" disabled>
+                                  Choose
+                                </MenuItem>
+                                {field.values.split(",").map((option) => (
+                                  <MenuItem key={option} value={option}>
+                                    {option}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          )} */}
+                          {field.type === "file" && (
+                            <FormControl fullWidth margin="normal">
+                              <Typography>{field.label}</Typography>
+                              <Button
+                                variant="contained"
+                                component="label"
+                                color="primary"
+                              >
+                                Upload File
+                                <input
+                                  // required={field.required || false}
+                                  type="file"
+                                  hidden
+                                  value={participant[field.label] || ""}
+                                  onChange={(e) =>
+                                    updateParticipant(
+                                      index,
+                                      field.label,
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </Button>
+                              {participant[field.label] && (
+                                <Typography variant="body2" marginTop={1}>
+                                  Selected: {participant[field.label]}
+                                </Typography>
+                              )}
+                            </FormControl>
+                          )}
                         </Grid>
                       ))}
                       <Grid item xs={2}>
