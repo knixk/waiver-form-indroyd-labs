@@ -118,7 +118,6 @@ const Form = () => {
     setCenterAddInfo,
   } = myState;
 
-
   const [errors, setErrors] = useState({});
 
   const validateField = (field, value) => {
@@ -538,12 +537,12 @@ const Form = () => {
                           fullWidth
                           value={formData[question.question_id] || ""}
                           required={question.required || false}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             handleInputChange(
                               question.question_id,
                               e.target.value
-                            )
-                          }
+                            );
+                          }}
                           placeholder={
                             question.input_placeholder || "Enter your response"
                           }
