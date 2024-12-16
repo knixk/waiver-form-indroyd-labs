@@ -188,7 +188,28 @@ const Form = () => {
     // console.log(sign?.getTrimmedCanvas().width == 1)
     // setFormData({});
     e.preventDefault();
+
+    let err = false;
     // return;
+
+    // try {
+    //   validationSchema.validateSync(formData, { abortEarly: false });
+    //   // Proceed with form submission
+    // } catch (error) {
+    //   err = true;
+    //   const validationErrors = {};
+    //   error.inner.forEach((err) => {
+    //     validationErrors[err.path] = err.message;
+    //     toast.error(err.message);
+    //   });
+    //   setErrors(validationErrors);
+    //   // return;
+    // }
+
+    if (err) {
+      return;
+    }
+    // console.log("still working");
 
     if (sign?.getTrimmedCanvas().width == 1) {
       toast.error("You must sign the form!");
@@ -567,17 +588,17 @@ const Form = () => {
 
                             if (question.variant == "phone_number") {
                               validateField("phoneNumber", e.target.value);
-                              console.log("phone val");
+                              // console.log("phone val");
                             }
 
                             if (question.variant == "zip_code") {
                               validateField("zipCode", e.target.value);
-                              console.log("zip code val");
+                              // console.log("zip code val");
                             }
 
                             if (question.variant == "email") {
                               validateField("email", e.target.value);
-                              console.log("email val");
+                              // console.log("email val");
                             }
                           }}
                           placeholder={
