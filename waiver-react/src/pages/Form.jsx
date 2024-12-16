@@ -186,7 +186,9 @@ const Form = () => {
 
   const handleSubmit = async (e) => {
     // console.log(sign?.getTrimmedCanvas().width == 1)
+    // setFormData({});
     e.preventDefault();
+    // return;
 
     if (sign?.getTrimmedCanvas().width == 1) {
       toast.error("You must sign the form!");
@@ -494,6 +496,7 @@ const Form = () => {
                   handleInputChange("fixed__email", e.target.value);
                   validateField("email", e.target.value);
                 }}
+                helperText={errors.email}
               />
               <TextField
                 fullWidth
@@ -506,6 +509,7 @@ const Form = () => {
                   handleInputChange("fixed__number", e.target.value);
                   validateField("phoneNumber", e.target.value);
                 }}
+                helperText={errors.phoneNumber}
               />
               {questions &&
                 questions.map((question) => (
@@ -545,6 +549,13 @@ const Form = () => {
                             (question.variant == "zip_code" &&
                               !!errors.zipCode) ||
                             (question.variant == "email" && !!errors.email)
+                          }
+                          helperText={
+                            (question.variant == "phone_number" &&
+                              errors.phoneNumber) ||
+                            (question.variant == "zip_code" &&
+                              errors.zipCode) ||
+                            (question.variant == "email" && errors.email)
                           }
                           value={formData[question.question_id] || ""}
                           required={question.required || false}
