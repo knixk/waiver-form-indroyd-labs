@@ -3,6 +3,9 @@ import { Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { useHistory, useLocation } from "react-router";
+import dummyCenter from "./dummyCenter.json";
+
+// console.log(dummyCenter, "=======im dc")
 
 const logo = "https://dypdvfcjkqkg2.cloudfront.net/large/5862799-1989.jpg";
 
@@ -18,6 +21,8 @@ function Home() {
   const navigate = useNavigate();
   const queryParameters = new URLSearchParams(window.location.search);
   const centerParams = queryParameters.get("center");
+
+  // console.log(import.meta.env.VITE_MODE);
   // const history = useHistory();
   // const location = useLocation();
 
@@ -31,7 +36,6 @@ function Home() {
     setCenterID,
   } = myState;
 
-
   const handleNext = () => {
     if (layer < 3) {
       setLayer(layer + 1);
@@ -39,40 +43,54 @@ function Home() {
   };
 
   useEffect(() => {
-    const postCenter = async (centerId) => {
-      const center = `${aws_url}/get-center`;
-      const options = {
-        center_id: centerId,
+    if (import.meta.env.VITE_MODE == "prod") {
+      console.log("inside prod");
+      const postCenter = async (centerId) => {
+        const center = `${aws_url}/get-center`;
+        const options = {
+          center_id: centerId,
+        };
+
+        try {
+          const response = await axios.post(center, options);
+          // console.log("Response:", response.data.data);
+          setCenterInfo(response.data.data);
+          console.log(response.data.data);
+          // const jsonData = J
+          setCenterAddInfo(response.data.data);
+          return response.data.data; // Return the response data
+        } catch (error) {
+          console.error(
+            "Error posting center:",
+            error.response?.data || error.message // Handle error gracefully
+          );
+          throw error; // Rethrow the error for further handling
+        }
       };
+      if (!centerParams) {
+        setCenterID(5);
+        // const params = new URLSearchParams({ ["center"]: 5 });
+        // history.replace({
+        //   pathname: location.pathname,
+        //   search: params.toString(),
+        // });
 
-      try {
-        const response = await axios.post(center, options);
-        // console.log("Response:", response.data.data);
-        setCenterInfo(response.data.data);
-        // const jsonData = J
-        setCenterAddInfo(response.data.data);
-        return response.data.data; // Return the response data
-      } catch (error) {
-        console.error(
-          "Error posting center:",
-          error.response?.data || error.message // Handle error gracefully
-        );
-        throw error; // Rethrow the error for further handling
+        // console.log("no paramss");
+        postCenter(5);
+      } else {
+        centerParams && setCenterID(centerParams);
+        centerParams && postCenter(centerParams);
       }
-    };
-    if (!centerParams) {
-      setCenterID(5);
-      // const params = new URLSearchParams({ ["center"]: 5 });
-      // history.replace({
-      //   pathname: location.pathname,
-      //   search: params.toString(),
-      // });
+    }
 
-      // console.log("no paramss");
-      postCenter(5);
-    } else {
-      centerParams && setCenterID(centerParams);
-      centerParams && postCenter(centerParams);
+    if (import.meta.env.VITE_MODE == "dev") {
+      console.log("inside dev mode...");
+      setCenterInfo(dummyCenter);
+      setCenterAddInfo(dummyCenter);
+      setCenterID(5);
+
+      let prsedData = JSON.parse(dummyCenter.additional_info);
+      console.log(prsedData);
     }
   }, []);
 
