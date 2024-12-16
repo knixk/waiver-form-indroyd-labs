@@ -223,6 +223,8 @@ const FormBuilder = () => {
               <MenuItem value="phone_number">Phone Number</MenuItem>
               <MenuItem value="zip_code">Zip Code</MenuItem>
               <MenuItem value="password">Password</MenuItem>
+              <MenuItem value="email">Email</MenuItem>
+
             </Select>
           </FormControl>
         )}

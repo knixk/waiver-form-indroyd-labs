@@ -4,9 +4,28 @@
       "company_logo": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg",
       "company_address": "pune",
       "questions": [
-
         {
-          "label": "text",
+          "label": "asdasdasdas",
+          "input_type": "text",
+          "values": "",
+          "image": "",
+          "required": false,
+          "variant": "zip_code",
+          "customStyles": {},
+          "question_id": 1734344749671
+        },
+        {
+          "label": "asdasdasdas",
+          "input_type": "text",
+          "values": "",
+          "image": "",
+          "required": false,
+          "customStyles": {},
+          "variant": "zip_code",
+          "question_id": 1734344849360
+        },
+        {
+          "label": "asdasd",
           "input_type": "text",
           "values": "",
           "image": "",
@@ -24,16 +43,6 @@
           "variant": "phone_number",
           "question_id": 1734344986895
         },
-        {
-            "label": "2nd email",
-            "input_type": "text",
-            "values": "",
-            "image": "",
-            "required": true,
-            "customStyles": {},
-            "variant": "email",
-            "question_id": 173243486895
-          },
         {
           "label": "zip code",
           "input_type": "text",
@@ -55,7 +64,7 @@
           "question_id": 1734345016423
         },
         {
-          "label": "dropdown",
+          "label": "asdasd",
           "input_type": "dropdown",
           "values": "drop, top",
           "image": "",

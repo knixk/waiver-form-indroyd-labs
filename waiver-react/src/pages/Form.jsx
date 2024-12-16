@@ -16,7 +16,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^\+?\d{10,15}$/, "Invalid phone number")
     .required("Phone number is required"),
   zipCode: Yup.string()
-    .matches(/^\d{5}(-\d{4})?$/, "Invalid ZIP code")
+    .matches(/^\d{6}(-\d{4})?$/, "Invalid ZIP code")
     .required("ZIP code is required"),
   email: Yup.string()
     .email("Invalid email address")
@@ -535,6 +535,12 @@ const Form = () => {
                           type={question.variant || "text"}
                           variant="outlined"
                           fullWidth
+                          error={
+                            (question.variant == "phone_number" &&
+                              !!errors.phoneNumber) ||
+                            (question.variant == "zip_code" && !!errors.zipCode) || 
+                            (question.variant == "email" && !!errors.email)
+                          }
                           value={formData[question.question_id] || ""}
                           required={question.required || false}
                           onChange={(e) => {
@@ -542,6 +548,22 @@ const Form = () => {
                               question.question_id,
                               e.target.value
                             );
+
+                            if (question.variant == "phone_number") {
+                              validateField("phoneNumber", e.target.value);
+                              console.log("phone val");
+                            }
+
+                            if (question.variant == "zip_code") {
+                              validateField("zipCode", e.target.value);
+                              console.log("zip code val");
+                            }
+
+                            if (question.variant == "email") {
+                              validateField("email", e.target.value);
+                              console.log("email val");
+                            }
+
                           }}
                           placeholder={
                             question.input_placeholder || "Enter your response"
