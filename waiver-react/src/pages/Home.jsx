@@ -3,7 +3,7 @@ import { Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { useHistory, useLocation } from "react-router";
-import dummyCenter from "./dummyCenter.json";
+import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
 // console.log(dummyCenter, "=======im dc")
 

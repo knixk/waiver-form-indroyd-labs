@@ -6,7 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-import template_config from "../../template_config.json";
+import template_config from "../misc/dummyData/dummyTemplates/main-template-config.json";
 
 import { useContext } from "react";
 import { MyContext } from "../App";
