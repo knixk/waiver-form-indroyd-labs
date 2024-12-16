@@ -9,6 +9,21 @@ import html2canvas from "html2canvas";
 import template_config from "../misc/dummyData/dummyTemplates/main-template-config.json";
 import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  phoneNumber: Yup.string()
+    .matches(/^\+?\d{10,15}$/, "Invalid phone number")
+    .required("Phone number is required"),
+  zipCode: Yup.string()
+    .matches(/^\d{5}(-\d{4})?$/, "Invalid ZIP code")
+    .required("ZIP code is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  // Add more validations as needed
+});
+
 import { useContext } from "react";
 import { MyContext } from "../App";
 import { useNavigate } from "react-router-dom";
@@ -102,6 +117,18 @@ const Form = () => {
     centerAddInfo,
     setCenterAddInfo,
   } = myState;
+
+
+  const [errors, setErrors] = useState({});
+
+  const validateField = (field, value) => {
+    try {
+      validationSchema.validateSyncAt(field, { [field]: value });
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    } catch (error) {
+      setErrors((prev) => ({ ...prev, [field]: error.message }));
+    }
+  };
 
   const canvasContainerRef = useRef(null);
   const navigate = useNavigate();
@@ -225,7 +252,6 @@ const Form = () => {
   };
 
   useEffect(() => {
-
     // setting the template info here..
     if (import.meta.env.VITE_MODE == "prod") {
       console.log("in prod mode..");
@@ -374,7 +400,6 @@ const Form = () => {
       // asyncFnStitch();
       fetchTemplate(4);
     }
-
 
     // Setting the center info here
     if (import.meta.env.VITE_MODE == "prod") {
