@@ -444,9 +444,9 @@ const FormBuilder = () => {
                 }}
               >
                 <MenuItem value="text">Text</MenuItem>
-                <MenuItem value="dropdown">Dropdown</MenuItem>
-                <MenuItem value="date">Date</MenuItem>
-                <MenuItem value="file">File</MenuItem>
+                {/* <MenuItem value="dropdown">Dropdown</MenuItem> */}
+                {/* <MenuItem value="date">Date</MenuItem> */}
+                {/* <MenuItem value="file">File</MenuItem> */}
               </Select>
             </FormControl>
             <IconButton

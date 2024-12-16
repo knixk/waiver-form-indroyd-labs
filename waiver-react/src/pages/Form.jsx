@@ -7,6 +7,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
 import template_config from "../misc/dummyData/dummyTemplates/main-template-config.json";
+import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
 import { useContext } from "react";
 import { MyContext } from "../App";
@@ -96,6 +97,10 @@ const Form = () => {
     setWantParticipants,
     centerID,
     setCenterID,
+    centerInfo,
+    setCenterInfo,
+    centerAddInfo,
+    setCenterAddInfo,
   } = myState;
 
   const canvasContainerRef = useRef(null);
@@ -219,80 +224,9 @@ const Form = () => {
     reader.readAsDataURL(pdfBlob);
   };
 
-  // useEffect(() => {
-  //   const getTemplateIdFromCenterID = async (id) => {
-  //     let ans = null;
-  //     const templates = "http://localhost:5050/template-id-from-center";
-
-  //     const options = {
-  //       center_id: id,
-  //     };
-
-  //     try {
-  //       const response = await axios.post(templates, options);
-  //       ans = response.data.template_id;
-  //       setTemplateId(ans);
-  //     } catch (error) {
-  //       console.error(error);
-  //       toast("No form found...");
-  //       setTimeout(() => navigate("/"), 5000);
-  //     }
-
-  //     return ans;
-  //   };
-
-  //   const fetchTemplate = async (t_id) => {};
-  //   // const templates = "http://localhost:5050/post-center";
-
-  //   // const options = {
-  //   //   id: t_id,
-  //   // };
-
-  //   try {
-  //     // const response = await axios.post(templates, options);
-  //     // const myData = JSON.parse(response.data.data[0].template_config);
-
-  //     // if (myData) {
-  //     //   setQuestions(myData.questions);
-  //     //   setCompanyLogo(myData.company_logo);
-  //     //   setExtraFields(myData.extra_participants_form_fields);
-  //     //   setDisplayForm(true);
-  //     //   setCompanyName(myData.company_name);
-
-  //     // use local template
-  //     setQuestions(template_config.template_config.questions);
-  //     setCompanyLogo(template_config.template_config.company_logo);
-  //     setExtraFields(
-  //       template_config.template_config.extra_participants_form_fields
-  //     );
-  //     setDisplayForm(true);
-  //     setCompanyName(template_config.template_config.company_name);
-  //     // setWantParticipants(
-  //     //   template_config.template_config.want_to_add_participants
-  //     // );
-
-  //     setLoading(false);
-  //   } catch (error) {
-  //     toast("template doesn't exist");
-  //     console.error(
-  //       "Error:",
-  //       error.response ? error.response.data : error.message
-  //     );
-  //   }
-
-  //   const asyncFnStitch = async () => {
-  //     setCenterID(centerParams);
-
-  //     const data =
-  //       centerParams && (await getTemplateIdFromCenterID(centerParams));
-  //     data && (await fetchTemplate(data));
-  //   };
-
-  //   // asyncFnStitch();
-  //   fetchTemplate(4);
-  // }, []);
-
   useEffect(() => {
+
+    // setting the template info here..
     if (import.meta.env.VITE_MODE == "prod") {
       console.log("in prod mode..");
       const getTemplateIdFromCenterID = async (id) => {
@@ -440,6 +374,58 @@ const Form = () => {
       // asyncFnStitch();
       fetchTemplate(4);
     }
+
+
+    // Setting the center info here
+    if (import.meta.env.VITE_MODE == "prod") {
+      console.log("inside prod");
+      const postCenter = async (centerId) => {
+        const center = `${aws_url}/get-center`;
+        const options = {
+          center_id: centerId,
+        };
+
+        try {
+          const response = await axios.post(center, options);
+          // console.log("Response:", response.data.data);
+          setCenterInfo(response.data.data);
+          // console.log(response.data.data);
+          // const jsonData = J
+          setCenterAddInfo(response.data.data);
+          return response.data.data; // Return the response data
+        } catch (error) {
+          console.error(
+            "Error posting center:",
+            error.response?.data || error.message // Handle error gracefully
+          );
+          throw error; // Rethrow the error for further handling
+        }
+      };
+      if (!centerParams) {
+        setCenterID(5);
+        // const params = new URLSearchParams({ ["center"]: 5 });
+        // history.replace({
+        //   pathname: location.pathname,
+        //   search: params.toString(),
+        // });
+
+        // console.log("no paramss");
+        postCenter(5);
+      } else {
+        centerParams && setCenterID(centerParams);
+        centerParams && postCenter(centerParams);
+      }
+    }
+
+    if (import.meta.env.VITE_MODE == "dev") {
+      console.log("inside dev mode...");
+      setCenterInfo(dummyCenter);
+      setCenterAddInfo(dummyCenter);
+      setCenterID(5);
+
+      let prsedData = JSON.parse(dummyCenter.additional_info);
+      // console.log(prsedData);
+    }
   }, []);
 
   return (
@@ -457,7 +443,7 @@ const Form = () => {
               marginTop={2}
               letterSpacing={1.5}
             >
-              {(formData && companyName) || "Company name"}
+              {centerInfo && centerInfo.center_name}
             </Typography>
             {formData && (
               <img className="form__logo" src={companyLogo} alt="" />

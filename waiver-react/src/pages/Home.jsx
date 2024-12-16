@@ -55,7 +55,7 @@ function Home() {
           const response = await axios.post(center, options);
           // console.log("Response:", response.data.data);
           setCenterInfo(response.data.data);
-          console.log(response.data.data);
+          // console.log(response.data.data);
           // const jsonData = J
           setCenterAddInfo(response.data.data);
           return response.data.data; // Return the response data
@@ -90,7 +90,7 @@ function Home() {
       setCenterID(5);
 
       let prsedData = JSON.parse(dummyCenter.additional_info);
-      console.log(prsedData);
+      // console.log(prsedData);
     }
   }, []);
 
