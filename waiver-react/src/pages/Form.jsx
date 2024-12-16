@@ -294,7 +294,7 @@ const Form = () => {
 
   useEffect(() => {
     if (import.meta.env.VITE_MODE == "prod") {
-      console.log("in dev mode..")
+      console.log("in prod mode..")
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
         const templates = `${aws_url}/template-id-from-center`;
@@ -368,6 +368,7 @@ const Form = () => {
     }
 
     if (import.meta.env.VITE_MODE == "dev") {
+      console.log('in dev mode..')
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
         const templates = "http://localhost:5050/template-id-from-center";
