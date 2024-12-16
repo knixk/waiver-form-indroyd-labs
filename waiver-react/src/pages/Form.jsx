@@ -293,7 +293,7 @@ const Form = () => {
   // }, []);
 
   useEffect(() => {
-    if (import.meta.env.VITE_MODE == "dev") {
+    if (import.meta.env.VITE_MODE == "prod") {
       console.log("in dev mode..")
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
