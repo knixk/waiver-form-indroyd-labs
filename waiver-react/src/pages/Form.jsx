@@ -784,7 +784,7 @@ const Form = () => {
                               </Select>
                             </FormControl>
                           )} */}
-                          {field.type === "file" && (
+                          {/* {field.type === "file" && (
                             <FormControl fullWidth margin="normal">
                               <Typography>{field.label}</Typography>
                               <Button
@@ -813,7 +813,7 @@ const Form = () => {
                                 </Typography>
                               )}
                             </FormControl>
-                          )}
+                          )} */}
                         </Grid>
                       ))}
                       <Grid item xs={2}>
