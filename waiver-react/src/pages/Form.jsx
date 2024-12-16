@@ -489,9 +489,11 @@ const Form = () => {
                 margin="normal"
                 required
                 type="email"
-                onChange={(e) =>
-                  handleInputChange("fixed__email", e.target.value)
-                }
+                error={!!errors.email}
+                onChange={(e) => {
+                  handleInputChange("fixed__email", e.target.value);
+                  validateField("email", e.target.value);
+                }}
               />
               <TextField
                 fullWidth
@@ -499,9 +501,11 @@ const Form = () => {
                 margin="normal"
                 required
                 type="tel"
-                onChange={(e) =>
-                  handleInputChange("fixed__number", e.target.value)
-                }
+                error={!!errors.phoneNumber}
+                onChange={(e) => {
+                  handleInputChange("fixed__number", e.target.value);
+                  validateField("phoneNumber", e.target.value);
+                }}
               />
               {questions &&
                 questions.map((question) => (
@@ -538,7 +542,8 @@ const Form = () => {
                           error={
                             (question.variant == "phone_number" &&
                               !!errors.phoneNumber) ||
-                            (question.variant == "zip_code" && !!errors.zipCode) || 
+                            (question.variant == "zip_code" &&
+                              !!errors.zipCode) ||
                             (question.variant == "email" && !!errors.email)
                           }
                           value={formData[question.question_id] || ""}
@@ -563,7 +568,6 @@ const Form = () => {
                               validateField("email", e.target.value);
                               console.log("email val");
                             }
-
                           }}
                           placeholder={
                             question.input_placeholder || "Enter your response"
