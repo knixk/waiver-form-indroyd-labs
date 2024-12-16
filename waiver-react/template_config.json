@@ -1,35 +1,82 @@
 {
-  "template_name": "",
+  "template_name": "Flea market",
   "template_config": {
-    "company_logo": "",
-    "company_address": "",
+    "company_logo": "https://sc0.blr1.digitaloceanspaces.com/large/770442-article-hgbprjwrmi-1447948323.jpeg",
+    "company_address": "Pune",
     "questions": [
       {
-        "label": "asdasdasdasdasdasd",
+        "label": "Do you have a coupon code?",
         "input_type": "text",
         "values": "",
-        "image": "asdasd",
+        "image": "",
+        "required": false,
+        "customStyles": {},
+        "question_id": 1734085867918
+      },
+      {
+        "label": "Any message you would like to leave us?",
+        "input_type": "textarea",
+        "values": "",
+        "image": "",
+        "required": false,
+        "customStyles": {},
+        "question_id": 1734085892899
+      },
+      {
+        "label": "Please select your preferred location",
+        "input_type": "dropdown",
+        "values": "Indore, Mumbai, Pune",
+        "image": "",
+        "required": false,
+        "customStyles": {
+          "color": "red",
+          "fontWeight": "bold",
+          "textAlign": "center"
+        },
+        "color": "red",
+        "bold": true,
+        "alignment": "center",
+        "question_id": 1734085930569
+      },
+      {
+        "label": "Please attach your id proof",
+        "input_type": "file",
+        "values": "",
+        "image": "",
+        "required": false,
+        "customStyles": {
+          "color": "red"
+        },
+        "color": "red",
+        "question_id": 1734085983971
+      },
+      {
+        "label": "Thanks for filling our form, make sure to follow us on instagram to stay in the loop. Cheers!",
+        "input_type": "label",
+        "values": "",
+        "image": "https://t3.ftcdn.net/jpg/01/32/12/26/360_F_132122695_cNuq5ACUnfSfqmRgJSP1rRiGVHdVedl6.jpg",
         "required": false,
         "customStyles": {
           "fontSize": "2rem",
-          "color": "blue",
-          "fontWeight": "bold",
-          "fontStyle": "italic",
-          "textAlign": "center"
+          "color": "purple",
+          "fontStyle": "italic"
         },
         "fontSize": "2rem",
-        "color": "blue",
         "italic": true,
-        "bold": true,
-        "alignment": "center",
-        "question_id": 1734074921101
+        "color": "purple",
+        "question_id": 1734086061144
       }
     ],
     "extra_participants_form_fields": [
       {
-        "id": "field_1734074923586",
-        "type": "dropdown",
-        "label": "asdasd"
+        "id": "field_1734086066851",
+        "type": "text",
+        "label": "Name"
+      },
+      {
+        "id": "field_1734086074410",
+        "type": "text",
+        "label": "age"
       }
     ]
   }
