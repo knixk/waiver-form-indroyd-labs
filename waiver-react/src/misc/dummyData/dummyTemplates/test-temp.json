@@ -1,0 +1,89 @@
+{
+    "template_name": "test temp",
+    "template_config": {
+      "company_logo": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg",
+      "company_address": "pune",
+      "questions": [
+        {
+          "label": "asdasdasdas",
+          "input_type": "text",
+          "values": "",
+          "image": "",
+          "required": false,
+          "variant": "zip_code",
+          "customStyles": {},
+          "question_id": 1734344749671
+        },
+        {
+          "label": "asdasdasdas",
+          "input_type": "text",
+          "values": "",
+          "image": "",
+          "required": false,
+          "customStyles": {},
+          "variant": "zip_code",
+          "question_id": 1734344849360
+        },
+        {
+          "label": "asdasd",
+          "input_type": "text",
+          "values": "",
+          "image": "",
+          "required": false,
+          "customStyles": {},
+          "question_id": 1734344976776
+        },
+        {
+          "label": "phone",
+          "input_type": "text",
+          "values": "",
+          "image": "",
+          "required": false,
+          "customStyles": {},
+          "variant": "phone_number",
+          "question_id": 1734344986895
+        },
+        {
+          "label": "zip code",
+          "input_type": "text",
+          "values": "",
+          "image": "",
+          "required": false,
+          "customStyles": {},
+          "variant": "zip_code",
+          "question_id": 1734345003249
+        },
+        {
+          "label": "password",
+          "input_type": "text",
+          "values": "",
+          "image": "",
+          "required": false,
+          "customStyles": {},
+          "variant": "password",
+          "question_id": 1734345016423
+        },
+        {
+          "label": "asdasd",
+          "input_type": "dropdown",
+          "values": "drop, top",
+          "image": "",
+          "required": false,
+          "customStyles": {},
+          "question_id": 1734345028354
+        }
+      ],
+      "extra_participants_form_fields": [
+        {
+          "id": "field_1734345034387",
+          "type": "text",
+          "label": "name"
+        },
+        {
+          "id": "field_1734345037638",
+          "type": "text",
+          "label": "age"
+        }
+      ]
+    }
+  }

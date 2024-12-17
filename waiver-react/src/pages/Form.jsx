@@ -6,7 +6,23 @@ import toast, { Toaster } from "react-hot-toast";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-import template_config from "../../template_config.json";
+import template_config from "../misc/dummyData/dummyTemplates/main-template-config.json";
+import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
+
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  phoneNumber: Yup.string()
+    .matches(/^\+?\d{10,15}$/, "Invalid phone number")
+    .required("Phone number is required"),
+  zipCode: Yup.string()
+    .matches(/^\d{6}(-\d{4})?$/, "Invalid ZIP code")
+    .required("ZIP code is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  // Add more validations as needed
+});
 
 import { useContext } from "react";
 import { MyContext } from "../App";
@@ -96,7 +112,22 @@ const Form = () => {
     setWantParticipants,
     centerID,
     setCenterID,
+    centerInfo,
+    setCenterInfo,
+    centerAddInfo,
+    setCenterAddInfo,
   } = myState;
+
+  const [errors, setErrors] = useState({});
+
+  const validateField = (field, value) => {
+    try {
+      validationSchema.validateSyncAt(field, { [field]: value });
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    } catch (error) {
+      setErrors((prev) => ({ ...prev, [field]: error.message }));
+    }
+  };
 
   const canvasContainerRef = useRef(null);
   const navigate = useNavigate();
@@ -155,7 +186,30 @@ const Form = () => {
 
   const handleSubmit = async (e) => {
     // console.log(sign?.getTrimmedCanvas().width == 1)
+    // setFormData({});
     e.preventDefault();
+
+    let err = false;
+    // return;
+
+    // try {
+    //   validationSchema.validateSync(formData, { abortEarly: false });
+    //   // Proceed with form submission
+    // } catch (error) {
+    //   err = true;
+    //   const validationErrors = {};
+    //   error.inner.forEach((err) => {
+    //     validationErrors[err.path] = err.message;
+    //     toast.error(err.message);
+    //   });
+    //   setErrors(validationErrors);
+    //   // return;
+    // }
+
+    if (err) {
+      return;
+    }
+    // console.log("still working");
 
     if (sign?.getTrimmedCanvas().width == 1) {
       toast.error("You must sign the form!");
@@ -219,82 +273,10 @@ const Form = () => {
     reader.readAsDataURL(pdfBlob);
   };
 
-  // useEffect(() => {
-  //   const getTemplateIdFromCenterID = async (id) => {
-  //     let ans = null;
-  //     const templates = "http://localhost:5050/template-id-from-center";
-
-  //     const options = {
-  //       center_id: id,
-  //     };
-
-  //     try {
-  //       const response = await axios.post(templates, options);
-  //       ans = response.data.template_id;
-  //       setTemplateId(ans);
-  //     } catch (error) {
-  //       console.error(error);
-  //       toast("No form found...");
-  //       setTimeout(() => navigate("/"), 5000);
-  //     }
-
-  //     return ans;
-  //   };
-
-  //   const fetchTemplate = async (t_id) => {};
-  //   // const templates = "http://localhost:5050/post-center";
-
-  //   // const options = {
-  //   //   id: t_id,
-  //   // };
-
-  //   try {
-  //     // const response = await axios.post(templates, options);
-  //     // const myData = JSON.parse(response.data.data[0].template_config);
-
-  //     // if (myData) {
-  //     //   setQuestions(myData.questions);
-  //     //   setCompanyLogo(myData.company_logo);
-  //     //   setExtraFields(myData.extra_participants_form_fields);
-  //     //   setDisplayForm(true);
-  //     //   setCompanyName(myData.company_name);
-
-  //     // use local template
-  //     setQuestions(template_config.template_config.questions);
-  //     setCompanyLogo(template_config.template_config.company_logo);
-  //     setExtraFields(
-  //       template_config.template_config.extra_participants_form_fields
-  //     );
-  //     setDisplayForm(true);
-  //     setCompanyName(template_config.template_config.company_name);
-  //     // setWantParticipants(
-  //     //   template_config.template_config.want_to_add_participants
-  //     // );
-
-  //     setLoading(false);
-  //   } catch (error) {
-  //     toast("template doesn't exist");
-  //     console.error(
-  //       "Error:",
-  //       error.response ? error.response.data : error.message
-  //     );
-  //   }
-
-  //   const asyncFnStitch = async () => {
-  //     setCenterID(centerParams);
-
-  //     const data =
-  //       centerParams && (await getTemplateIdFromCenterID(centerParams));
-  //     data && (await fetchTemplate(data));
-  //   };
-
-  //   // asyncFnStitch();
-  //   fetchTemplate(4);
-  // }, []);
-
   useEffect(() => {
+    // setting the template info here..
     if (import.meta.env.VITE_MODE == "prod") {
-      console.log("in dev mode..")
+      console.log("in prod mode..");
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
         const templates = `${aws_url}/template-id-from-center`;
@@ -368,6 +350,7 @@ const Form = () => {
     }
 
     if (import.meta.env.VITE_MODE == "dev") {
+      console.log("in dev mode..");
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
         const templates = "http://localhost:5050/template-id-from-center";
@@ -439,6 +422,57 @@ const Form = () => {
       // asyncFnStitch();
       fetchTemplate(4);
     }
+
+    // Setting the center info here
+    if (import.meta.env.VITE_MODE == "prod") {
+      console.log("inside prod");
+      const postCenter = async (centerId) => {
+        const center = `${aws_url}/get-center`;
+        const options = {
+          center_id: centerId,
+        };
+
+        try {
+          const response = await axios.post(center, options);
+          // console.log("Response:", response.data.data);
+          setCenterInfo(response.data.data);
+          // console.log(response.data.data);
+          // const jsonData = J
+          setCenterAddInfo(response.data.data);
+          return response.data.data; // Return the response data
+        } catch (error) {
+          console.error(
+            "Error posting center:",
+            error.response?.data || error.message // Handle error gracefully
+          );
+          throw error; // Rethrow the error for further handling
+        }
+      };
+      if (!centerParams) {
+        setCenterID(6);
+        // const params = new URLSearchParams({ ["center"]: 5 });
+        // history.replace({
+        //   pathname: location.pathname,
+        //   search: params.toString(),
+        // });
+
+        // console.log("no paramss");
+        postCenter(6);
+      } else {
+        centerParams && setCenterID(centerParams);
+        centerParams && postCenter(centerParams);
+      }
+    }
+
+    if (import.meta.env.VITE_MODE == "dev") {
+      console.log("inside dev mode...");
+      setCenterInfo(dummyCenter);
+      setCenterAddInfo(dummyCenter);
+      setCenterID(5);
+
+      let prsedData = JSON.parse(dummyCenter.additional_info);
+      // console.log(prsedData);
+    }
   }, []);
 
   return (
@@ -456,7 +490,7 @@ const Form = () => {
               marginTop={2}
               letterSpacing={1.5}
             >
-              {(formData && companyName) || "Company name"}
+              {centerInfo && centerInfo.center_name}
             </Typography>
             {formData && (
               <img className="form__logo" src={companyLogo} alt="" />
@@ -478,9 +512,12 @@ const Form = () => {
                 margin="normal"
                 required
                 type="email"
-                onChange={(e) =>
-                  handleInputChange("fixed__email", e.target.value)
-                }
+                error={!!errors.email}
+                onChange={(e) => {
+                  handleInputChange("fixed__email", e.target.value);
+                  validateField("email", e.target.value);
+                }}
+                helperText={errors.email}
               />
               <TextField
                 fullWidth
@@ -488,9 +525,12 @@ const Form = () => {
                 margin="normal"
                 required
                 type="tel"
-                onChange={(e) =>
-                  handleInputChange("fixed__number", e.target.value)
-                }
+                error={!!errors.phoneNumber}
+                onChange={(e) => {
+                  handleInputChange("fixed__number", e.target.value);
+                  validateField("phoneNumber", e.target.value);
+                }}
+                helperText={errors.phoneNumber}
               />
               {questions &&
                 questions.map((question) => (
@@ -524,14 +564,43 @@ const Form = () => {
                           type={question.variant || "text"}
                           variant="outlined"
                           fullWidth
+                          error={
+                            (question.variant == "phone_number" &&
+                              !!errors.phoneNumber) ||
+                            (question.variant == "zip_code" &&
+                              !!errors.zipCode) ||
+                            (question.variant == "email" && !!errors.email)
+                          }
+                          helperText={
+                            (question.variant == "phone_number" &&
+                              errors.phoneNumber) ||
+                            (question.variant == "zip_code" &&
+                              errors.zipCode) ||
+                            (question.variant == "email" && errors.email)
+                          }
                           value={formData[question.question_id] || ""}
                           required={question.required || false}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             handleInputChange(
                               question.question_id,
                               e.target.value
-                            )
-                          }
+                            );
+
+                            if (question.variant == "phone_number") {
+                              validateField("phoneNumber", e.target.value);
+                              // console.log("phone val");
+                            }
+
+                            if (question.variant == "zip_code") {
+                              validateField("zipCode", e.target.value);
+                              // console.log("zip code val");
+                            }
+
+                            if (question.variant == "email") {
+                              validateField("email", e.target.value);
+                              // console.log("email val");
+                            }
+                          }}
                           placeholder={
                             question.input_placeholder || "Enter your response"
                           }
@@ -754,6 +823,65 @@ const Form = () => {
                               )
                             }
                           />
+                          {/* {field.input_type === "dropdown" && (
+                            <FormControl fullWidth margin="normal">
+                              <Typography
+                              >
+                                {field.label}
+                              </Typography>
+
+                              <Select
+                                value={formData[field.field_id] || ""}
+                                required={field.required || false}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    field.field_id,
+                                    e.target.value
+                                  )
+                                }
+                                displayEmpty
+                              >
+                                <MenuItem value="" disabled>
+                                  Choose
+                                </MenuItem>
+                                {field.values.split(",").map((option) => (
+                                  <MenuItem key={option} value={option}>
+                                    {option}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          )} */}
+                          {/* {field.type === "file" && (
+                            <FormControl fullWidth margin="normal">
+                              <Typography>{field.label}</Typography>
+                              <Button
+                                variant="contained"
+                                component="label"
+                                color="primary"
+                              >
+                                Upload File
+                                <input
+                                  // required={field.required || false}
+                                  type="file"
+                                  hidden
+                                  value={participant[field.label] || ""}
+                                  onChange={(e) =>
+                                    updateParticipant(
+                                      index,
+                                      field.label,
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </Button>
+                              {participant[field.label] && (
+                                <Typography variant="body2" marginTop={1}>
+                                  Selected: {participant[field.label]}
+                                </Typography>
+                              )}
+                            </FormControl>
+                          )} */}
                         </Grid>
                       ))}
                       <Grid item xs={2}>

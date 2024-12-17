@@ -1,0 +1,87 @@
+{
+    "template_name": "Painting workshop",
+    "template_config": {
+        "company_logo": "https://i.ytimg.com/vi/SyCtXzYLZgc/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBpQFvggAM7X9Szdgm48v2njdAKcg",
+        "company_address": "Pune",
+        "questions": [
+            {
+                "label": "Describe your painting skills",
+                "input_type": "text",
+                "values": "",
+                "image": "",
+                "required": false,
+                "customStyles": {},
+                "question_id": 1734322973547
+            },
+            {
+                "label": "Choose your brush size",
+                "input_type": "dropdown",
+                "values": "Thick, thin",
+                "image": "",
+                "required": false,
+                "customStyles": {},
+                "question_id": 1734322999664
+            },
+            {
+                "label": "choose your preferred date",
+                "input_type": "text",
+                "values": "",
+                "image": "",
+                "required": false,
+                "customStyles": {
+                    "color": "purple"
+                },
+                "color": "purple",
+                "question_id": 1734323062946
+            },
+            {
+                "label": "Add your best work",
+                "input_type": "file",
+                "values": "",
+                "image": "",
+                "required": false,
+                "customStyles": {},
+                "question_id": 1734323098717
+            },
+            {
+                "label": "Thank you for filling the hope. Let's meet at the venue.",
+                "input_type": "label",
+                "values": "",
+                "image": "https://i.ytimg.com/vi/7whhcFfz51Q/maxresdefault.jpg",
+                "required": false,
+                "customStyles": {
+                    "fontSize": "2rem",
+                    "fontWeight": "bold",
+                    "textAlign": "center"
+                },
+                "fontSize": "2rem",
+                "alignment": "center",
+                "bold": true,
+                "italic": false,
+                "question_id": 1734323149703
+            }
+        ],
+        "extra_participants_form_fields": [
+            {
+                "id": "field_1734323157334",
+                "type": "text",
+                "label": "name"
+            },
+            {
+                "id": "field_1734323161512",
+                "type": "text",
+                "label": "age"
+            },
+            {
+                "id": "field_1734323163776",
+                "type": "dropdown",
+                "label": "gender"
+            },
+            {
+                "id": "field_1734323180336",
+                "type": "file",
+                "label": "art work "
+            }
+        ]
+    }
+  }

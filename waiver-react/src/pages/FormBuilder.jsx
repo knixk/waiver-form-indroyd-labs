@@ -31,11 +31,7 @@ const FormBuilder = () => {
     values: "",
     image: "",
     required: false,
-    // fontSize: "",
-    // color: "",
-    // bold: false,
-    // italic: false,
-    // alignment: "",
+    variant: "",
     customStyles: {},
   });
 
@@ -54,21 +50,6 @@ const FormBuilder = () => {
     );
   };
 
-  //   const handleDownloadConfig = () => {
-  //     const config = {
-  //       template_name: templateName,
-  //       template_config: {
-  //         questions,
-  //         extra_participants_form_fields: extraParticipantFields,
-  //         company_logo: companyLogo,
-  //         company_name: "Fun City Adventure Park",
-  //         company_address: companyAddress,
-  //         want_to_add_participants: true,
-  //       },
-  //     };
-  //     console.log(config);
-  //   };
-
   const handleAddQuestion = () => {
     setFormConfig((prev) => ({
       ...prev,
@@ -83,11 +64,6 @@ const FormBuilder = () => {
       values: "",
       image: "",
       required: false,
-      // fontSize: "",
-      // color: "",
-      // bold: false,
-      // italic: false,
-      // alignment: "",
       customStyles: {},
     });
   };
@@ -119,7 +95,6 @@ const FormBuilder = () => {
       },
     }));
   };
-
 
   const handleGenerateConfig = () => {
     setCurrentQuestion((currentQuestion) => ({
@@ -154,7 +129,7 @@ const FormBuilder = () => {
       },
     };
 
-    downloadObjectAsJSON(config)
+    downloadObjectAsJSON(config);
 
     console.log(config);
   };
@@ -207,6 +182,8 @@ const FormBuilder = () => {
           fullWidth
           margin="normal"
         />
+
+        {/* Input type dropdown */}
         <FormControl fullWidth margin="normal">
           <InputLabel>Input Type</InputLabel>
           <Select
@@ -226,6 +203,32 @@ const FormBuilder = () => {
             <MenuItem value="label">Label</MenuItem>
           </Select>
         </FormControl>
+
+        {/* Variant dropdown */}
+        {currentQuestion.input_type == "text" && (
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Select Variant</InputLabel>
+            <Select
+              value={currentQuestion.variant}
+              onChange={(e) => {
+                setCurrentQuestion((prev) => ({
+                  ...prev,
+                  variant: e.target.value,
+                }));
+
+                console.log(currentQuestion);
+              }}
+            >
+              <MenuItem value="text">Default</MenuItem>
+              <MenuItem value="phone_number">Phone Number</MenuItem>
+              <MenuItem value="zip_code">Zip Code</MenuItem>
+              <MenuItem value="password">Password</MenuItem>
+              <MenuItem value="email">Email</MenuItem>
+
+            </Select>
+          </FormControl>
+        )}
+
         {currentQuestion.input_type === "dropdown" && (
           <TextField
             label="Values (comma separated)"
@@ -444,9 +447,9 @@ const FormBuilder = () => {
                 }}
               >
                 <MenuItem value="text">Text</MenuItem>
-                <MenuItem value="dropdown">Dropdown</MenuItem>
-                <MenuItem value="date">Date</MenuItem>
-                <MenuItem value="file">File</MenuItem>
+                {/* <MenuItem value="dropdown">Dropdown</MenuItem> */}
+                {/* <MenuItem value="date">Date</MenuItem> */}
+                {/* <MenuItem value="file">File</MenuItem> */}
               </Select>
             </FormControl>
             <IconButton

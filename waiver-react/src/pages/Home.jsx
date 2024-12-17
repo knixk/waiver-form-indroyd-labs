@@ -3,7 +3,7 @@ import { Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { useHistory, useLocation } from "react-router";
-import dummyCenter from "./dummyCenter.json";
+import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
 // console.log(dummyCenter, "=======im dc")
 
@@ -55,7 +55,7 @@ function Home() {
           const response = await axios.post(center, options);
           // console.log("Response:", response.data.data);
           setCenterInfo(response.data.data);
-          console.log(response.data.data);
+          // console.log(response.data.data);
           // const jsonData = J
           setCenterAddInfo(response.data.data);
           return response.data.data; // Return the response data
@@ -68,7 +68,7 @@ function Home() {
         }
       };
       if (!centerParams) {
-        setCenterID(5);
+        setCenterID(6);
         // const params = new URLSearchParams({ ["center"]: 5 });
         // history.replace({
         //   pathname: location.pathname,
@@ -76,7 +76,7 @@ function Home() {
         // });
 
         // console.log("no paramss");
-        postCenter(5);
+        postCenter(6);
       } else {
         centerParams && setCenterID(centerParams);
         centerParams && postCenter(centerParams);
@@ -87,10 +87,10 @@ function Home() {
       console.log("inside dev mode...");
       setCenterInfo(dummyCenter);
       setCenterAddInfo(dummyCenter);
-      setCenterID(5);
+      setCenterID(6);
 
       let prsedData = JSON.parse(dummyCenter.additional_info);
-      console.log(prsedData);
+      // console.log(prsedData);
     }
   }, []);
 
