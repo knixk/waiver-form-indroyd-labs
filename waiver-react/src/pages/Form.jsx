@@ -449,7 +449,7 @@ const Form = () => {
         }
       };
       if (!centerParams) {
-        setCenterID(5);
+        setCenterID(6);
         // const params = new URLSearchParams({ ["center"]: 5 });
         // history.replace({
         //   pathname: location.pathname,
@@ -457,7 +457,7 @@ const Form = () => {
         // });
 
         // console.log("no paramss");
-        postCenter(5);
+        postCenter(6);
       } else {
         centerParams && setCenterID(centerParams);
         centerParams && postCenter(centerParams);

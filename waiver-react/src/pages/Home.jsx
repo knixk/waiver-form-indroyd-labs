@@ -68,7 +68,7 @@ function Home() {
         }
       };
       if (!centerParams) {
-        setCenterID(5);
+        setCenterID(6);
         // const params = new URLSearchParams({ ["center"]: 5 });
         // history.replace({
         //   pathname: location.pathname,
@@ -76,7 +76,7 @@ function Home() {
         // });
 
         // console.log("no paramss");
-        postCenter(5);
+        postCenter(6);
       } else {
         centerParams && setCenterID(centerParams);
         centerParams && postCenter(centerParams);
@@ -87,7 +87,7 @@ function Home() {
       console.log("inside dev mode...");
       setCenterInfo(dummyCenter);
       setCenterAddInfo(dummyCenter);
-      setCenterID(5);
+      setCenterID(6);
 
       let prsedData = JSON.parse(dummyCenter.additional_info);
       // console.log(prsedData);
