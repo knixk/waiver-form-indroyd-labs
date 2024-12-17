@@ -9,29 +9,6 @@ const { connectToDatabase } = require("./connectDB");
 
 env.config();
 
-// use the db
-(async () => {
-  try {
-    const dbConnection = await connectToDatabase();
-    console.log("Database connected successfully");
-    // You can now use dbConnection in your app
-  } catch (err) {
-    console.error(err.message);
-  }
-})();
-
-app.use(async (req, res, next) => {
-  try {
-    if (!global.dbConnection) {
-      global.dbConnection = await connectToDatabase(); // Wait for connection
-    }
-    req.db = global.dbConnection; // Pass connection to routes
-    next();
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 app.use(cors());
 
 app.use(express.json({ limit: "10mb" })); // Increase limit for JSON payloads

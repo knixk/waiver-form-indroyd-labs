@@ -248,7 +248,6 @@ router.post("/center", async (req, res) => {
 });
 
 // center controller
-
 router.post("/get-center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
@@ -271,32 +270,6 @@ router.post("/get-center", async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 });
-
-// post a center id
-// router.post("/center-by-id", async (req, res) => {
-//   console.log(req.body);
-//   const con = global.dbConnection;
-//   if (!con) {
-//     return res
-//       .status(500)
-//       .json({ error: "Database connection not established" });
-//   }
-
-//   const { center_id } = req.body;
-
-//   const result = await getCenterByID(con, center_id);
-//   console.log(result)
-
-//   // if (!result || !result[0]) {
-//   //   return res.sendStatus(404).json({
-//   //     msg: "Error getting info by center..",
-//   //   }); // Handle undefined or empty result
-//   // }
-
-//   res.status(200).json({
-//     center_id: result[0],
-//   });
-// });
 
 router.post("/get-submission-as-file", async (req, res) => {
   const con = global.dbConnection;
@@ -447,3 +420,5 @@ router.post("/template-from-sid", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+module.exports = router;
