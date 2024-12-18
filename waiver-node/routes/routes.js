@@ -501,7 +501,7 @@ router.post("/template-from-sid", async (req, res) => {
         .status(404)
         .json({ error: "Template not found for the given submission ID" });
     }
-    res.json({ template });
+    res.json({ template, message: "Here is the template used by the given submission ID" });
   } catch (error) {
     console.error("Error fetching template:", error);
     res.status(500).json({ error: "Internal Server Error" });
