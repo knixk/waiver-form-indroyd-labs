@@ -28,7 +28,7 @@ const privateKey = fs.readFileSync(prvtfilePath, "utf8");
 
 // Data to encrypt
 const data = process.env.SECRET_KEY;
-
+const secretKey = process.env.SECRET_KEY;
 // Encrypt the data with the public key
 const encryptedData = crypto.publicEncrypt(publicKey, Buffer.from(data));
 
