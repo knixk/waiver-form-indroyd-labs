@@ -13,6 +13,19 @@ const {
   getCenterById,
   getTemplateBySubmissionId,
 } = require("../controllers/controllers");
+const env = require("dotenv");
+const jwt = require("jsonwebtoken");
+env.config();
+
+const generateJWT = async (key) => {
+  const user = {
+    secretKey: key,
+  };
+  const token = jwt.sign(user, process.env.SECRET_KEY, {
+    expiresIn: "1h", // expires in one hour
+  });
+  return token;
+};
 
 router.get("/", (req, res) => {
   res.status(200).json({
@@ -72,7 +85,7 @@ router.post("/get-token", async (req, res) => {
   const token = await generateJWT(secret_key);
 
   res.status(200).json({
-    token,
+    token,  
   });
 });
 
