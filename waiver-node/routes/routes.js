@@ -139,22 +139,25 @@ router.post("/get-token", async (req, res) => {
     return res.status(400).json({ message: "Secret key required" });
   }
 
-  // Decrypt the encrypted key using the private key
-  const decryptedKey = crypto
-    .privateDecrypt(privateKey, Buffer.from(encrypted_key, "base64"))
-    .toString();
+  try {
+    // Decrypt the encrypted key using the private key
+    const decryptedKey = crypto
+      .privateDecrypt(privateKey, Buffer.from(encrypted_key, "base64"))
+      .toString();
 
-  console.log("im decrp: ", decryptedKey);
-
-  if (decryptedKey != process.env.SECRET_KEY) {
+    // if (decryptedKey != process.env.SECRET_KEY) {
+    // }
+  } catch (err) {
+    console.error("err");
     res.status(401).json({
       message: "You're not authorized, Invalid key",
     });
-
     return;
   }
 
-  const token = await generateJWT(decryptedKey);
+  // console.log("im decrp: ", decryptedKey);
+
+  const token = await generateJWT(process.env.SECRET_KEY);
 
   res.status(200).json({
     message: "Here is your JWT Token",
