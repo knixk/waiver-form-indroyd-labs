@@ -16,7 +16,6 @@ const {
 const env = require("dotenv");
 const jwt = require("jsonwebtoken");
 env.config();
-// const NodeRSA = require("node-rsa");
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
@@ -33,18 +32,9 @@ const data = process.env.SECRET_KEY;
 // Encrypt the data with the public key
 const encryptedData = crypto.publicEncrypt(publicKey, Buffer.from(data));
 
-console.log("Encrypted Data:", encryptedData.toString("base64"));
+// console.log("Encrypted Data:", encryptedData.toString("base64"));
 
-console.log("ENDS HERE \n");
-
-// const secretKey = process.env.SECRET_KEY; // Example key
-// const encryptedKey = crypto
-//   .publicEncrypt(publicKey, Buffer.from(secretKey))
-//   .toString("base64");
-
-// console.log("EK ========> ", encryptedKey);
-
-// Send `encryptedKey` in your API payload
+// console.log("ENDS HERE \n");
 
 const generateJWT = async (key) => {
   const user = {

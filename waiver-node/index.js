@@ -5,7 +5,7 @@ const cors = require("cors");
 const env = require("dotenv");
 const fs = require("fs");
 // DB Connection fn
-const { connectToDatabase } = require("./connectDB.js");  
+const { connectToDatabase } = require("./connectDB.js");
 // All the routes
 const myRouter = require("./routes/routes");
 // const serverless = require("serverless-http");

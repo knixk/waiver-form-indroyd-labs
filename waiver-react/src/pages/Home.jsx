@@ -2,17 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-// import { useHistory, useLocation } from "react-router";
 import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
-
-// console.log(dummyCenter, "=======im dc")
 
 const logo = "https://dypdvfcjkqkg2.cloudfront.net/large/5862799-1989.jpg";
 
 const aws_url =
   "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
 
-// import logo from "../assets/unicef.png";
 import { useContext } from "react";
 import { MyContext } from "../App";
 
@@ -23,8 +19,6 @@ function Home() {
   const centerParams = queryParameters.get("center");
 
   // console.log(import.meta.env.VITE_MODE);
-  // const history = useHistory();
-  // const location = useLocation();
 
   const myState = useContext(MyContext);
   const {

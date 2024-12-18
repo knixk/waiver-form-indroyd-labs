@@ -315,16 +315,6 @@ const Form = () => {
             setExtraFields(myData.extra_participants_form_fields);
             setDisplayForm(true);
             setCompanyName(myData.company_name);
-
-            // use local template
-            // setQuestions(template_config.template_config.questions);
-            // setCompanyLogo(template_config.template_config.company_logo);
-            // setExtraFields(
-            //   template_config.template_config.extra_participants_form_fields
-            // );
-            // setDisplayForm(true);
-            // setCompanyName(template_config.template_config.company_name);
-
             setLoading(false);
           }
         } catch (error) {
@@ -373,23 +363,8 @@ const Form = () => {
       };
 
       const fetchTemplate = async (t_id) => {};
-      // const templates = "http://localhost:5050/post-center";
-
-      // const options = {
-      //   id: t_id,
-      // };
 
       try {
-        // const response = await axios.post(templates, options);
-        // const myData = JSON.parse(response.data.data[0].template_config);
-
-        // if (myData) {
-        //   setQuestions(myData.questions);
-        //   setCompanyLogo(myData.company_logo);
-        //   setExtraFields(myData.extra_participants_form_fields);
-        //   setDisplayForm(true);
-        //   setCompanyName(myData.company_name);
-
         // use local template
         setQuestions(template_config.template_config.questions);
         setCompanyLogo(template_config.template_config.company_logo);
@@ -450,13 +425,6 @@ const Form = () => {
       };
       if (!centerParams) {
         setCenterID(6);
-        // const params = new URLSearchParams({ ["center"]: 5 });
-        // history.replace({
-        //   pathname: location.pathname,
-        //   search: params.toString(),
-        // });
-
-        // console.log("no paramss");
         postCenter(6);
       } else {
         centerParams && setCenterID(centerParams);
