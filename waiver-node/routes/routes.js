@@ -16,22 +16,26 @@ const {
 const env = require("dotenv");
 const jwt = require("jsonwebtoken");
 env.config();
-const NodeRSA = require("node-rsa");
-// const crypto = require("crypto");
+// const NodeRSA = require("node-rsa");
+const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
+const publicfilePath = path.resolve(__dirname, "../keys/public_key.pem");
+const prvtfilePath = path.resolve(__dirname, "../keys/private_key.pem");
 
-const publicKey = `-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
------END PUBLIC KEY-----`;
+// Load the public key
+const publicKey = fs.readFileSync(publicfilePath, "utf8");
+const privateKey = fs.readFileSync(prvtfilePath, "utf8");
 
-const privateKey = `-----BEGIN PRIVATE KEY-----
-MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBK...
------END PRIVATE KEY-----`;
-// Encryption using public key
-const encryptKey = new NodeRSA();
-encryptKey.importKey(publicKey, "pkcs1-public-pem");
-// console.log(first)
-const encryptedSecret = encryptKey.encrypt(process.env.SECRET_KEY, "base64"); // Encrypt your secret_key
-console.log("Encrypted Secret:", encryptedSecret);
+// Data to encrypt
+const data = process.env.SECRET_KEY;
+
+// Encrypt the data with the public key
+const encryptedData = crypto.publicEncrypt(publicKey, Buffer.from(data));
+
+console.log("Encrypted Data:", encryptedData.toString("base64"));
+
+console.log("ENDS HERE \n");
 
 // const secretKey = process.env.SECRET_KEY; // Example key
 // const encryptedKey = crypto
@@ -119,6 +123,8 @@ router.get("/submissions", async (req, res) => {
 
 // get all the templates
 
+// get all the templates
+
 router.post("/get-token", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
@@ -127,34 +133,35 @@ router.post("/get-token", async (req, res) => {
       .json({ message: "Database connection not established" });
   }
 
-  const { encryptedSecret } = req.body;
+  const { encrypted_key } = req.body; // Assuming username and email are provided in the request body
 
-  if (!encryptedSecret) {
-    return res.status(400).json({ message: "Encrypted key is required" });
+  if (!encrypted_key) {
+    return res.status(400).json({ message: "Secret key required" });
   }
 
-  try {
-    // Decrypt the encrypted key
-    const decryptKey = new NodeRSA();
-    decryptKey.importKey(privateKey, "pkcs1-private-pem");
-    const decryptedKey = decryptKey.decrypt(encryptedSecret, "utf8");
+  // Decrypt the encrypted key using the private key
+  const decryptedKey = crypto
+    .privateDecrypt(privateKey, Buffer.from(encrypted_key, "base64"))
+    .toString();
 
-    console.log("Decrypted Secret Key:", decryptedKey);
+  console.log("im decrp: ", decryptedKey);
 
-    const token = await generateJWT(decryptedKey);
-
-    res.status(200).json({
-      message: "Here is your JWT Token",
-      response: {
-        token,
-      },
+  if (decryptedKey != process.env.SECRET_KEY) {
+    res.status(401).json({
+      message: "You're not authorized, Invalid key",
     });
-  } catch (err) {
-    console.error("Decryption Failed:", err.message);
-    return res
-      .status(400)
-      .json({ message: "Invalid or corrupted encrypted key" });
+
+    return;
   }
+
+  const token = await generateJWT(decryptedKey);
+
+  res.status(200).json({
+    message: "Here is your JWT Token",
+    response: {
+      token,
+    },
+  });
 });
 
 router.get("/templates", async (req, res) => {

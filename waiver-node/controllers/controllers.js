@@ -4,7 +4,7 @@ const env = require("dotenv");
 env.config();
 
 // Helper methods and controllers
-const { connectToDatabase } = require("../connectDB");
+// const { connectToDatabase } = require("../connectDB");
 
 // console.log(connectToDatabase);
 
@@ -12,29 +12,29 @@ const { google } = require("googleapis");
 // Google Drive API Configuration
 
 // use the db
-(async () => {
-  try {
-    const dbConnection = await connectToDatabase();
-    console.log("Database connected successfully");
-    // You can now use dbConnection in your app
-  } catch (err) {
-    console.error(err.message);
-  }
-})();
+// (async () => {
+//   try {
+//     const dbConnection = await connectToDatabase();
+//     console.log("Database connected successfully");
+//     // You can now use dbConnection in your app
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// })();
 
-app.use(async (req, res, next) => {
-  try {
-    if (!global.dbConnection) {
-      global.dbConnection = await connectToDatabase(); // Wait for connection
-    }
-    req.db = global.dbConnection; // Pass connection to routes
-    next();
-  } catch (err) {
-    res.status(500).json({ message: err.message 
+// app.use(async (req, res, next) => {
+//   try {
+//     if (!global.dbConnection) {
+//       global.dbConnection = await connectToDatabase(); // Wait for connection
+//     }
+//     req.db = global.dbConnection; // Pass connection to routes
+//     next();
+//   } catch (err) {
+//     res.status(500).json({ message: err.message 
 
-    });
-  }
-});
+//     });
+//   }
+// });
 
 const folder__id = process.env.GOOGLE_DRIVE_FOLDER_ID;
 

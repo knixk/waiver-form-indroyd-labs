@@ -4,7 +4,9 @@ const port = process.env.PORT || 5050;
 const cors = require("cors");
 const env = require("dotenv");
 const fs = require("fs");
+// DB Connection fn
 const { connectToDatabase } = require("./connectDB.js");  
+// All the routes
 const myRouter = require("./routes/routes");
 // const serverless = require("serverless-http");
 
@@ -13,7 +15,7 @@ const myRouter = require("./routes/routes");
   try {
     const dbConnection = await connectToDatabase();
     console.log("Database connected successfully");
-    // You can now use dbConnection in your app
+    // You can now use dbConnection
   } catch (err) {
     console.error(err.message);
   }
