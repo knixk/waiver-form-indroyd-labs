@@ -174,6 +174,7 @@ router.get("/templates", async (req, res) => {
   const result = await getTemplates(con, filterOptions);
 
   res.status(200).json({
+    message: "Here is your template..",
     data: result,
   });
 });
@@ -198,6 +199,7 @@ router.get("/centers", async (req, res) => {
 
   res.status(200).json({
     data: result,
+    message: "Here are centers associated with given data.."
   });
 });
 
@@ -221,6 +223,7 @@ router.post("/template-id-from-center", async (req, res) => {
 
   res.status(200).json({
     template_id: result[0].template_id,
+    message: "Here is your template id.."
   });
 });
 
@@ -347,6 +350,7 @@ router.post("/get-center", async (req, res) => {
     res.status(200).json({
       success: true,
       data: center,
+      message: "center was found.."
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
