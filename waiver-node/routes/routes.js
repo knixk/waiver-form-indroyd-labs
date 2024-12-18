@@ -16,6 +16,31 @@ const {
 const env = require("dotenv");
 const jwt = require("jsonwebtoken");
 env.config();
+const NodeRSA = require("node-rsa");
+// const crypto = require("crypto");
+
+const publicKey = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+-----END PUBLIC KEY-----`;
+
+const privateKey = `-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBK...
+-----END PRIVATE KEY-----`;
+// Encryption using public key
+const encryptKey = new NodeRSA();
+encryptKey.importKey(publicKey, "pkcs1-public-pem");
+// console.log(first)
+const encryptedSecret = encryptKey.encrypt(process.env.SECRET_KEY, "base64"); // Encrypt your secret_key
+console.log("Encrypted Secret:", encryptedSecret);
+
+// const secretKey = process.env.SECRET_KEY; // Example key
+// const encryptedKey = crypto
+//   .publicEncrypt(publicKey, Buffer.from(secretKey))
+//   .toString("base64");
+
+// console.log("EK ========> ", encryptedKey);
+
+// Send `encryptedKey` in your API payload
 
 const generateJWT = async (key) => {
   const user = {
@@ -68,6 +93,32 @@ router.get("/submissions", async (req, res) => {
   }
 });
 
+// router.post("/get-token", async (req, res) => {
+//   const con = global.dbConnection;
+//   if (!con) {
+//     return res
+//       .status(500)
+//       .json({ message: "Database connection not established" });
+//   }
+
+//   const { secret_key } = req.body; // Assuming username and email are provided in the request body
+
+//   if (!secret_key) {
+//     return res.status(400).json({ message: "Secret key required" });
+//   }
+
+//   const token = await generateJWT(secret_key);
+
+//   res.status(200).json({
+//     message: "Here is your JWT Token",
+//     response: {
+//       token,
+//     },
+//   });
+// });
+
+// get all the templates
+
 router.post("/get-token", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
@@ -76,23 +127,36 @@ router.post("/get-token", async (req, res) => {
       .json({ message: "Database connection not established" });
   }
 
-  const { secret_key } = req.body; // Assuming username and email are provided in the request body
+  const { encryptedSecret } = req.body;
 
-  if (!secret_key) {
-    return res.status(400).json({ message: "Secret key required" });
+  if (!encryptedSecret) {
+    return res.status(400).json({ message: "Encrypted key is required" });
   }
 
-  const token = await generateJWT(secret_key);
+  try {
+    // Decrypt the encrypted key
+    const decryptKey = new NodeRSA();
+    decryptKey.importKey(privateKey, "pkcs1-private-pem");
+    const decryptedKey = decryptKey.decrypt(encryptedSecret, "utf8");
 
-  res.status(200).json({
-    message: "Here is your JWT Token",
-    response: {
-      token,
-    },
-  });
+    console.log("Decrypted Secret Key:", decryptedKey);
+
+    const token = await generateJWT(decryptedKey);
+
+    res.status(200).json({
+      message: "Here is your JWT Token",
+      response: {
+        token,
+      },
+    });
+  } catch (err) {
+    console.error("Decryption Failed:", err.message);
+    return res
+      .status(400)
+      .json({ message: "Invalid or corrupted encrypted key" });
+  }
 });
 
-// get all the templates
 router.get("/templates", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
