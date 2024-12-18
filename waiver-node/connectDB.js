@@ -1,4 +1,6 @@
 const mysql = require("mysql");
+const env = require("dotenv");
+env.config();
 
 const connectToDatabase = () => {
   return new Promise(async (resolve, reject) => {

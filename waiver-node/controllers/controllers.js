@@ -1,5 +1,12 @@
+const express = require("express");
+const app = express();
+const env = require("dotenv");
+env.config();
+
 // Helper methods and controllers
-const { connectToDatabase } = require("./connectDB");
+const { connectToDatabase } = require("../connectDB");
+
+// console.log(connectToDatabase);
 
 const { google } = require("googleapis");
 // Google Drive API Configuration

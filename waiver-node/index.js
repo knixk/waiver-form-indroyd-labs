@@ -4,8 +4,11 @@ const port = process.env.PORT || 5050;
 const cors = require("cors");
 const env = require("dotenv");
 const fs = require("fs");
-const { connectToDatabase } = require("./connectDB");
+const { connectToDatabase } = require("./connectDB.js");
+const router = require("./routes/routes");
 // const serverless = require("serverless-http");
+
+// console.log(router);
 
 env.config();
 

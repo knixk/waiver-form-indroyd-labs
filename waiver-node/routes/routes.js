@@ -12,7 +12,7 @@ const {
   getSubmissionById,
   getCenterById,
   getTemplateBySubmissionId,
-} = require("../controllers");
+} = require("../controllers/controllers");
 
 router.get("/", (req, res) => {
   res.status(200).json({
