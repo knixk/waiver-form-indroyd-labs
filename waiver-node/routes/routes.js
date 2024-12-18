@@ -29,7 +29,7 @@ const generateJWT = async (key) => {
 
 router.get("/", (req, res) => {
   res.status(200).json({
-    msg: "api is functional...",
+    message: "api is functional...",
   });
 });
 
@@ -38,7 +38,7 @@ router.get("/submissions", async (req, res) => {
   if (!con) {
     return res
       .status(500)
-      .json({ error: "Database connection not established" });
+      .json({ message: "Database connection not established" });
   }
 
   console.log(req.query);
@@ -73,7 +73,7 @@ router.post("/get-token", async (req, res) => {
   if (!con) {
     return res
       .status(500)
-      .json({ error: "Database connection not established" });
+      .json({ message: "Database connection not established" });
   }
 
   const { secret_key } = req.body; // Assuming username and email are provided in the request body
@@ -85,7 +85,10 @@ router.post("/get-token", async (req, res) => {
   const token = await generateJWT(secret_key);
 
   res.status(200).json({
-    token,  
+    message: "Here is your JWT Token",
+    response: {
+      token,
+    },
   });
 });
 
@@ -95,7 +98,7 @@ router.get("/templates", async (req, res) => {
   if (!con) {
     return res
       .status(500)
-      .json({ error: "Database connection not established" });
+      .json({ Message: "Database connection not established" });
   }
 
   console.log(req.body);
@@ -119,7 +122,7 @@ router.get("/centers", async (req, res) => {
   if (!con) {
     return res
       .status(500)
-      .json({ error: "Database connection not established" });
+      .json({ Message: "Database connection not established" });
   }
 
   const filterOptions = {
@@ -139,7 +142,7 @@ router.post("/template-id-from-center", async (req, res) => {
   if (!con) {
     return res
       .status(500)
-      .json({ error: "Database connection not established" });
+      .json({ Message: "Database connection not established" });
   }
 
   const { center_id } = req.body;
@@ -148,7 +151,7 @@ router.post("/template-id-from-center", async (req, res) => {
 
   if (!result || !result[0]) {
     return res.sendStatus(404).json({
-      msg: "Error getting template by center..",
+      message: "Error getting template by center..",
     }); // Handle undefined or empty result
   }
 
@@ -179,7 +182,7 @@ router.post("/submissions", async (req, res) => {
   postASubmission(con, data);
 
   res.status(200).json({
-    msg: "form was submitted",
+    message: "form was submitted",
   });
 });
 
@@ -202,13 +205,15 @@ router.post("/templates", async (req, res) => {
     const ans = await postATemplate(con, data); // Await the result from the template insertion
 
     res.status(200).json({
-      msg: "Template was saved",
-      template_id: ans, // Send the inserted template ID in response
+      message: "Template was saved",
+      response: {
+        template_id: ans, // Send the inserted template ID in response
+      },
     });
   } catch (err) {
     console.error("Error inserting template:", err);
     res.status(500).json({
-      msg: "Error saving template",
+      message: "Error saving template",
       error: err.message,
     });
   }
@@ -220,7 +225,7 @@ router.post("/centers", async (req, res) => {
   if (!con) {
     return res
       .status(500)
-      .json({ error: "Database connection not established" });
+      .json({ message: "Database connection not established" });
   }
 
   const data = {
@@ -233,7 +238,7 @@ router.post("/centers", async (req, res) => {
   postACenter(con, data);
 
   res.status(200).json({
-    msg: "center was saved",
+    message: "center was saved",
   });
 });
 
@@ -256,7 +261,7 @@ router.post("/center", async (req, res) => {
   postACenter(con, data);
 
   res.status(200).json({
-    msg: "center was saved",
+    message: "center was saved",
   });
 });
 
@@ -298,7 +303,7 @@ router.post("/get-submission-as-file", async (req, res) => {
   //   data:
   // });
   res.sendStatus(200).json({
-    msg: "",
+    message: "Here is your file",
   });
 });
 
@@ -346,6 +351,7 @@ router.post("/post-center", async (req, res) => {
 
   res.status(200).json({
     data: result,
+    message: "Here is your template based on a center ID",
   });
 });
 

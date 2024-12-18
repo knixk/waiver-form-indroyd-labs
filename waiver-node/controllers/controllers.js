@@ -4,7 +4,7 @@ const env = require("dotenv");
 env.config();
 
 // Helper methods and controllers
-const { connectToDatabase } = require("../connectDB");
+// const { connectToDatabase } = require("../connectDB");
 
 // console.log(connectToDatabase);
 
@@ -30,7 +30,9 @@ app.use(async (req, res, next) => {
     req.db = global.dbConnection; // Pass connection to routes
     next();
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message 
+      
+    });
   }
 });
 
