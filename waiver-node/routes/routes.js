@@ -223,7 +223,11 @@ router.get("/submissions", async (req, res) => {
     if (!center_id) {
       return res
         .status(403)
-        .json({ message: "Invalid token payload. Missing center_id.", code: 403, response: {} });
+        .json({
+          message: "Invalid token payload. Missing center_id.",
+          code: 403,
+          response: {},
+        });
     }
 
     // Query submissions for the center_id
@@ -241,7 +245,6 @@ router.get("/submissions", async (req, res) => {
       .json({ message: "Invalid or expired token.", code: 403, response: {} });
   }
 });
-
 
 router.post("/get-token", async (req, res) => {
   const con = global.dbConnection;
@@ -618,7 +621,7 @@ router.post("/post-center", async (req, res) => {
   const result = await getTemplates(con, filterOptions);
 
   res.status(200).json({
-    data: result,
+    response: result,
     message: "Here is your template based on a center ID",
     code: 200,
   });
