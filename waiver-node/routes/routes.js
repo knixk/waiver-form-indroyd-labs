@@ -49,15 +49,19 @@ const generateJWT = async (key) => {
 router.get("/", (req, res) => {
   res.status(200).json({
     message: "api is functional...",
+    code: 200,
+    response: {},
   });
 });
 
 router.get("/submissions", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
-    return res
-      .status(500)
-      .json({ message: "Database connection not established" });
+    return res.status(500).json({
+      message: "Database connection not established",
+      code: 500,
+      response: {},
+    });
   }
 
   console.log(req.query);
@@ -67,7 +71,9 @@ router.get("/submissions", async (req, res) => {
   console.log("token", req.query);
 
   if (!token) {
-    return res.status(401).json({ message: "Token is required." });
+    return res
+      .status(401)
+      .json({ message: "Token is required.", code: 401, response: {} });
   }
 
   try {
@@ -80,10 +86,16 @@ router.get("/submissions", async (req, res) => {
     const filterOptions = { mobile_number }; // Adjust filterOptions as needed
     const result = await getSubmissions(con, filterOptions);
 
-    res.status(200).json({ data: result, message: "Here are all the submissions.." });
+    res.status(200).json({
+      data: result,
+      message: "Here are all the submissions..",
+      code: 200,
+    });
   } catch (err) {
     console.error("Invalid Token:", err);
-    return res.status(403).json({ message: "Invalid or expired token." });
+    return res
+      .status(403)
+      .json({ message: "Invalid or expired token.", code: 403, response: {} });
   }
 });
 
@@ -92,7 +104,7 @@ router.get("/submissions", async (req, res) => {
 //   if (!con) {
 //     return res
 //       .status(500)
-//       .json({ message: "Database connection not established" });
+//       .json({ message: "Database connection not established", code: 500, response: {} });
 //   }
 
 //   const { secret_key } = req.body; // Assuming username and email are provided in the request body
@@ -118,15 +130,19 @@ router.get("/submissions", async (req, res) => {
 router.post("/get-token", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
-    return res
-      .status(500)
-      .json({ message: "Database connection not established" });
+    return res.status(500).json({
+      message: "Database connection not established",
+      code: 500,
+      response: {},
+    });
   }
 
   const { encrypted_key } = req.body; // Assuming username and email are provided in the request body
 
   if (!encrypted_key) {
-    return res.status(400).json({ message: "Secret key required" });
+    return res
+      .status(400)
+      .json({ message: "Secret key required", code: 400, response: {} });
   }
 
   try {
@@ -154,15 +170,18 @@ router.post("/get-token", async (req, res) => {
     response: {
       token,
     },
+    code: 200,
   });
 });
 
 router.get("/templates", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
-    return res
-      .status(500)
-      .json({ Message: "Database connection not established" });
+    return res.status(500).json({
+      message: "Database connection not established",
+      code: 500,
+      response: {},
+    });
   }
 
   console.log(req.body);
@@ -176,6 +195,8 @@ router.get("/templates", async (req, res) => {
   res.status(200).json({
     message: "Here is your template..",
     data: result,
+    code: 200,
+    response: {},
   });
 });
 
@@ -199,16 +220,19 @@ router.get("/centers", async (req, res) => {
 
   res.status(200).json({
     data: result,
-    message: "Here are centers associated with given data.."
+    message: "Here are centers associated with given data..",
+    code: 200,
   });
 });
 
 router.post("/template-id-from-center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
-    return res
-      .status(500)
-      .json({ Message: "Database connection not established" });
+    return res.status(500).json({
+      Message: "Database connection not established",
+      code: 500,
+      response: {},
+    });
   }
 
   const { center_id } = req.body;
@@ -218,12 +242,15 @@ router.post("/template-id-from-center", async (req, res) => {
   if (!result || !result[0]) {
     return res.sendStatus(404).json({
       message: "Error getting template by center..",
+      code: 404,
+      response: {},
     }); // Handle undefined or empty result
   }
 
   res.status(200).json({
     template_id: result[0].template_id,
-    message: "Here is your template id.."
+    message: "Here is your template id..",
+    code: 200,
   });
 });
 
@@ -250,15 +277,19 @@ router.post("/submissions", async (req, res) => {
 
   res.status(200).json({
     message: "form was submitted",
+    code: 200,
+    response: {},
   });
 });
 
 router.post("/templates", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
-    return res
-      .status(500)
-      .json({ error: "Database connection not established" });
+    return res.status(500).json({
+      error: "Database connection not established",
+      code: 500,
+      response: {},
+    });
   }
 
   const { template_name, template_config } = req.body;
@@ -273,6 +304,7 @@ router.post("/templates", async (req, res) => {
 
     res.status(200).json({
       message: "Template was saved",
+      code: 200,
       response: {
         template_id: ans, // Send the inserted template ID in response
       },
@@ -282,6 +314,8 @@ router.post("/templates", async (req, res) => {
     res.status(500).json({
       message: "Error saving template",
       error: err.message,
+      code: 500,
+      response: {},
     });
   }
 });
@@ -290,9 +324,11 @@ router.post("/templates", async (req, res) => {
 router.post("/centers", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
-    return res
-      .status(500)
-      .json({ message: "Database connection not established" });
+    return res.status(500).json({
+      message: "Database connection not established",
+      code: 500,
+      response: {},
+    });
   }
 
   const data = {
@@ -306,6 +342,8 @@ router.post("/centers", async (req, res) => {
 
   res.status(200).json({
     message: "center was saved",
+    code: 200,
+    response: {},
   });
 });
 
@@ -329,6 +367,8 @@ router.post("/center", async (req, res) => {
 
   res.status(200).json({
     message: "center was saved",
+    code: 200,
+    response: {},
   });
 });
 
@@ -336,9 +376,11 @@ router.post("/center", async (req, res) => {
 router.post("/get-center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
-    return res
-      .status(500)
-      .json({ error: "Database connection not established" });
+    return res.status(500).json({
+      error: "Database connection not established",
+      code: 500,
+      response: {},
+    });
   }
 
   const { center_id } = req.body;
@@ -350,10 +392,12 @@ router.post("/get-center", async (req, res) => {
     res.status(200).json({
       success: true,
       data: center,
-      message: "center was found.."
+      message: "center was found..",
     });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    res
+      .status(500)
+      .json({ success: false, error: err.message, code: 500, response: {} });
   }
 });
 
@@ -372,6 +416,10 @@ router.post("/get-submission-as-file", async (req, res) => {
   // });
   res.sendStatus(200).json({
     message: "Here is your file",
+    code: 200,
+    response: {
+      response,
+    },
   });
 });
 
@@ -406,9 +454,11 @@ router.post("/get-submission-as-file", async (req, res) => {
 router.post("/post-center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
-    return res
-      .status(500)
-      .json({ error: "Database connection not established" });
+    return res.status(500).json({
+      error: "Database connection not established",
+      code: 500,
+      response: {},
+    });
   }
 
   const filterOptions = {
@@ -420,6 +470,7 @@ router.post("/post-center", async (req, res) => {
   res.status(200).json({
     data: result,
     message: "Here is your template based on a center ID",
+    code: 200,
   });
 });
 
@@ -449,18 +500,26 @@ router.post("/upload-image", async (req, res) => {
     // Clean up the temporary file
     fs.unlinkSync(tempFilePath);
 
-    res.status(200).json({ link: driveLink });
+    res.status(200).json({
+      code: 200,
+      response: { link: driveLink },
+      message: "Here is your link",
+    });
   } catch (error) {
-    res.status(500).json({ error: "Failed to upload PDF" });
+    res
+      .status(500)
+      .json({ error: "Failed to upload PDF", code: 500, response: {} });
   }
 });
 
 router.get("/submission/ack/:id", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
-    return res
-      .status(500)
-      .json({ error: "Database connection not established" });
+    return res.status(500).json({
+      error: "Database connection not established",
+      code: 500,
+      response: {},
+    });
   }
 
   const { id } = req.params;
@@ -474,7 +533,9 @@ router.get("/submission/ack/:id", async (req, res) => {
         return res.status(404).json({ error: "Not found" });
 
       const submissionData = JSON.parse(results[0].submission_data);
-      return res.status(200).json({ imgLink: submissionData.imgLink });
+      return res
+        .status(200)
+        .json({ code: 500, response: { imgLink: submissionData.imgLink } });
     }
   );
 });
@@ -483,15 +544,19 @@ router.get("/submission/ack/:id", async (req, res) => {
 router.post("/template-from-sid", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
-    return res
-      .status(500)
-      .json({ error: "Database connection not established" });
+    return res.status(500).json({
+      error: "Database connection not established",
+      code: 500,
+      response: {},
+    });
   }
 
   const { submissionId } = req.body;
 
   if (!submissionId) {
-    return res.status(400).json({ error: "Submission ID is required" });
+    return res
+      .status(400)
+      .json({ error: "Submission ID is required", code: 400, response: {} });
   }
 
   try {
@@ -501,10 +566,15 @@ router.post("/template-from-sid", async (req, res) => {
         .status(404)
         .json({ error: "Template not found for the given submission ID" });
     }
-    res.json({ template, message: "Here is the template used by the given submission ID" });
+    res.json({
+      template,
+      message: "Here is the template used by the given submission ID",
+    });
   } catch (error) {
     console.error("Error fetching template:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res
+      .status(500)
+      .json({ code: 500, response: {}, message: "Internal Server Error" });
   }
 });
 
