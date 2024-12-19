@@ -118,14 +118,25 @@ const Form = () => {
 
   const [errors, setErrors] = useState({});
 
-  const validateField = (field, value) => {
-    try {
-      validationSchema.validateSyncAt(field, { [field]: value });
-      setErrors((prev) => ({ ...prev, [field]: "" }));
-    } catch (error) {
-      setErrors((prev) => ({ ...prev, [field]: error.message }));
-    }
+  // const validateField = (field, value) => {
+  //   try {
+  //     validationSchema.validateSyncAt(field, { [field]: value });
+  //     setErrors((prev) => ({ ...prev, [field]: "" }));
+  //   } catch (error) {
+  //     setErrors((prev) => ({ ...prev, [field]: error.message }));
+  //   }
+  // };
+
+  const validateField = (fieldKey, value) => {
+    let schema = yup.string().email("Invalid email").required();
+    schema
+      .validate(value)
+      .then(() => setErrors((prev) => ({ ...prev, [fieldKey]: null })))
+      .catch((err) =>
+        setErrors((prev) => ({ ...prev, [fieldKey]: err.message }))
+      );
   };
+  
 
   const canvasContainerRef = useRef(null);
   const navigate = useNavigate();
