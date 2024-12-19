@@ -80,7 +80,7 @@ router.get("/submissions", async (req, res) => {
     const filterOptions = { mobile_number }; // Adjust filterOptions as needed
     const result = await getSubmissions(con, filterOptions);
 
-    res.status(200).json({ response: result, message: "Here are all the submissions.." });
+    res.status(200).json({ data: result, message: "Here are all the submissions.." });
   } catch (err) {
     console.error("Invalid Token:", err);
     return res.status(403).json({ message: "Invalid or expired token." });
