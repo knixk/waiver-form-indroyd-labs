@@ -128,45 +128,59 @@ const postACenter = (con, data) => {
   );
 };
 
-const getSubmissions = async (
-  con,
-  { name = null, mobile_number = null, email = null, days = null } = {}
-) => {
-  let getSubmissionsQuery = "SELECT * FROM submissions WHERE 1=1"; // Base query to start with
-
-  // Filter by name if provided
-  if (name) {
-    getSubmissionsQuery += ` AND name LIKE '%${name}%'`; // Using LIKE for partial matching
-  }
-
-  // Filter by mobile_number if provided
-  if (mobile_number) {
-    getSubmissionsQuery += ` AND mobile_number LIKE '%${mobile_number}%'`;
-  }
-
-  // Filter by email if provided
-  if (email) {
-    getSubmissionsQuery += ` AND email LIKE '%${email}%'`; // Using LIKE for partial matching
-  }
-
-  // Filter by submission date range if provided
-  if (days) {
-    getSubmissionsQuery += ` AND submission_date >= CURDATE() - INTERVAL ${days} DAY`;
-  }
-
-  // Order by the latest date
-  getSubmissionsQuery += " ORDER BY submission_date DESC";
+const getSubmissionsByCenter = async (con, centerId) => {
+  const query = `SELECT * FROM submissions WHERE center_id = ? ORDER BY submission_date DESC`;
 
   return new Promise((resolve, reject) => {
-    con.query(getSubmissionsQuery, (err, result, fields) => {
+    con.query(query, [centerId], (err, result) => {
       if (err) {
-        reject(err); // Reject promise on error
+        reject(err); // Reject the promise on error
       } else {
-        resolve(result); // Resolve promise with the result
+        resolve(result); // Resolve the promise with the result
       }
     });
   });
 };
+
+// const getSubmissions = async (
+//   con,
+//   { name = null, mobile_number = null, email = null, days = null } = {}
+// ) => {
+//   let getSubmissionsQuery = "SELECT * FROM submissions WHERE 1=1"; // Base query to start with
+
+//   // Filter by name if provided
+//   if (name) {
+//     getSubmissionsQuery += ` AND name LIKE '%${name}%'`; // Using LIKE for partial matching
+//   }
+
+//   // Filter by mobile_number if provided
+//   if (mobile_number) {
+//     getSubmissionsQuery += ` AND mobile_number LIKE '%${mobile_number}%'`;
+//   }
+
+//   // Filter by email if provided
+//   if (email) {
+//     getSubmissionsQuery += ` AND email LIKE '%${email}%'`; // Using LIKE for partial matching
+//   }
+
+//   // Filter by submission date range if provided
+//   if (days) {
+//     getSubmissionsQuery += ` AND submission_date >= CURDATE() - INTERVAL ${days} DAY`;
+//   }
+
+//   // Order by the latest date
+//   getSubmissionsQuery += " ORDER BY submission_date DESC";
+
+//   return new Promise((resolve, reject) => {
+//     con.query(getSubmissionsQuery, (err, result, fields) => {
+//       if (err) {
+//         reject(err); // Reject promise on error
+//       } else {
+//         resolve(result); // Resolve promise with the result
+//       }
+//     });
+//   });
+// };
 
 const getCenters = async (con, { center_name = null, days = null } = {}) => {
   let getCentersQuery = "SELECT * FROM centers WHERE 1=1"; // Base query to start with
@@ -297,7 +311,8 @@ module.exports = {
   uploadFileToDrive,
   postASubmission,
   postACenter,
-  getSubmissions,
+  // getSubmissions,
+  getSubmissionsByCenter,
   getCenters,
   getTemplateByCenter,
   postATemplate,
