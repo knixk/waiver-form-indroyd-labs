@@ -46,6 +46,7 @@ function Search() {
 
   const getSubmissions = async (data) => {
     const submissions = `${uri}/submissions${params}`;
+    console.log(uri, "IM")
     try {
       const response = await axios.get(submissions, {
         headers: {
@@ -56,7 +57,7 @@ function Search() {
       const tmp_data = JSON.parse(response.data.data[0].submission_data);
       setTemplateData(tmp_data);
       localStorage.setItem("waiver_form_jwt_token", jwt);
-      return response.data;
+      return response.response;
     } catch (error) {
       if (error.status == 403) {
         toast.error("Invalid token...");

@@ -51,10 +51,11 @@ function Home() {
         try {
           const response = await axios.post(center, options);
           // console.log("Response:", response.data.data);
-          setCenterInfo(response.data.data);
+          // console.log(response.data.response.data)
+          setCenterInfo(response.data.response.data);
           // console.log(response.data.data);
           // const jsonData = J
-          setCenterAddInfo(response.data.data);
+          // setCenterAddInfo(response.data.data);
           return response.data.data; // Return the response data
         } catch (error) {
           console.error(
