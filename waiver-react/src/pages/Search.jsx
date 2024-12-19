@@ -13,8 +13,12 @@ import {
 
 import { useNavigate } from "react-router-dom";
 
-const aws_url =
-  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
+const uri =
+  import.meta.env.VITE_MODE == "prod"
+    ? import.meta.env.VITE_AWS_URI
+    : import.meta.env.VITE_API_LOCAL_URI;
+
+// console.log(import.meta.env.VITE_MODE);
 
 import { useContext } from "react";
 import { MyContext } from "../App";
@@ -41,7 +45,7 @@ function Search() {
   const navigate = useNavigate();
 
   const getSubmissions = async (data) => {
-    const submissions = `${aws_url}/submissions${params}`;
+    const submissions = `${uri}/submissions${params}`;
     try {
       const response = await axios.get(submissions, {
         headers: {

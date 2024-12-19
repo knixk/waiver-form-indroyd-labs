@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
-const logo = "https://dypdvfcjkqkg2.cloudfront.net/large/5862799-1989.jpg";
-
-const aws_url =
-  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
+const uri =
+  import.meta.env.VITE_MODE == "prod"
+    ? import.meta.env.VITE_AWS_URI
+    : import.meta.env.VITE_API_LOCAL_URI;
 
 import { useContext } from "react";
 import { MyContext } from "../App";
@@ -37,10 +37,13 @@ function Home() {
   };
 
   useEffect(() => {
-    if (import.meta.env.VITE_MODE == "prod") {
+    if (
+      import.meta.env.VITE_MODE == "prod" ||
+      import.meta.env.VITE_MODE == "dev"
+    ) {
       console.log("inside prod");
       const postCenter = async (centerId) => {
-        const center = `${aws_url}/get-center`;
+        const center = `${uri}/get-center`;
         const options = {
           center_id: centerId,
         };
@@ -77,15 +80,15 @@ function Home() {
       }
     }
 
-    if (import.meta.env.VITE_MODE == "dev") {
-      console.log("inside dev mode...");
-      setCenterInfo(dummyCenter);
-      setCenterAddInfo(dummyCenter);
-      setCenterID(6);
+    // if (import.meta.env.VITE_MODE == "dev") {
+    //   console.log("inside dev mode...");
+    //   setCenterInfo(dummyCenter);
+    //   setCenterAddInfo(dummyCenter);
+    //   setCenterID(6);
 
-      let prsedData = JSON.parse(dummyCenter.additional_info);
-      // console.log(prsedData);
-    }
+    //   let prsedData = JSON.parse(dummyCenter.additional_info);
+    //   // console.log(prsedData);
+    // }
   }, []);
 
   return (
