@@ -47,30 +47,6 @@ const encryptedData = crypto.publicEncrypt(
 
 // console.log("Encrypted Data:", encryptedData.toString("base64"));
 
-// const generateJWT = (payload) => {
-//   return new Promise((resolve, reject) => {
-//     jwt.sign(payload, { expiresIn: "24h" }, (err, token) => {
-//       if (err) {
-//         reject(err);
-//       } else {
-//         resolve(token);
-//       }
-//     });
-//   });
-// };
-
-// console.log("ENDS HERE \n");
-
-// const generateJWT = async (key) => {
-//   const user = {
-//     secretKey: key,
-//   };
-//   const token = jwt.sign(user, process.env.SECRET_KEY, {
-//     expiresIn: "1h", // expires in one hour
-//   });
-//   return token;
-// };
-
 router.get("/", (req, res) => {
   res.status(200).json({
     message: "api is functional...",
@@ -79,123 +55,6 @@ router.get("/", (req, res) => {
   });
 });
 
-// router.get("/submissions", async (req, res) => {
-//   const con = global.dbConnection;
-//   if (!con) {
-//     return res.status(500).json({
-//       message: "Database connection not established",
-//       code: 500,
-//       response: {},
-//     });
-//   }
-
-//   console.log(req.query);
-//   const { mobile_number } = req.query;
-//   const token = req.headers.authorization?.split(" ")[1];
-
-//   console.log("token", req.query);
-
-//   if (!token) {
-//     return res
-//       .status(401)
-//       .json({ message: "Token is required.", code: 401, response: {} });
-//   }
-
-//   try {
-//     const decoded = jwt.verify(token, secretKey); // Verify token
-
-//     // Optional: You can add more checks based on `decoded` content if needed
-//     console.log("Token Verified:", decoded);
-
-//     // Get submissions based on query params
-//     const filterOptions = { mobile_number }; // Adjust filterOptions as needed
-//     const result = await getSubmissions(con, filterOptions);
-
-//     res.status(200).json({
-//       response: result,
-//       message: "Here are all the submissions..",
-//       code: 200,
-//     });
-//   } catch (err) {
-//     console.error("Invalid Token:", err);
-//     return res
-//       .status(403)
-//       .json({ message: "Invalid or expired token.", code: 403, response: {} });
-//   }
-// });
-
-// router.post("/get-token", async (req, res) => {
-//   const con = global.dbConnection;
-//   if (!con) {
-//     return res
-//       .status(500)
-//       .json({ message: "Database connection not established", code: 500, response: {} });
-//   }
-
-//   const { secret_key } = req.body; // Assuming username and email are provided in the request body
-
-//   if (!secret_key) {
-//     return res.status(400).json({ message: "Secret key required" });
-//   }
-
-//   const token = await generateJWT(secret_key);
-
-//   res.status(200).json({
-//     message: "Here is your JWT Token",
-//     response: {
-//       token,
-//     },
-//   });
-// });
-
-// get all the templates
-
-// get all the templates
-
-// router.get("/submissions", async (req, res) => {
-//   const con = global.dbConnection;
-//   if (!con) {
-//     return res.status(500).json({
-//       message: "Database connection not established",
-//       code: 500,
-//       response: {},
-//     });
-//   }
-
-//   const token = req.headers.authorization?.split(" ")[1];
-
-//   if (!token) {
-//     return res
-//       .status(401)
-//       .json({ message: "Token is required.", code: 401, response: {} });
-//   }
-
-//   try {
-//     // Verify and decode the token
-//     const decoded = jwt.verify(token, secretKey); // Replace `secretKey` with your JWT secret
-//     const { centerId } = decoded;
-
-//     if (!centerId) {
-//       return res
-//         .status(403)
-//         .json({ message: "Invalid token payload.", code: 403, response: {} });
-//     }
-
-//     // Query submissions for the centerId
-//     const result = await getSubmissionsByCenter(con, centerId);
-
-//     res.status(200).json({
-//       response: result,
-//       message: "Submissions for the center.",
-//       code: 200,
-//     });
-//   } catch (err) {
-//     console.error("Invalid Token:", err);
-//     return res
-//       .status(403)
-//       .json({ message: "Invalid or expired token.", code: 403, response: {} });
-//   }
-// });
 
 router.get("/submissions", async (req, res) => {
   const con = global.dbConnection;
@@ -267,27 +126,14 @@ router.post("/get-token", async (req, res) => {
   try {
     // Decrypt the encrypted key using the private key
 
-    // const decryptedKey = crypto
-    //   .privateDecrypt(privateKey, Buffer.from(encrypted_key, "base64"))
-    //   .toString();
-
     const decryptedData = crypto
       .privateDecrypt(privateKey, Buffer.from(encrypted_key, "base64"))
       .toString();
-    // console.log("here");
 
-    // console.log(decryptedData);
     // Parse the JSON string into an object
     const payload = JSON.parse(decryptedData);
-    // console.log(payload);
     // Access payload properties
-    // const { center_id, expiresIn } = payload;
-    // const token = await generateJWT(payload);
     const token = await generateJWT(payload, process.env.SECRET_KEY);
-
-    // console.log("token, err", token);
-
-    // console.log(token);
 
     res.status(200).json({
       message: "Here is your JWT Token",
@@ -296,9 +142,6 @@ router.post("/get-token", async (req, res) => {
       },
       code: 200,
     });
-
-    // if (decryptedKey != process.env.SECRET_KEY) {
-    // }
   } catch (err) {
     console.error("err");
     res.status(401).json({
@@ -308,8 +151,6 @@ router.post("/get-token", async (req, res) => {
     });
     return;
   }
-
-  // console.log("im decrp: ", decryptedKey);
 });
 
 router.get("/templates", async (req, res) => {
@@ -322,7 +163,6 @@ router.get("/templates", async (req, res) => {
     });
   }
 
-  // console.log(req.body);
   // get this from query params
   const filterOptions = {
     id: 1,
@@ -536,8 +376,6 @@ router.post("/get-center", async (req, res) => {
   }
 
   const { center_id } = req.body;
-  // console.log(req.body);
-  // console.log(centerId)
 
   try {
     const center = await getCenterById(con, center_id);
@@ -578,6 +416,7 @@ router.post("/get-submission-as-file", async (req, res) => {
   });
 });
 
+// deprecated route but works
 // router.post("/upload-image", async (req, res) => {
 
 //   const { imgData } = req.body;

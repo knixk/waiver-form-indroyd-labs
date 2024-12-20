@@ -1,40 +1,9 @@
-const express = require("express");
-const app = express();
 const env = require("dotenv");
 env.config();
-
-// Helper methods and controllers
-// const { connectToDatabase } = require("../connectDB");
-
-// console.log(connectToDatabase);
 
 const { google } = require("googleapis");
 // Google Drive API Configuration
 
-// use the db
-// (async () => {
-//   try {
-//     const dbConnection = await connectToDatabase();
-//     console.log("Database connected successfully");
-//     // You can now use dbConnection in your app
-//   } catch (err) {
-//     console.error(err.message);
-//   }
-// })();
-
-// app.use(async (req, res, next) => {
-//   try {
-//     if (!global.dbConnection) {
-//       global.dbConnection = await connectToDatabase(); // Wait for connection
-//     }
-//     req.db = global.dbConnection; // Pass connection to routes
-//     next();
-//   } catch (err) {
-//     res.status(500).json({ message: err.message 
-
-//     });
-//   }
-// });
 
 const folder__id = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
@@ -122,8 +91,6 @@ const postACenter = (con, data) => {
     ], // Ensure JSON is stringified
     (err, result) => {
       if (err) throw err;
-      // console.log("Inserted ID:", result.insertId);
-      // console.log("Insertion finished.");
     }
   );
 };
@@ -142,6 +109,7 @@ const getSubmissionsByCenter = async (con, centerId) => {
   });
 };
 
+// deprecated
 // const getSubmissions = async (
 //   con,
 //   { name = null, mobile_number = null, email = null, days = null } = {}
@@ -311,7 +279,6 @@ module.exports = {
   uploadFileToDrive,
   postASubmission,
   postACenter,
-  // getSubmissions,
   getSubmissionsByCenter,
   getCenters,
   getTemplateByCenter,
