@@ -95,19 +95,19 @@ const postACenter = (con, data) => {
   );
 };
 
-const getSubmissionsByCenter = async (con, centerId) => {
-  const query = `SELECT * FROM submissions WHERE center_id = ? ORDER BY submission_date DESC`;
+// const getSubmissionsByCenter = async (con, centerId) => {
+//   const query = `SELECT * FROM submissions WHERE center_id = ? ORDER BY submission_date DESC`;
 
-  return new Promise((resolve, reject) => {
-    con.query(query, [centerId], (err, result) => {
-      if (err) {
-        reject(err); // Reject the promise on error
-      } else {
-        resolve(result); // Resolve the promise with the result
-      }
-    });
-  });
-};
+//   return new Promise((resolve, reject) => {
+//     con.query(query, [centerId], (err, result) => {
+//       if (err) {
+//         reject(err); // Reject the promise on error
+//       } else {
+//         resolve(result); // Resolve the promise with the result
+//       }
+//     });
+//   });
+// };
 
 // deprecated
 // const getSubmissions = async (
@@ -149,6 +149,27 @@ const getSubmissionsByCenter = async (con, centerId) => {
 //     });
 //   });
 // };
+
+const getSubmissionsByCenter = async (con, centerId, searchQuery) => {
+  const query = `
+    SELECT * FROM submissions 
+    WHERE center_id = ? 
+    AND (mobile_number LIKE ? OR email LIKE ? OR name LIKE ?)
+    ORDER BY submission_date DESC`;
+
+  const searchParam = `%${searchQuery}%`;
+
+  return new Promise((resolve, reject) => {
+    con.query(query, [centerId, searchParam, searchParam, searchParam], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
 
 const getCenters = async (con, { center_name = null, days = null } = {}) => {
   let getCentersQuery = "SELECT * FROM centers WHERE 1=1"; // Base query to start with

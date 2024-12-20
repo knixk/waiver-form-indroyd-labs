@@ -51,6 +51,59 @@ router.get("/", (req, res) => {
   });
 });
 
+// router.get("/submissions", async (req, res) => {
+//   const con = global.dbConnection;
+//   if (!con) {
+//     return res.status(500).json({
+//       message: "Database connection not established",
+//       code: 500,
+//       response: {},
+//     });
+//   }
+
+//   const token = req.headers.authorization?.split(" ")[1];
+
+//   // console.log("im the token being verified, ", token);
+
+//   if (!token) {
+//     return res
+//       .status(401)
+//       .json({ message: "Token is required.", code: 401, response: {} });
+//   }
+
+//   try {
+//     // Verify and decode the token
+//     const decoded = jwt.verify(token, process.env.SECRET_KEY); // Replace `secretKey` with your JWT secret
+
+//     // console.log(decoded);
+//     const { center_id } = decoded;
+
+//     // console.log(center_id)
+
+//     if (!center_id) {
+//       return res.status(403).json({
+//         message: "Invalid token payload. Missing center_id.",
+//         code: 403,
+//         response: {},
+//       });
+//     }
+
+//     // Query submissions for the center_id
+//     const result = await getSubmissionsByCenter(con, center_id);
+
+//     res.status(200).json({
+//       response: result,
+//       message: "Submissions for the center.",
+//       code: 200,
+//     });
+//   } catch (err) {
+//     console.error("Invalid Token:", err);
+//     return res
+//       .status(403)
+//       .json({ message: "Invalid or expired token.", code: 403, response: {} });
+//   }
+// });
+
 router.get("/submissions", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
@@ -62,24 +115,17 @@ router.get("/submissions", async (req, res) => {
   }
 
   const token = req.headers.authorization?.split(" ")[1];
-
-  // console.log("im the token being verified, ", token);
-
   if (!token) {
-    return res
-      .status(401)
-      .json({ message: "Token is required.", code: 401, response: {} });
+    return res.status(401).json({
+      message: "Token is required.",
+      code: 401,
+      response: {},
+    });
   }
 
   try {
-    // Verify and decode the token
-    const decoded = jwt.verify(token, process.env.SECRET_KEY); // Replace `secretKey` with your JWT secret
-
-    // console.log(decoded);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const { center_id } = decoded;
-
-    // console.log(center_id)
-
     if (!center_id) {
       return res.status(403).json({
         message: "Invalid token payload. Missing center_id.",
@@ -88,8 +134,11 @@ router.get("/submissions", async (req, res) => {
       });
     }
 
-    // Query submissions for the center_id
-    const result = await getSubmissionsByCenter(con, center_id);
+    // Extract search query
+    const searchQuery = req.query.search || "";
+
+    // Query submissions for the center_id with optional search
+    const result = await getSubmissionsByCenter(con, center_id, searchQuery);
 
     res.status(200).json({
       response: result,
@@ -98,11 +147,14 @@ router.get("/submissions", async (req, res) => {
     });
   } catch (err) {
     console.error("Invalid Token:", err);
-    return res
-      .status(403)
-      .json({ message: "Invalid or expired token.", code: 403, response: {} });
+    return res.status(403).json({
+      message: "Invalid or expired token.",
+      code: 403,
+      response: {},
+    });
   }
 });
+
 
 router.post("/get-token", async (req, res) => {
   const con = global.dbConnection;
