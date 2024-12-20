@@ -55,7 +55,6 @@ router.get("/", (req, res) => {
   });
 });
 
-
 router.get("/submissions", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
@@ -77,16 +76,18 @@ router.get("/submissions", async (req, res) => {
   try {
     // Verify and decode the token
     const decoded = jwt.verify(token, secretKey); // Replace `secretKey` with your JWT secret
-    const { center_id } = decoded;
+
+    console.log(decoded);
+    const { center_id } = decoded.secretKey;
+
+    // console.log(center_id)
 
     if (!center_id) {
-      return res
-        .status(403)
-        .json({
-          message: "Invalid token payload. Missing center_id.",
-          code: 403,
-          response: {},
-        });
+      return res.status(403).json({
+        message: "Invalid token payload. Missing center_id.",
+        code: 403,
+        response: {},
+      });
     }
 
     // Query submissions for the center_id
@@ -132,6 +133,7 @@ router.post("/get-token", async (req, res) => {
 
     // Parse the JSON string into an object
     const payload = JSON.parse(decryptedData);
+    console.log("im payload, ", payload);
     // Access payload properties
     const token = await generateJWT(payload, process.env.SECRET_KEY);
 
