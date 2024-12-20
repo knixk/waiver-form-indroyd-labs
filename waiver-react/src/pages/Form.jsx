@@ -136,7 +136,6 @@ const Form = () => {
         setErrors((prev) => ({ ...prev, [fieldKey]: err.message }))
       );
   };
-  
 
   const canvasContainerRef = useRef(null);
   const navigate = useNavigate();
@@ -317,8 +316,12 @@ const Form = () => {
           id: t_id,
         };
 
+        // console.log("first")
+
         try {
+          
           const response = await axios.post(templates, options);
+          console.log(response)
           const myData = JSON.parse(response.data.data[0].template_config);
 
           if (myData) {
@@ -424,11 +427,15 @@ const Form = () => {
 
         try {
           const response = await axios.post(center, options);
+          // console.log(JSON.parse(response.data.response.data.additional_info))
           // console.log("Response:", response.data.data);
-          setCenterInfo(response.data.data);
+          setCenterInfo(response.data.response.data);
+          const addInfo = JSON.parse(
+            response.data.response.data.additional_info
+          );
           // console.log(response.data.data);
           // const jsonData = J
-          setCenterAddInfo(response.data.data);
+          setCenterAddInfo(addInfo);
           return response.data.data; // Return the response data
         } catch (error) {
           console.error(
