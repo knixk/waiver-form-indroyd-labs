@@ -29,11 +29,7 @@ const { generateJWT } = require("../authentication/jwt");
 const publicKey = fs.readFileSync(publicfilePath, "utf8");
 const privateKey = fs.readFileSync(prvtfilePath, "utf8");
 
-// Data to encrypt
-const data = process.env.SECRET_KEY;
-const secretKey = process.env.SECRET_KEY;
 // Encrypt the data with the public key
-// const encryptedData = crypto.publicEncrypt(publicKey, Buffer.from(data));
 
 const myPayload = {
   center_id: 6,
@@ -44,8 +40,8 @@ const encryptedData = crypto.publicEncrypt(
   publicKey,
   Buffer.from(JSON.stringify(myPayload))
 );
-
-console.log("Encrypted Data:", encryptedData.toString("base64"));
+// uncomment this to get the encrypted_key
+// console.log("Encrypted Data:", encryptedData.toString("base64"));
 
 router.get("/", (req, res) => {
   res.status(200).json({
@@ -67,7 +63,7 @@ router.get("/submissions", async (req, res) => {
 
   const token = req.headers.authorization?.split(" ")[1];
 
-  console.log("im the token being verified, ", token);
+  // console.log("im the token being verified, ", token);
 
   if (!token) {
     return res
@@ -79,7 +75,7 @@ router.get("/submissions", async (req, res) => {
     // Verify and decode the token
     const decoded = jwt.verify(token, process.env.SECRET_KEY); // Replace `secretKey` with your JWT secret
 
-    console.log(decoded);
+    // console.log(decoded);
     const { center_id } = decoded;
 
     // console.log(center_id)
