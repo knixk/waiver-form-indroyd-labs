@@ -2,17 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-// import { useHistory, useLocation } from "react-router";
 import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
-// console.log(dummyCenter, "=======im dc")
+const uri =
+  import.meta.env.VITE_MODE == "prod"
+    ? import.meta.env.VITE_AWS_URI
+    : import.meta.env.VITE_API_LOCAL_URI;
 
-const logo = "https://dypdvfcjkqkg2.cloudfront.net/large/5862799-1989.jpg";
-
-const aws_url =
-  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
-
-// import logo from "../assets/unicef.png";
 import { useContext } from "react";
 import { MyContext } from "../App";
 
@@ -23,8 +19,6 @@ function Home() {
   const centerParams = queryParameters.get("center");
 
   // console.log(import.meta.env.VITE_MODE);
-  // const history = useHistory();
-  // const location = useLocation();
 
   const myState = useContext(MyContext);
   const {
@@ -43,10 +37,13 @@ function Home() {
   };
 
   useEffect(() => {
-    if (import.meta.env.VITE_MODE == "prod") {
-      console.log("inside prod");
+    if (
+      import.meta.env.VITE_MODE == "prod" ||
+      import.meta.env.VITE_MODE == "dev"
+    ) {
+      // console.log("inside prod");
       const postCenter = async (centerId) => {
-        const center = `${aws_url}/get-center`;
+        const center = `${uri}/get-center`;
         const options = {
           center_id: centerId,
         };
@@ -54,10 +51,11 @@ function Home() {
         try {
           const response = await axios.post(center, options);
           // console.log("Response:", response.data.data);
-          setCenterInfo(response.data.data);
+          // console.log(response.data.response.data)
+          setCenterInfo(response.data.response.data);
           // console.log(response.data.data);
           // const jsonData = J
-          setCenterAddInfo(response.data.data);
+          // setCenterAddInfo(response.data.data);
           return response.data.data; // Return the response data
         } catch (error) {
           console.error(
@@ -83,15 +81,15 @@ function Home() {
       }
     }
 
-    if (import.meta.env.VITE_MODE == "dev") {
-      console.log("inside dev mode...");
-      setCenterInfo(dummyCenter);
-      setCenterAddInfo(dummyCenter);
-      setCenterID(6);
+    // if (import.meta.env.VITE_MODE == "dev") {
+    //   console.log("inside dev mode...");
+    //   setCenterInfo(dummyCenter);
+    //   setCenterAddInfo(dummyCenter);
+    //   setCenterID(6);
 
-      let prsedData = JSON.parse(dummyCenter.additional_info);
-      // console.log(prsedData);
-    }
+    //   let prsedData = JSON.parse(dummyCenter.additional_info);
+    //   // console.log(prsedData);
+    // }
   }, []);
 
   return (

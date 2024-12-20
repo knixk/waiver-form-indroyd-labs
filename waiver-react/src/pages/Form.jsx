@@ -46,14 +46,12 @@ import {
   Checkbox,
 } from "@mui/material";
 
-const aws_url =
-  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
-
-const local = "http://localhost:5050";
+const uri =
+  import.meta.env.VITE_MODE == "prod"
+    ? import.meta.env.VITE_AWS_URI
+    : import.meta.env.VITE_API_LOCAL_URI;
 
 import deleteIcon from "../assets/delete.png";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 const CheckboxQuestion = ({ question, formData, handleInputChange }) => {
   return (
@@ -120,13 +118,23 @@ const Form = () => {
 
   const [errors, setErrors] = useState({});
 
-  const validateField = (field, value) => {
-    try {
-      validationSchema.validateSyncAt(field, { [field]: value });
-      setErrors((prev) => ({ ...prev, [field]: "" }));
-    } catch (error) {
-      setErrors((prev) => ({ ...prev, [field]: error.message }));
-    }
+  // const validateField = (field, value) => {
+  //   try {
+  //     validationSchema.validateSyncAt(field, { [field]: value });
+  //     setErrors((prev) => ({ ...prev, [field]: "" }));
+  //   } catch (error) {
+  //     setErrors((prev) => ({ ...prev, [field]: error.message }));
+  //   }
+  // };
+
+  const validateField = (fieldKey, value) => {
+    let schema = yup.string().email("Invalid email").required();
+    schema
+      .validate(value)
+      .then(() => setErrors((prev) => ({ ...prev, [fieldKey]: null })))
+      .catch((err) =>
+        setErrors((prev) => ({ ...prev, [fieldKey]: err.message }))
+      );
   };
 
   const canvasContainerRef = useRef(null);
@@ -178,7 +186,7 @@ const Form = () => {
   };
 
   const uploadImageToBackend = async (imgData) => {
-    const response = await axios.post(`${aws_url}/upload-image`, {
+    const response = await axios.post(`${uri}/upload-image`, {
       imgData,
     });
     return response.data.link; // Backend returns the Google Drive link
@@ -262,7 +270,7 @@ const Form = () => {
           signature_data: sign?.getTrimmedCanvas().toDataURL("image/png"),
         };
 
-        await axios.post(`${aws_url}/submissions`, submissionPayload);
+        await axios.post(`${uri}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
         setTimeout(() => navigate(`/?center=${centerID}`), 3000);
       } catch (error) {
@@ -275,11 +283,15 @@ const Form = () => {
 
   useEffect(() => {
     // setting the template info here..
-    if (import.meta.env.VITE_MODE == "prod") {
+    // console.log("ue run")
+    if (
+      import.meta.env.VITE_MODE == "prod" ||
+      import.meta.env.VITE_MODE == "dev"
+    ) {
       console.log("in prod mode..");
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
-        const templates = `${aws_url}/template-id-from-center`;
+        const templates = `${uri}/template-id-from-center`;
 
         const options = {
           center_id: id,
@@ -287,7 +299,8 @@ const Form = () => {
 
         try {
           const response = await axios.post(templates, options);
-          ans = response.data.template_id;
+          // console.log(response.data.response.template_id)
+          ans = response.data.response.template_id;
           setTemplateId(ans);
         } catch (error) {
           console.error(error);
@@ -299,15 +312,17 @@ const Form = () => {
       };
 
       const fetchTemplate = async (t_id) => {
-        const templates = `${aws_url}/post-center`;
+        const templates = `${uri}/post-center`;
 
         const options = {
           id: t_id,
         };
 
         try {
+          
           const response = await axios.post(templates, options);
-          const myData = JSON.parse(response.data.data[0].template_config);
+          // console.log(response.data.response[0].template_config)
+          const myData = JSON.parse(response.data.response[0].template_config);
 
           if (myData) {
             setQuestions(myData.questions);
@@ -315,16 +330,6 @@ const Form = () => {
             setExtraFields(myData.extra_participants_form_fields);
             setDisplayForm(true);
             setCompanyName(myData.company_name);
-
-            // use local template
-            // setQuestions(template_config.template_config.questions);
-            // setCompanyLogo(template_config.template_config.company_logo);
-            // setExtraFields(
-            //   template_config.template_config.extra_participants_form_fields
-            // );
-            // setDisplayForm(true);
-            // setCompanyName(template_config.template_config.company_name);
-
             setLoading(false);
           }
         } catch (error) {
@@ -349,96 +354,87 @@ const Form = () => {
       asyncFnStitch();
     }
 
-    if (import.meta.env.VITE_MODE == "dev") {
-      console.log("in dev mode..");
-      const getTemplateIdFromCenterID = async (id) => {
-        let ans = null;
-        const templates = "http://localhost:5050/template-id-from-center";
+    // if (import.meta.env.VITE_MODE == "dev") {
+    //   console.log("in dev mode..");
+    //   const getTemplateIdFromCenterID = async (id) => {
+    //     let ans = null;
+    //     const templates = "http://localhost:5050/template-id-from-center";
 
-        const options = {
-          center_id: id,
-        };
+    //     const options = {
+    //       center_id: id,
+    //     };
 
-        try {
-          const response = await axios.post(templates, options);
-          ans = response.data.template_id;
-          setTemplateId(ans);
-        } catch (error) {
-          console.error(error);
-          toast("No form found...");
-          setTimeout(() => navigate("/"), 5000);
-        }
+    //     try {
+    //       const response = await axios.post(templates, options);
+    //       ans = response.data.template_id;
+    //       setTemplateId(ans);
+    //     } catch (error) {
+    //       console.error(error);
+    //       toast("No form found...");
+    //       setTimeout(() => navigate("/"), 5000);
+    //     }
 
-        return ans;
-      };
+    //     return ans;
+    //   };
 
-      const fetchTemplate = async (t_id) => {};
-      // const templates = "http://localhost:5050/post-center";
+    //   const fetchTemplate = async (t_id) => {};
 
-      // const options = {
-      //   id: t_id,
-      // };
+    //   try {
+    //     // use local template
+    //     setQuestions(template_config.template_config.questions);
+    //     setCompanyLogo(template_config.template_config.company_logo);
+    //     setExtraFields(
+    //       template_config.template_config.extra_participants_form_fields
+    //     );
+    //     setDisplayForm(true);
+    //     setCompanyName(template_config.template_config.company_name);
+    //     // setWantParticipants(
+    //     //   template_config.template_config.want_to_add_participants
+    //     // );
 
-      try {
-        // const response = await axios.post(templates, options);
-        // const myData = JSON.parse(response.data.data[0].template_config);
+    //     setLoading(false);
+    //   } catch (error) {
+    //     toast("template doesn't exist");
+    //     console.error(
+    //       "Error:",
+    //       error.response ? error.response.data : error.message
+    //     );
+    //   }
 
-        // if (myData) {
-        //   setQuestions(myData.questions);
-        //   setCompanyLogo(myData.company_logo);
-        //   setExtraFields(myData.extra_participants_form_fields);
-        //   setDisplayForm(true);
-        //   setCompanyName(myData.company_name);
+    //   const asyncFnStitch = async () => {
+    //     setCenterID(centerParams);
 
-        // use local template
-        setQuestions(template_config.template_config.questions);
-        setCompanyLogo(template_config.template_config.company_logo);
-        setExtraFields(
-          template_config.template_config.extra_participants_form_fields
-        );
-        setDisplayForm(true);
-        setCompanyName(template_config.template_config.company_name);
-        // setWantParticipants(
-        //   template_config.template_config.want_to_add_participants
-        // );
+    //     const data =
+    //       centerParams && (await getTemplateIdFromCenterID(centerParams));
+    //     data && (await fetchTemplate(data));
+    //   };
 
-        setLoading(false);
-      } catch (error) {
-        toast("template doesn't exist");
-        console.error(
-          "Error:",
-          error.response ? error.response.data : error.message
-        );
-      }
-
-      const asyncFnStitch = async () => {
-        setCenterID(centerParams);
-
-        const data =
-          centerParams && (await getTemplateIdFromCenterID(centerParams));
-        data && (await fetchTemplate(data));
-      };
-
-      // asyncFnStitch();
-      fetchTemplate(4);
-    }
+    //   // asyncFnStitch();
+    //   fetchTemplate(4);
+    // }
 
     // Setting the center info here
-    if (import.meta.env.VITE_MODE == "prod") {
-      console.log("inside prod");
+    if (
+      import.meta.env.VITE_MODE == "prod" ||
+      import.meta.env.VITE_MODE == "dev"
+    ) {
       const postCenter = async (centerId) => {
-        const center = `${aws_url}/get-center`;
+        const center = `${uri}/get-center`;
         const options = {
           center_id: centerId,
         };
 
         try {
           const response = await axios.post(center, options);
+          // console.log(JSON.parse(response.data.response.data.additional_info))
           // console.log("Response:", response.data.data);
-          setCenterInfo(response.data.data);
+          setCenterInfo(response.data.response.data);
+          const addInfo = JSON.parse(
+            response.data.response.data.additional_info
+          );
           // console.log(response.data.data);
           // const jsonData = J
-          setCenterAddInfo(response.data.data);
+          setCenterAddInfo(addInfo);
           return response.data.data; // Return the response data
         } catch (error) {
           console.error(
@@ -450,13 +446,6 @@ const Form = () => {
       };
       if (!centerParams) {
         setCenterID(6);
-        // const params = new URLSearchParams({ ["center"]: 5 });
-        // history.replace({
-        //   pathname: location.pathname,
-        //   search: params.toString(),
-        // });
-
-        // console.log("no paramss");
         postCenter(6);
       } else {
         centerParams && setCenterID(centerParams);

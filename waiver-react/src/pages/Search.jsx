@@ -13,8 +13,12 @@ import {
 
 import { useNavigate } from "react-router-dom";
 
-const aws_url =
-  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
+const uri =
+  import.meta.env.VITE_MODE == "prod"
+    ? import.meta.env.VITE_AWS_URI
+    : import.meta.env.VITE_API_LOCAL_URI;
+
+// console.log(import.meta.env.VITE_MODE);
 
 import { useContext } from "react";
 import { MyContext } from "../App";
@@ -41,7 +45,8 @@ function Search() {
   const navigate = useNavigate();
 
   const getSubmissions = async (data) => {
-    const submissions = `${aws_url}/submissions${params}`;
+    const submissions = `${uri}/submissions${params}`;
+    // console.log(uri, "IM");
     try {
       const response = await axios.get(submissions, {
         headers: {
@@ -49,10 +54,12 @@ function Search() {
         },
       });
 
-      const tmp_data = JSON.parse(response.data.data[0].submission_data);
-      setTemplateData(tmp_data);
+
+      // const tmp_data = JSON.parse(response.data.data[0].submission_data);
+      // setTemplateData(tmp_data);
       localStorage.setItem("waiver_form_jwt_token", jwt);
-      return response.data;
+
+      return response.data.response;
     } catch (error) {
       if (error.status == 403) {
         toast.error("Invalid token...");
@@ -79,11 +86,11 @@ function Search() {
       return;
     }
 
-    if (res.data.length === 0) {
+    if (res.length === 0) {
       toast("No data found.");
     }
-    setData(res.data);
-    setSubmissions(res.data);
+    setData(res);
+    setSubmissions(res);
   };
 
   const handleChange = (e) => {
