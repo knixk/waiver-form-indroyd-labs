@@ -45,7 +45,7 @@ const encryptedData = crypto.publicEncrypt(
   Buffer.from(JSON.stringify(myPayload))
 );
 
-console.log("Encrypted Data:", encryptedData.toString("base64"));
+// console.log("Encrypted Data:", encryptedData.toString("base64"));
 
 // const generateJWT = (payload) => {
 //   return new Promise((resolve, reject) => {
@@ -274,18 +274,18 @@ router.post("/get-token", async (req, res) => {
     const decryptedData = crypto
       .privateDecrypt(privateKey, Buffer.from(encrypted_key, "base64"))
       .toString();
-    console.log("here");
+    // console.log("here");
 
     // console.log(decryptedData);
     // Parse the JSON string into an object
     const payload = JSON.parse(decryptedData);
-    console.log(payload);
+    // console.log(payload);
     // Access payload properties
     // const { center_id, expiresIn } = payload;
     // const token = await generateJWT(payload);
     const token = await generateJWT(payload, process.env.SECRET_KEY);
 
-    console.log("token, err", token);
+    // console.log("token, err", token);
 
     // console.log(token);
 
@@ -322,7 +322,7 @@ router.get("/templates", async (req, res) => {
     });
   }
 
-  console.log(req.body);
+  // console.log(req.body);
   // get this from query params
   const filterOptions = {
     id: 1,
@@ -536,7 +536,7 @@ router.post("/get-center", async (req, res) => {
   }
 
   const { center_id } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   // console.log(centerId)
 
   try {

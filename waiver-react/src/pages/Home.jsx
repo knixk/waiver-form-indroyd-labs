@@ -41,7 +41,7 @@ function Home() {
       import.meta.env.VITE_MODE == "prod" ||
       import.meta.env.VITE_MODE == "dev"
     ) {
-      console.log("inside prod");
+      // console.log("inside prod");
       const postCenter = async (centerId) => {
         const center = `${uri}/get-center`;
         const options = {

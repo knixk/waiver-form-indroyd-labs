@@ -21,10 +21,12 @@ import {
   Radio,
 } from "@mui/material";
 
-const aws_url =
-  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws";
-
 import deleteIcon from "../assets/delete.png";
+
+const uri =
+  import.meta.env.VITE_MODE == "prod"
+    ? import.meta.env.VITE_AWS_URI
+    : import.meta.env.VITE_API_LOCAL_URI;
 
 const ViewForm = () => {
   const myState = useContext(MyContext);
@@ -98,14 +100,22 @@ const ViewForm = () => {
   const handleInputChange = async (e) => {};
 
   useEffect(() => {
+    // console.log("ue run");
     const fetchTemplateFromSID = async (submissionId) => {
-      const templatefromSIDURL = `${aws_url}/template-from-sid`;
+      const templatefromSIDURL = `${uri}/template-from-sid`;
       try {
         const response = await axios.post(templatefromSIDURL, {
           submissionId,
         });
 
-        const tData = JSON.parse(response.data.template[0].template_config);
+        // console.log(
+        //   response.data.response.template[0].template_config,
+        //   "m RESSO"
+        // );
+        // return;
+        const tData = JSON.parse(
+          response.data.response.template[0].template_config
+        );
 
         setQuestions(tData.questions);
         setCompanyLogo(tData.company_logo);
@@ -118,10 +128,10 @@ const ViewForm = () => {
 
         return response.data.template;
       } catch (error) {
-        console.error(
-          "Error fetching template:",
-          error.response?.data || error.message
-        );
+        // console.error(
+        //   "Error fetching template:",
+        //   error.response?.data || error.message
+        // );
       }
     };
 

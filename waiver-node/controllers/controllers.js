@@ -122,8 +122,8 @@ const postACenter = (con, data) => {
     ], // Ensure JSON is stringified
     (err, result) => {
       if (err) throw err;
-      console.log("Inserted ID:", result.insertId);
-      console.log("Insertion finished.");
+      // console.log("Inserted ID:", result.insertId);
+      // console.log("Insertion finished.");
     }
   );
 };
@@ -195,7 +195,7 @@ const getCenters = async (con, { center_name = null, days = null } = {}) => {
       if (err) {
         reject(err); // Reject promise on error
       } else {
-        console.log(result[0].template_id);
+        // console.log(result[0].template_id);
         resolve(result); // Resolve promise with the result
       }
     });
@@ -233,8 +233,8 @@ const postATemplate = (con, data) => {
         if (err) {
           return reject(err); // Reject if there's an error
         }
-        console.log("Inserted ID:", result.insertId);
-        console.log("Insertion finished...");
+        // console.log("Inserted ID:", result.insertId);
+        // console.log("Insertion finished...");
         resolve(result.insertId); // Resolve with the inserted ID
       }
     );
@@ -295,7 +295,7 @@ const getTemplateBySubmissionId = async (con, { submissionId = null } = {}) => {
       WHERE s.id = ?
     `;
 
-  console.log("Fetching template for submission ID:", submissionId);
+  // console.log("Fetching template for submission ID:", submissionId);
   return new Promise((resolve, reject) => {
     con.query(query, [submissionId], (err, result) => {
       if (err) {

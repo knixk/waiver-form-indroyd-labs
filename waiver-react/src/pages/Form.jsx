@@ -283,6 +283,7 @@ const Form = () => {
 
   useEffect(() => {
     // setting the template info here..
+    // console.log("ue run")
     if (
       import.meta.env.VITE_MODE == "prod" ||
       import.meta.env.VITE_MODE == "dev"
@@ -298,7 +299,8 @@ const Form = () => {
 
         try {
           const response = await axios.post(templates, options);
-          ans = response.data.template_id;
+          // console.log(response.data.response.template_id)
+          ans = response.data.response.template_id;
           setTemplateId(ans);
         } catch (error) {
           console.error(error);
@@ -316,13 +318,11 @@ const Form = () => {
           id: t_id,
         };
 
-        // console.log("first")
-
         try {
           
           const response = await axios.post(templates, options);
-          console.log(response)
-          const myData = JSON.parse(response.data.data[0].template_config);
+          // console.log(response.data.response[0].template_config)
+          const myData = JSON.parse(response.data.response[0].template_config);
 
           if (myData) {
             setQuestions(myData.questions);
@@ -418,7 +418,6 @@ const Form = () => {
       import.meta.env.VITE_MODE == "prod" ||
       import.meta.env.VITE_MODE == "dev"
     ) {
-      console.log("inside prod");
       const postCenter = async (centerId) => {
         const center = `${uri}/get-center`;
         const options = {
