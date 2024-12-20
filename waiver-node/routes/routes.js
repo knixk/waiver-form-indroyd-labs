@@ -45,7 +45,7 @@ const encryptedData = crypto.publicEncrypt(
   Buffer.from(JSON.stringify(myPayload))
 );
 
-// console.log("Encrypted Data:", encryptedData.toString("base64"));
+console.log("Encrypted Data:", encryptedData.toString("base64"));
 
 router.get("/", (req, res) => {
   res.status(200).json({
@@ -67,6 +67,8 @@ router.get("/submissions", async (req, res) => {
 
   const token = req.headers.authorization?.split(" ")[1];
 
+  console.log("im the token being verified, ", token);
+
   if (!token) {
     return res
       .status(401)
@@ -75,10 +77,10 @@ router.get("/submissions", async (req, res) => {
 
   try {
     // Verify and decode the token
-    const decoded = jwt.verify(token, secretKey); // Replace `secretKey` with your JWT secret
+    const decoded = jwt.verify(token, process.env.SECRET_KEY); // Replace `secretKey` with your JWT secret
 
     console.log(decoded);
-    const { center_id } = decoded.secretKey;
+    const { center_id } = decoded;
 
     // console.log(center_id)
 
