@@ -136,6 +136,7 @@ router.get("/submissions", async (req, res) => {
 
     // Extract search query
     const searchQuery = req.query.search || "";
+    // console.log(searchQuery, "im sq")
 
     // Query submissions for the center_id with optional search
     const result = await getSubmissionsByCenter(con, center_id, searchQuery);
