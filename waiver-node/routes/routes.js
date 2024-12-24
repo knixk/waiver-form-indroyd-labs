@@ -20,8 +20,18 @@ env.config();
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
-const publicfilePath = path.resolve(__dirname, "../keys/public_key.pem");
-const prvtfilePath = path.resolve(__dirname, "../keys/private_key.pem");
+
+// const publicfilePath = path.resolve(__dirname, "../keys/public_key.pem");
+// const prvtfilePath = path.resolve(__dirname, "../keys/private_key.pem");
+
+// Use correct path resolution based on `pkg` environment
+const publicfilePath = process.pkg
+  ? path.join(process.cwd(), "keys/public_key.pem") // For bundled app
+  : path.resolve(__dirname, "../keys/public_key.pem"); // For development
+
+const prvtfilePath = process.pkg
+  ? path.join(process.cwd(), "keys/private_key.pem") // For bundled app
+  : path.resolve(__dirname, "../keys/private_key.pem");
 
 const { generateJWT } = require("../authentication/jwt");
 
@@ -155,7 +165,6 @@ router.get("/submissions", async (req, res) => {
     });
   }
 });
-
 
 router.post("/get-token", async (req, res) => {
   const con = global.dbConnection;
