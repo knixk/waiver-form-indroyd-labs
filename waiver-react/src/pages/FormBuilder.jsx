@@ -15,6 +15,12 @@ import {
 } from "@mui/material";
 
 import { Delete } from "@mui/icons-material";
+import axios from "axios";
+
+const uri =
+  import.meta.env.VITE_MODE == "prod"
+    ? import.meta.env.VITE_AWS_URI
+    : import.meta.env.VITE_API_LOCAL_URI;
 
 const FormBuilder = () => {
   const [extraParticipantFields, setExtraParticipantFields] = useState([]);
@@ -96,6 +102,15 @@ const FormBuilder = () => {
     }));
   };
 
+  const uploadTemplate = async (data) => {
+    try {
+      const res = await axios.post(uri, data);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleGenerateConfig = () => {
     setCurrentQuestion((currentQuestion) => ({
       ...currentQuestion,
@@ -130,6 +145,8 @@ const FormBuilder = () => {
     };
 
     downloadObjectAsJSON(config);
+
+    uploadTemplate(config);
 
     console.log(config);
   };
@@ -224,7 +241,6 @@ const FormBuilder = () => {
               <MenuItem value="zip_code">Zip Code</MenuItem>
               <MenuItem value="password">Password</MenuItem>
               <MenuItem value="email">Email</MenuItem>
-
             </Select>
           </FormControl>
         )}
