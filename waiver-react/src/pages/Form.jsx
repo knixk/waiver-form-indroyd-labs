@@ -506,7 +506,7 @@ const Form = () => {
                 error={!!errors.email}
                 onChange={(e) => {
                   handleInputChange("fixed__email", e.target.value);
-                  validateField("email", e.target.value);
+                  // validateField("email", e.target.value);
                 }}
                 helperText={errors.email}
               />
@@ -519,7 +519,7 @@ const Form = () => {
                 error={!!errors.phoneNumber}
                 onChange={(e) => {
                   handleInputChange("fixed__number", e.target.value);
-                  validateField("phoneNumber", e.target.value);
+                  // validateField("phoneNumber", e.target.value);
                 }}
                 helperText={errors.phoneNumber}
               />
@@ -578,17 +578,17 @@ const Form = () => {
                             );
 
                             if (question.variant == "phone_number") {
-                              validateField("phoneNumber", e.target.value);
+                              // validateField("phoneNumber", e.target.value);
                               // console.log("phone val");
                             }
 
                             if (question.variant == "zip_code") {
-                              validateField("zipCode", e.target.value);
+                              // validateField("zipCode", e.target.value);
                               // console.log("zip code val");
                             }
 
                             if (question.variant == "email") {
-                              validateField("email", e.target.value);
+                              // validateField("email", e.target.value);
                               // console.log("email val");
                             }
                           }}
