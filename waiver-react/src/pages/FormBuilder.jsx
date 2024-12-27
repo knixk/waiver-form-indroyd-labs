@@ -751,14 +751,14 @@ const FormBuilder = () => {
         Generate and Log Config
       </Button>
 
-      <Button
+      {/* <Button
         variant="contained"
         color="primary"
         sx={{ mt: 2 }}
         onClick={() => handleUploadTemplate(finalTemplate)}
       >
         Upload template
-      </Button>
+      </Button> */}
     </Box>
   );
 };
