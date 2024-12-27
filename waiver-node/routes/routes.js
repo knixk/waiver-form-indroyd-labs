@@ -40,10 +40,11 @@ const publicKey = fs.readFileSync(publicfilePath, "utf8");
 const privateKey = fs.readFileSync(prvtfilePath, "utf8");
 
 // Encrypt the data with the public key
+//
 
 const myPayload = {
-  center_id: 6,
-  expiresIn: Date.now() + 3600000, // 1-hour expiration
+  center_name: "Flea market stall",
+  created_at: Date.now(),
 };
 
 const encryptedData = crypto.publicEncrypt(
@@ -135,8 +136,8 @@ router.get("/submissions", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    const { center_id } = decoded;
-    if (!center_id) {
+    const { center_name } = decoded;
+    if (!center_name) {
       return res.status(403).json({
         message: "Invalid token payload. Missing center_id.",
         code: 403,
@@ -149,7 +150,7 @@ router.get("/submissions", async (req, res) => {
     // console.log(searchQuery, "im sq")
 
     // Query submissions for the center_id with optional search
-    const result = await getSubmissionsByCenter(con, center_id, searchQuery);
+    const result = await getSubmissionsByCenter(con, center_name, searchQuery);
 
     res.status(200).json({
       response: result,
@@ -193,17 +194,37 @@ router.post("/get-token", async (req, res) => {
 
     // Parse the JSON string into an object
     const payload = JSON.parse(decryptedData);
-    console.log("im payload, ", payload);
-    // Access payload properties
-    const token = await generateJWT(payload, process.env.SECRET_KEY);
+    const { created_at } = payload;
 
-    res.status(200).json({
-      message: "Here is your JWT Token",
-      response: {
-        token,
-      },
-      code: 200,
-    });
+    const currentTime = Date.now();
+    const differenceInHours =
+      Math.abs(currentTime - created_at) / (1000 * 60 * 60);
+
+    // console.log(differenceInHours);
+
+    if (differenceInHours <= 20) {
+      console.log("the diff is fine");
+      const token = await generateJWT(payload, process.env.SECRET_KEY);
+      res.status(200).json({
+        message: "Here is your JWT Token",
+        response: {
+          token,
+        },
+        code: 200,
+      });
+    } else {
+      res.status(401).json({
+        message: "Your token has been outdated..",
+        code: 401,
+        response: {},
+      });
+      // console.log("the diff is not fine");
+
+      return;
+    }
+
+    // console.log("im payload, ", payload);
+    // Access payload properties
   } catch (err) {
     console.error("err");
     res.status(401).json({
