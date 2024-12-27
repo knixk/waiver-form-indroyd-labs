@@ -203,7 +203,7 @@ router.post("/get-token", async (req, res) => {
     // console.log(differenceInHours);
 
     if (differenceInHours <= 20) {
-      console.log("the diff is fine");
+      // console.log("the diff is fine");
       const token = await generateJWT(payload, process.env.SECRET_KEY);
       res.status(200).json({
         message: "Here is your JWT Token",

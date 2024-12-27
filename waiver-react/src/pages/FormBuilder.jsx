@@ -73,7 +73,7 @@ const FormBuilder = () => {
   });
 
   const handleChange = (field, value) => {
-    console.log(formData, "Fd");
+    // console.log(formData, "Fd");
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -98,7 +98,7 @@ const FormBuilder = () => {
   };
 
   const uploadTemplate = async (data) => {
-    console.log(data);
+    // console.log(data);
     let ans;
     try {
       const response = await axios.post(
@@ -106,9 +106,9 @@ const FormBuilder = () => {
         data
       );
 
-      console.log(response, "im res")
+      // console.log(response, "im res")
       const templateId = await response.data.response.template_id;
-      console.log(templateId);
+      // console.log(templateId);
       setFormData((prev) => ({
         ...prev,
         template_id: templateId,
@@ -139,7 +139,7 @@ const FormBuilder = () => {
         "http://localhost:5050/centers",
         newData
       );
-      console.log("Center uploaded:", response.data);
+      // console.log("Center uploaded:", response.data);
     } catch (error) {
       console.error("Error uploading center:", error);
     }
