@@ -16,6 +16,7 @@ import {
 
 import { Delete } from "@mui/icons-material";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const uri =
   import.meta.env.VITE_MODE == "prod"
@@ -101,10 +102,7 @@ const FormBuilder = () => {
     // console.log(data);
     let ans;
     try {
-      const response = await axios.post(
-        "http://localhost:5050/templates",
-        data
-      );
+      const response = await axios.post(`${uri}/templates`, data);
 
       // console.log(response, "im res")
       const templateId = await response.data.response.template_id;
@@ -135,10 +133,7 @@ const FormBuilder = () => {
     // console.log(newData, "latest serve");
 
     try {
-      const response = await axios.post(
-        "http://localhost:5050/centers",
-        newData
-      );
+      const response = await axios.post(`${uri}/centers`, newData);
       // console.log("Center uploaded:", response.data);
     } catch (error) {
       console.error("Error uploading center:", error);
@@ -283,11 +278,14 @@ const FormBuilder = () => {
     t_id && (await uploadCenter(t_id));
     // console.log(t_id, "yes");
 
+    toast.success(`Center was submitted with template_id ${t_id}`);
+
     // console.log(config);
   };
 
   return (
     <Box p={2}>
+      <Toaster />
       <Typography variant="h4">Form Builder</Typography>
 
       <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
