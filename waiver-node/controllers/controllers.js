@@ -1,40 +1,9 @@
-const express = require("express");
-const app = express();
 const env = require("dotenv");
 env.config();
-
-// Helper methods and controllers
-// const { connectToDatabase } = require("../connectDB");
-
-// console.log(connectToDatabase);
 
 const { google } = require("googleapis");
 // Google Drive API Configuration
 
-// use the db
-// (async () => {
-//   try {
-//     const dbConnection = await connectToDatabase();
-//     console.log("Database connected successfully");
-//     // You can now use dbConnection in your app
-//   } catch (err) {
-//     console.error(err.message);
-//   }
-// })();
-
-// app.use(async (req, res, next) => {
-//   try {
-//     if (!global.dbConnection) {
-//       global.dbConnection = await connectToDatabase(); // Wait for connection
-//     }
-//     req.db = global.dbConnection; // Pass connection to routes
-//     next();
-//   } catch (err) {
-//     res.status(500).json({ message: err.message 
-
-//     });
-//   }
-// });
 
 const folder__id = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
@@ -85,8 +54,8 @@ const uploadFileToDrive = async (fileName, filePath, mimeType) => {
 const postASubmission = (con, data) => {
   return new Promise((resolve, reject) => {
     const query = `
-        INSERT INTO submissions (template_id, submission_data, name, email, mobile_number)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO submissions (template_id, submission_data, name, email, mobile_number, center_id)
+        VALUES (?, ?, ?, ?, ?, ?)
       `;
     con.query(
       query,
@@ -96,6 +65,7 @@ const postASubmission = (con, data) => {
         data.name,
         data.email,
         data.mobile_number,
+        data.center_id
       ],
       (err, result) => {
         if (err) return reject(err);
@@ -122,26 +92,25 @@ const postACenter = (con, data) => {
     ], // Ensure JSON is stringified
     (err, result) => {
       if (err) throw err;
-      // console.log("Inserted ID:", result.insertId);
-      // console.log("Insertion finished.");
     }
   );
 };
 
-const getSubmissionsByCenter = async (con, centerId) => {
-  const query = `SELECT * FROM submissions WHERE center_id = ? ORDER BY submission_date DESC`;
+// const getSubmissionsByCenter = async (con, centerId) => {
+//   const query = `SELECT * FROM submissions WHERE center_id = ? ORDER BY submission_date DESC`;
 
-  return new Promise((resolve, reject) => {
-    con.query(query, [centerId], (err, result) => {
-      if (err) {
-        reject(err); // Reject the promise on error
-      } else {
-        resolve(result); // Resolve the promise with the result
-      }
-    });
-  });
-};
+//   return new Promise((resolve, reject) => {
+//     con.query(query, [centerId], (err, result) => {
+//       if (err) {
+//         reject(err); // Reject the promise on error
+//       } else {
+//         resolve(result); // Resolve the promise with the result
+//       }
+//     });
+//   });
+// };
 
+// deprecated
 // const getSubmissions = async (
 //   con,
 //   { name = null, mobile_number = null, email = null, days = null } = {}
@@ -181,6 +150,27 @@ const getSubmissionsByCenter = async (con, centerId) => {
 //     });
 //   });
 // };
+
+const getSubmissionsByCenter = async (con, centerId, searchQuery) => {
+  const query = `
+    SELECT * FROM submissions 
+    WHERE center_id = ? 
+    AND (mobile_number LIKE ? OR email LIKE ? OR name LIKE ?)
+    ORDER BY submission_date DESC`;
+
+  const searchParam = `%${searchQuery}%`;
+
+  return new Promise((resolve, reject) => {
+    con.query(query, [centerId, searchParam, searchParam, searchParam], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
 
 const getCenters = async (con, { center_name = null, days = null } = {}) => {
   let getCentersQuery = "SELECT * FROM centers WHERE 1=1"; // Base query to start with
@@ -311,7 +301,6 @@ module.exports = {
   uploadFileToDrive,
   postASubmission,
   postACenter,
-  // getSubmissions,
   getSubmissionsByCenter,
   getCenters,
   getTemplateByCenter,

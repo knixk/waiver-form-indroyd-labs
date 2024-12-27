@@ -97,7 +97,7 @@ function Search() {
     const { value } = e.target;
     setInput(value);
 
-    const params = new URLSearchParams({ mobile_number: value });
+    const params = new URLSearchParams({ search: value });
     setParams(`?${params.toString()}`);
   };
 
@@ -131,7 +131,7 @@ function Search() {
               fullWidth
               value={input}
               onChange={handleChange}
-              label="Enter Mobile Number"
+              label="Enter name / email / mobile number"
               variant="outlined"
               required
             />
