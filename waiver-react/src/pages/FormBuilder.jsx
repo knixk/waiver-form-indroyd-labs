@@ -74,6 +74,7 @@ const FormBuilder = () => {
   });
 
   const handleChange = (field, value) => {
+    console.log(formData, "Fd");
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -106,7 +107,7 @@ const FormBuilder = () => {
         data
       );
       const templateId = await response.data.response.template_id;
-      console.log(templateId);
+      console.log(templateId); 
       setFormData((prev) => ({
         ...prev,
         template_id: templateId,
@@ -277,8 +278,9 @@ const FormBuilder = () => {
     setFinalTemplate(config);
     downloadObjectAsJSON(config);
     const t_id = await uploadTemplate(config);
-    await uploadCenter(t_id);
-    console.log(t_id, "yes");
+    console.log("template id: ", t_id)
+    t_id && (await uploadCenter(t_id));
+    // console.log(t_id, "yes");
 
     console.log(config);
   };
@@ -358,9 +360,9 @@ const FormBuilder = () => {
             handleNestedChange("contact_info", "phone", e.target.value)
           }
         />
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
+        {/* <Button variant="contained" color="primary" onClick={handleSubmit}>
           Submit
-        </Button>
+        </Button> */}
       </Paper>
 
       {/* for the center */}
@@ -604,7 +606,7 @@ const FormBuilder = () => {
             <MenuItem value="right">Right</MenuItem>
           </Select>
         </FormControl>
-        <TextField
+        {/* <TextField
           label="Custom Styles (JSON format)"
           value={JSON.stringify(currentQuestion.customStyles, null, 2)}
           onChange={(e) => {
@@ -628,8 +630,8 @@ const FormBuilder = () => {
           fullWidth
           margin="normal"
           multiline
-        />
-        <Button variant="contained" onClick={handleAddQuestion}>
+        /> */}
+        <Button sx={{ mt: 1 }} variant="contained" onClick={handleAddQuestion}>
           Add Question
         </Button>
       </Paper>
