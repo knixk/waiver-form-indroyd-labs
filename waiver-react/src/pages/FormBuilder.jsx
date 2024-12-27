@@ -97,18 +97,17 @@ const FormBuilder = () => {
   };
 
   const uploadTemplate = async () => {
+    console.log(templateData);
     try {
       const response = await axios.post(
         "http://localhost:5050/templates",
         templateData
       );
       const templateId = response.data.response.template_id;
-
       setFormData((prev) => ({
         ...prev,
         template_id: templateId,
       }));
-
       console.log("Template uploaded:", response.data);
     } catch (error) {
       console.error("Error uploading template:", error);
@@ -116,6 +115,8 @@ const FormBuilder = () => {
   };
 
   const uploadCenter = async () => {
+    console.log("inside here");
+    console.log(formData, "I'm form data");
     try {
       const response = await axios.post(
         "http://localhost:5050/centers",
@@ -125,6 +126,7 @@ const FormBuilder = () => {
     } catch (error) {
       console.error("Error uploading center:", error);
     }
+
   };
 
   // const handleSubmit = async () => {
@@ -141,8 +143,10 @@ const FormBuilder = () => {
   // };
 
   const handleSubmit = async () => {
-    await uploadTemplate(); // Step 1: Upload template and get `template_id`
-    uploadCenter(); // Step 2: Use the `template_id` to create the center
+    await uploadTemplate(); // Step 1: Upload template and  t `template_id`
+
+    // uploadCenter(); // Step 2: Use the `template_id` to create the center
+
   };
 
   const handleUploadTemplate = () => {
