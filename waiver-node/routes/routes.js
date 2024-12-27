@@ -338,11 +338,12 @@ router.post("/templates", async (req, res) => {
   if (!con) {
     return res.status(500).json({
       message: "Database connection not established",
-
       code: 500,
       response: {},
     });
   }
+
+  console.log(req.body)
 
   const { template_name, template_config } = req.body;
 
