@@ -271,7 +271,7 @@ const Form = () => {
           center_id: centerID,
         };
 
-        console.log(centerID)
+        // console.log(centerID)
 
         await axios.post(`${uri}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");

@@ -4,7 +4,6 @@ env.config();
 const { google } = require("googleapis");
 // Google Drive API Configuration
 
-
 const folder__id = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
 const auth = new google.auth.GoogleAuth({
@@ -65,7 +64,7 @@ const postASubmission = (con, data) => {
         data.name,
         data.email,
         data.mobile_number,
-        data.center_id
+        data.center_id,
       ],
       (err, result) => {
         if (err) return reject(err);
@@ -151,26 +150,51 @@ const postACenter = (con, data) => {
 //   });
 // };
 
-const getSubmissionsByCenter = async (con, centerId, searchQuery) => {
+// const getSubmissionsByCenter = async (con, center_name, searchQuery) => {
+//   const query = `
+//     SELECT * FROM submissions
+//     WHERE center_name = ?
+//     AND (mobile_number LIKE ? OR email LIKE ? OR name LIKE ?)
+//     ORDER BY submission_date DESC`;
+
+//   const searchParam = `%${searchQuery}%`;
+
+//   return new Promise((resolve, reject) => {
+//     con.query(query, [centerId, searchParam, searchParam, searchParam], (err, result) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         resolve(result);
+//       }
+//     });
+//   });
+// };
+
+const getSubmissionsByCenter = async (con, center_name, searchQuery) => {
   const query = `
-    SELECT * FROM submissions 
-    WHERE center_id = ? 
-    AND (mobile_number LIKE ? OR email LIKE ? OR name LIKE ?)
-    ORDER BY submission_date DESC`;
+  SELECT submissions.* 
+  FROM submissions 
+  INNER JOIN centers ON submissions.center_id = centers.id
+  WHERE centers.center_name = ? 
+  AND (submissions.mobile_number LIKE ? OR submissions.email LIKE ? OR submissions.name LIKE ?)
+  ORDER BY submissions.submission_date DESC`;
 
   const searchParam = `%${searchQuery}%`;
 
   return new Promise((resolve, reject) => {
-    con.query(query, [centerId, searchParam, searchParam, searchParam], (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
+    con.query(
+      query,
+      [center_name, searchParam, searchParam, searchParam],
+      (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
       }
-    });
+    );
   });
 };
-
 
 const getCenters = async (con, { center_name = null, days = null } = {}) => {
   let getCentersQuery = "SELECT * FROM centers WHERE 1=1"; // Base query to start with

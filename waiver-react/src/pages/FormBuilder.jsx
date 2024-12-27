@@ -65,7 +65,6 @@ const FormBuilder = () => {
       intro: "",
       img: "",
     },
-    center_id: 0,
   });
 
   const [templateData, setTemplateData] = useState({
@@ -74,7 +73,7 @@ const FormBuilder = () => {
   });
 
   const handleChange = (field, value) => {
-    console.log(formData, "Fd");
+    // console.log(formData, "Fd");
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -99,15 +98,17 @@ const FormBuilder = () => {
   };
 
   const uploadTemplate = async (data) => {
-    // console.log(finalTemplate);
+    // console.log(data);
     let ans;
     try {
       const response = await axios.post(
         "http://localhost:5050/templates",
         data
       );
+
+      // console.log(response, "im res")
       const templateId = await response.data.response.template_id;
-      console.log(templateId); 
+      // console.log(templateId);
       setFormData((prev) => ({
         ...prev,
         template_id: templateId,
@@ -122,23 +123,23 @@ const FormBuilder = () => {
     return ans;
   };
 
-  const uploadCenter = async (center_id) => {
-    console.log("inside here");
-    console.log(formData, "I'm form data");
+  const uploadCenter = async (template_id) => {
+    // console.log("inside here");
+    // console.log(formData, "I'm form data");
 
     const newData = {
       ...formData,
-      center_id: center_id,
+      template_id: template_id,
     };
 
-    console.log(newData, "latest serve");
+    // console.log(newData, "latest serve");
 
     try {
       const response = await axios.post(
         "http://localhost:5050/centers",
-        formData
+        newData
       );
-      console.log("Center uploaded:", response.data);
+      // console.log("Center uploaded:", response.data);
     } catch (error) {
       console.error("Error uploading center:", error);
     }
@@ -159,7 +160,7 @@ const FormBuilder = () => {
 
   const handleSubmit = async () => {
     const t_id = await uploadTemplate(); // Step 1: Upload template and  t `template_id`
-    console.log("got tid?", t_id);
+    // console.log("got tid?", t_id);
 
     // uploadCenter(); // Step 2: Use the `template_id` to create the center
   };
@@ -278,11 +279,11 @@ const FormBuilder = () => {
     setFinalTemplate(config);
     downloadObjectAsJSON(config);
     const t_id = await uploadTemplate(config);
-    console.log("template id: ", t_id)
+    // console.log("template id: ", t_id);
     t_id && (await uploadCenter(t_id));
     // console.log(t_id, "yes");
 
-    console.log(config);
+    // console.log(config);
   };
 
   return (
