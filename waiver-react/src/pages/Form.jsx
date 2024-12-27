@@ -268,7 +268,10 @@ const Form = () => {
           template_id: templateId,
           // imgLink: driveLink,
           signature_data: sign?.getTrimmedCanvas().toDataURL("image/png"),
+          center_id: centerID,
         };
+
+        console.log(centerID)
 
         await axios.post(`${uri}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
@@ -319,7 +322,6 @@ const Form = () => {
         };
 
         try {
-          
           const response = await axios.post(templates, options);
           // console.log(response.data.response[0].template_config)
           const myData = JSON.parse(response.data.response[0].template_config);
@@ -457,7 +459,7 @@ const Form = () => {
       console.log("inside dev mode...");
       setCenterInfo(dummyCenter);
       setCenterAddInfo(dummyCenter);
-      setCenterID(5);
+      // setCenterID(5);
 
       let prsedData = JSON.parse(dummyCenter.additional_info);
       // console.log(prsedData);

@@ -314,7 +314,8 @@ router.post("/submissions", async (req, res) => {
     });
   }
 
-  const { fixed__email, fixed__name, fixed__number } = req.body;
+  const { fixed__email, fixed__name, fixed__number, center_id } = req.body;
+  // console.log(req.body)
 
   const data = {
     template_id: req.body.template_id,
@@ -322,6 +323,7 @@ router.post("/submissions", async (req, res) => {
     name: fixed__name,
     email: fixed__email,
     mobile_number: fixed__number,
+    center_id: center_id,
   };
 
   postASubmission(con, data);
@@ -343,7 +345,7 @@ router.post("/templates", async (req, res) => {
     });
   }
 
-  console.log(req.body)
+  console.log(req.body);
 
   const { template_name, template_config } = req.body;
 

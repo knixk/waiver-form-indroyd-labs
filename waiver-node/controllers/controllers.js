@@ -54,8 +54,8 @@ const uploadFileToDrive = async (fileName, filePath, mimeType) => {
 const postASubmission = (con, data) => {
   return new Promise((resolve, reject) => {
     const query = `
-        INSERT INTO submissions (template_id, submission_data, name, email, mobile_number)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO submissions (template_id, submission_data, name, email, mobile_number, center_id)
+        VALUES (?, ?, ?, ?, ?, ?)
       `;
     con.query(
       query,
@@ -65,6 +65,7 @@ const postASubmission = (con, data) => {
         data.name,
         data.email,
         data.mobile_number,
+        data.center_id
       ],
       (err, result) => {
         if (err) return reject(err);
