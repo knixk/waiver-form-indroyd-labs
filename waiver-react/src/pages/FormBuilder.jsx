@@ -65,6 +65,7 @@ const FormBuilder = () => {
       intro: "",
       img: "",
     },
+    center_id: 0,
   });
 
   const [templateData, setTemplateData] = useState({
@@ -96,27 +97,41 @@ const FormBuilder = () => {
     }));
   };
 
-  const uploadTemplate = async () => {
-    console.log(templateData);
+  const uploadTemplate = async (data) => {
+    // console.log(finalTemplate);
+    let ans;
     try {
       const response = await axios.post(
         "http://localhost:5050/templates",
-        templateData
+        data
       );
-      const templateId = response.data.response.template_id;
+      const templateId = await response.data.response.template_id;
+      console.log(templateId);
       setFormData((prev) => ({
         ...prev,
         template_id: templateId,
       }));
       console.log("Template uploaded:", response.data);
+      ans = await templateId;
+      // return templateId;
     } catch (error) {
       console.error("Error uploading template:", error);
     }
+
+    return ans;
   };
 
-  const uploadCenter = async () => {
+  const uploadCenter = async (center_id) => {
     console.log("inside here");
     console.log(formData, "I'm form data");
+
+    const newData = {
+      ...formData,
+      center_id: center_id,
+    };
+
+    console.log(newData, "latest serve");
+
     try {
       const response = await axios.post(
         "http://localhost:5050/centers",
@@ -126,7 +141,6 @@ const FormBuilder = () => {
     } catch (error) {
       console.error("Error uploading center:", error);
     }
-
   };
 
   // const handleSubmit = async () => {
@@ -143,21 +157,21 @@ const FormBuilder = () => {
   // };
 
   const handleSubmit = async () => {
-    await uploadTemplate(); // Step 1: Upload template and  t `template_id`
+    const t_id = await uploadTemplate(); // Step 1: Upload template and  t `template_id`
+    console.log("got tid?", t_id);
 
     // uploadCenter(); // Step 2: Use the `template_id` to create the center
-
   };
 
-  const handleUploadTemplate = () => {
-    // e.preventDefault();
-    if (finalTemplate == {}) {
-      return;
-    }
-    uploadTemplate(finalTemplate);
-    console.log(finalTemplate);
-    console.log("template was submitted");
-  };
+  // const handleUploadTemplate = () => {
+  //   // e.preventDefault();
+  //   if (finalTemplate == {}) {
+  //     return;
+  //   }
+  //   uploadTemplate(finalTemplate);
+  //   console.log(finalTemplate);
+  //   console.log("template was submitted");
+  // };
 
   const handleAddParticipantField = () => {
     setExtraParticipantFields([
@@ -227,7 +241,7 @@ const FormBuilder = () => {
     }));
   };
 
-  const handleGenerateConfig = () => {
+  const handleGenerateConfig = async () => {
     setCurrentQuestion((currentQuestion) => ({
       ...currentQuestion,
       required: check, // Use the string "required" as the key
@@ -262,6 +276,9 @@ const FormBuilder = () => {
 
     setFinalTemplate(config);
     downloadObjectAsJSON(config);
+    const t_id = await uploadTemplate(config);
+    await uploadCenter(t_id);
+    console.log(t_id, "yes");
 
     console.log(config);
   };
@@ -271,7 +288,7 @@ const FormBuilder = () => {
       <Typography variant="h4">Form Builder</Typography>
 
       <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
-        <h3>Template Information</h3>
+        {/* <h3>Template Information</h3>
         <TextField
           label="Template Name"
           fullWidth
@@ -280,8 +297,8 @@ const FormBuilder = () => {
           onChange={(e) =>
             handleTemplateChange("template_name", e.target.value)
           }
-        />
-        <TextField
+        /> */}
+        {/* <TextField
           label="Template Description"
           fullWidth
           margin="normal"
@@ -289,7 +306,7 @@ const FormBuilder = () => {
           onChange={(e) =>
             handleTemplateChange("template_description", e.target.value)
           }
-        />
+        /> */}
         <h3>Center Information</h3>
         <TextField
           label="Center Name"
@@ -726,7 +743,10 @@ const FormBuilder = () => {
         variant="contained"
         color="primary"
         sx={{ mt: 2 }}
-        onClick={() => handleGenerateConfig()}
+        onClick={() => {
+          handleGenerateConfig();
+          // handleSubmit();
+        }}
       >
         Generate and Log Config
       </Button>
