@@ -192,6 +192,24 @@ const Form = () => {
     return response.data.link; // Backend returns the Google Drive link
   };
 
+  const getTemplateId = async (centerName) => {
+    try {
+      const response = await axios.get(`${uri}/get-template-id`, {
+        params: { center_name: centerName },
+      });
+
+      console.log(response, "temp")
+      console.log("Template ID:", response.data.template_id);
+      return response.data.template_id;
+    } catch (error) {
+      if (error.response) {
+        console.error("Error:", error.response.data.error);
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
+  };
+
   const handleSubmit = async (e) => {
     // console.log(sign?.getTrimmedCanvas().width == 1)
     // setFormData({});

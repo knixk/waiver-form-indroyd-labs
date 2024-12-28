@@ -75,10 +75,28 @@ const postASubmission = (con, data) => {
   });
 };
 
+const getTemplateByCenterName = (con, center_name) => {
+  const query = `
+  SELECT template_id 
+  FROM centers 
+  WHERE center_name = ?`;
+
+  con.query(query, [center_name], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Database error", details: err });
+    }
+    if (result.length > 0) {
+      return res.json({ template_id: result[0].template_id });
+    } else {
+      return res.status(404).json({ error: "Center not found" });
+    }
+  });
+};
+
 const postACenter = (con, data) => {
   const query = `
-      INSERT INTO centers (center_name, address, contact_info, template_id)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO centers (center_name, address, contact_info, template_id, additional_info)
+      VALUES (?, ?, ?, ?, ?)
     `;
 
   con.query(
@@ -88,6 +106,7 @@ const postACenter = (con, data) => {
       data.address,
       JSON.stringify(data.contact_info),
       data.template_id,
+      JSON.stringify(data.additional_info),
     ], // Ensure JSON is stringified
     (err, result) => {
       if (err) throw err;

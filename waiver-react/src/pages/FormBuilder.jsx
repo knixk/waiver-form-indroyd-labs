@@ -82,6 +82,9 @@ const FormBuilder = () => {
   };
 
   const handleNestedChange = (nestedField, subField, value) => {
+
+    console.log(formData)
+
     setFormData((prev) => ({
       ...prev,
       [nestedField]: {

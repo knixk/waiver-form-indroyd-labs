@@ -291,12 +291,21 @@ router.get("/centers", async (req, res) => {
   });
 });
 
+// API to get template_id by center_name
+router.get("/get-template-id", async (req, res) => {
+  const { center_name } = req.query;
+
+  if (!center_name) {
+    return res.status(400).json({ error: "Center name is required" });
+  }
+
+});
+
 router.post("/template-id-from-center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
     return res.status(500).json({
       message: "Database connection not established",
-
       code: 500,
       response: {},
     });
@@ -407,11 +416,14 @@ router.post("/centers", async (req, res) => {
     });
   }
 
+  console.log(req.body);
+
   const data = {
     center_name: req.body.center_name,
     address: req.body.center_address,
     contact_info: req.body.contact_info,
     template_id: req.body.template_id,
+    additional_info: req.body.additional_info,
   };
 
   postACenter(con, data);
