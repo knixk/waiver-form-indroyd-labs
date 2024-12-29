@@ -189,7 +189,7 @@ const Form = () => {
         params: { center_name: centerName },
       });
 
-      console.log(response, "temp")
+      console.log(response, "temp");
       console.log("Template ID:", response.data.template_id);
       return response.data.template_id;
     } catch (error) {
@@ -295,7 +295,6 @@ const Form = () => {
 
   useEffect(() => {
     // setting the template info here..
-    // console.log("ue run")
     if (
       import.meta.env.VITE_MODE == "prod" ||
       import.meta.env.VITE_MODE == "dev"
@@ -337,6 +336,7 @@ const Form = () => {
 
           if (myData) {
             setQuestions(myData.questions);
+            // set the company logo from the center, it's ok make the req
             setCompanyLogo(myData.company_logo);
             setExtraFields(myData.extra_participants_form_fields);
             setDisplayForm(true);
@@ -365,65 +365,6 @@ const Form = () => {
       asyncFnStitch();
     }
 
-    // if (import.meta.env.VITE_MODE == "dev") {
-    //   console.log("in dev mode..");
-    //   const getTemplateIdFromCenterID = async (id) => {
-    //     let ans = null;
-    //     const templates = "http://localhost:5050/template-id-from-center";
-
-    //     const options = {
-    //       center_id: id,
-    //     };
-
-    //     try {
-    //       const response = await axios.post(templates, options);
-    //       ans = response.data.template_id;
-    //       setTemplateId(ans);
-    //     } catch (error) {
-    //       console.error(error);
-    //       toast("No form found...");
-    //       setTimeout(() => navigate("/"), 5000);
-    //     }
-
-    //     return ans;
-    //   };
-
-    //   const fetchTemplate = async (t_id) => {};
-
-    //   try {
-    //     // use local template
-    //     setQuestions(template_config.template_config.questions);
-    //     setCompanyLogo(template_config.template_config.company_logo);
-    //     setExtraFields(
-    //       template_config.template_config.extra_participants_form_fields
-    //     );
-    //     setDisplayForm(true);
-    //     setCompanyName(template_config.template_config.company_name);
-    //     // setWantParticipants(
-    //     //   template_config.template_config.want_to_add_participants
-    //     // );
-
-    //     setLoading(false);
-    //   } catch (error) {
-    //     toast("template doesn't exist");
-    //     console.error(
-    //       "Error:",
-    //       error.response ? error.response.data : error.message
-    //     );
-    //   }
-
-    //   const asyncFnStitch = async () => {
-    //     setCenterID(centerParams);
-
-    //     const data =
-    //       centerParams && (await getTemplateIdFromCenterID(centerParams));
-    //     data && (await fetchTemplate(data));
-    //   };
-
-    //   // asyncFnStitch();
-    //   fetchTemplate(4);
-    // }
-
     // Setting the center info here
     if (
       import.meta.env.VITE_MODE == "prod" ||
@@ -437,14 +378,10 @@ const Form = () => {
 
         try {
           const response = await axios.post(center, options);
-          // console.log(JSON.parse(response.data.response.data.additional_info))
-          // console.log("Response:", response.data.data);
           setCenterInfo(response.data.response.data);
           const addInfo = JSON.parse(
             response.data.response.data.additional_info
           );
-          // console.log(response.data.data);
-          // const jsonData = J
           setCenterAddInfo(addInfo);
           return response.data.data; // Return the response data
         } catch (error) {
@@ -468,10 +405,8 @@ const Form = () => {
       console.log("inside dev mode...");
       setCenterInfo(dummyCenter);
       setCenterAddInfo(dummyCenter);
-      // setCenterID(5);
 
       let prsedData = JSON.parse(dummyCenter.additional_info);
-      // console.log(prsedData);
     }
   }, []);
 
@@ -492,8 +427,13 @@ const Form = () => {
             >
               {centerInfo && centerInfo.center_name}
             </Typography>
-            {formData && (
-              <img className="form__logo" src={companyLogo} alt="" />
+
+            {centerInfo && (
+              <img
+                className="form__logo"
+                src={JSON.parse(centerInfo.additional_info).img}
+                alt="logo"
+              />
             )}
 
             <form onSubmit={handleSubmit}>
@@ -823,65 +763,6 @@ const Form = () => {
                               )
                             }
                           />
-                          {/* {field.input_type === "dropdown" && (
-                            <FormControl fullWidth margin="normal">
-                              <Typography
-                              >
-                                {field.label}
-                              </Typography>
-
-                              <Select
-                                value={formData[field.field_id] || ""}
-                                required={field.required || false}
-                                onChange={(e) =>
-                                  handleInputChange(
-                                    field.field_id,
-                                    e.target.value
-                                  )
-                                }
-                                displayEmpty
-                              >
-                                <MenuItem value="" disabled>
-                                  Choose
-                                </MenuItem>
-                                {field.values.split(",").map((option) => (
-                                  <MenuItem key={option} value={option}>
-                                    {option}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            </FormControl>
-                          )} */}
-                          {/* {field.type === "file" && (
-                            <FormControl fullWidth margin="normal">
-                              <Typography>{field.label}</Typography>
-                              <Button
-                                variant="contained"
-                                component="label"
-                                color="primary"
-                              >
-                                Upload File
-                                <input
-                                  // required={field.required || false}
-                                  type="file"
-                                  hidden
-                                  value={participant[field.label] || ""}
-                                  onChange={(e) =>
-                                    updateParticipant(
-                                      index,
-                                      field.label,
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              </Button>
-                              {participant[field.label] && (
-                                <Typography variant="body2" marginTop={1}>
-                                  Selected: {participant[field.label]}
-                                </Typography>
-                              )}
-                            </FormControl>
-                          )} */}
                         </Grid>
                       ))}
                       <Grid item xs={2}>
@@ -889,7 +770,6 @@ const Form = () => {
                           color="red"
                           onClick={() => deleteParticipant(participant.id)}
                         >
-                          {/* <HighlightOffIcon fontSize="large" /> */}
                           <img style={{ width: 30 }} src={deleteIcon} />
                         </IconButton>
                       </Grid>
@@ -905,18 +785,12 @@ const Form = () => {
                 </Box>
               )}
 
-              <Box
-                // ref={canvasContainerRef}
-                // style={{ width: "100%", maxWidth: "500px" }}
-                sx={{ mt: 3 }}
-              >
+              <Box sx={{ mt: 3 }}>
                 <Typography variant="h6">Signature</Typography>
                 <SignatureCanvas
                   ref={(ref) => setSign(ref)}
                   penColor="black"
                   canvasProps={{
-                    // width: 500,
-                    // height: 200,
                     style: {
                       maxWidth: "330px",
                       height: 200,

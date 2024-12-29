@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
+// import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
 const uri =
   import.meta.env.VITE_MODE == "prod"
@@ -21,20 +21,7 @@ function Home() {
   // console.log(import.meta.env.VITE_MODE);
 
   const myState = useContext(MyContext);
-  const {
-    centerInfo,
-    setCenterInfo,
-    centerAddInfo,
-    setCenterAddInfo,
-    centerID,
-    setCenterID,
-  } = myState;
-
-  const handleNext = () => {
-    if (layer < 3) {
-      setLayer(layer + 1);
-    }
-  };
+  const { centerInfo, setCenterInfo, centerID, setCenterID } = myState;
 
   useEffect(() => {
     if (
@@ -50,12 +37,8 @@ function Home() {
 
         try {
           const response = await axios.post(center, options);
-          // console.log("Response:", response.data.data);
-          // console.log(response.data.response.data)
+          console.log(JSON.parse(response.data.response.data.additional_info).img);
           setCenterInfo(response.data.response.data);
-          // console.log(response.data.data);
-          // const jsonData = J
-          // setCenterAddInfo(response.data.data);
           return response.data.data; // Return the response data
         } catch (error) {
           console.error(
@@ -67,29 +50,12 @@ function Home() {
       };
       if (!centerParams) {
         setCenterID(6);
-        // const params = new URLSearchParams({ ["center"]: 5 });
-        // history.replace({
-        //   pathname: location.pathname,
-        //   search: params.toString(),
-        // });
-
-        // console.log("no paramss");
         postCenter(6);
       } else {
         centerParams && setCenterID(centerParams);
         centerParams && postCenter(centerParams);
       }
     }
-
-    // if (import.meta.env.VITE_MODE == "dev") {
-    //   console.log("inside dev mode...");
-    //   setCenterInfo(dummyCenter);
-    //   setCenterAddInfo(dummyCenter);
-    //   setCenterID(6);
-
-    //   let prsedData = JSON.parse(dummyCenter.additional_info);
-    //   // console.log(prsedData);
-    // }
   }, []);
 
   return (
@@ -146,14 +112,6 @@ function Home() {
               >
                 Get Started
               </Button>
-
-              {/* <Button
-              variant="contained"
-              onClick={() => navigate("/search")}
-              sx={{ mt: 2.5, ml: 2 }}
-            >
-              Search forms
-            </Button> */}
             </Box>
           )}
         </Box>

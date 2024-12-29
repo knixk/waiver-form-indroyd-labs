@@ -42,8 +42,10 @@ const privateKey = fs.readFileSync(prvtfilePath, "utf8");
 // Encrypt the data with the public key
 //
 
+let center_name = `asdasdasdUnique`;
+
 const myPayload = {
-  center_name: "Flea market stall",
+  center_name: center_name,
   created_at: Date.now(),
 };
 
@@ -52,7 +54,7 @@ const encryptedData = crypto.publicEncrypt(
   Buffer.from(JSON.stringify(myPayload))
 );
 // uncomment this to get the encrypted_key
-// console.log("Encrypted Data:", encryptedData.toString("base64"));
+console.log("Encrypted Data:", encryptedData.toString("base64"));
 
 router.get("/", (req, res) => {
   res.status(200).json({
@@ -245,7 +247,6 @@ router.get("/get-template-id", async (req, res) => {
   if (!center_name) {
     return res.status(400).json({ error: "Center name is required" });
   }
-
 });
 
 router.post("/template-id-from-center", async (req, res) => {
