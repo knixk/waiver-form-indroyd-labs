@@ -1,0 +1,24 @@
+{
+  "template_name": "asdasd",
+  "template_config": {
+    "questions": [
+      {
+        "label": "asdasd",
+        "input_type": "text",
+        "values": "",
+        "image": "",
+        "required": false,
+        "variant": "text",
+        "question_id": 1735465242223,
+        "customStyles": {}
+      }
+    ],
+    "extra_participants_form_fields": [
+      {
+        "id": "field_1735465244508",
+        "type": "text",
+        "label": "asdasd"
+      }
+    ]
+  }
+}

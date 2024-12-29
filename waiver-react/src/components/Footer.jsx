@@ -29,33 +29,6 @@ function Navbar() {
             />
             <p> Waiver form &copy; 2024</p>
           </div>
-
-          <div className="btns__container">
-            {/* {location.pathname != "/" && (
-              <Button
-                variant="contained"
-                type="submit"
-                id="download__btn"
-                onClick={() => {
-                  navigate(-1);
-                }}
-              >
-                Back
-              </Button>
-            )}
-
-            {location.pathname == "/view-form" && !err && (
-              <Button
-                variant="contained"
-                type="submit"
-                fullWidth
-                id="download__btn"
-                onClick={handleDownload}
-              >
-                Download
-              </Button>
-            )} */}
-          </div>
         </footer>
       )}
     </>

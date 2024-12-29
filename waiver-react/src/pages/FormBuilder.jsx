@@ -29,9 +29,9 @@ const FormBuilder = () => {
   const [formConfig, setFormConfig] = useState({
     templateName: "",
     companyLogo: "",
-    companyAddress: "",
     questions: [],
   });
+
   const [currentQuestion, setCurrentQuestion] = useState({
     label: "",
     input_type: "text",
@@ -39,16 +39,15 @@ const FormBuilder = () => {
     image: "",
     required: false,
     variant: "",
-    customStyles: {},
   });
 
-  const [templates] = useState([
-    { id: 1, name: "Template 1" },
-    { id: 2, name: "Template 2" },
-    { id: 3, name: "Template 3" },
-    { id: 4, name: "Template 4" },
-    { id: 6, name: "Flea Market" },
-  ]);
+  // const [templates] = useState([
+  //   { id: 1, name: "Template 1" },
+  //   { id: 2, name: "Template 2" },
+  //   { id: 3, name: "Template 3" },
+  //   { id: 4, name: "Template 4" },
+  //   { id: 6, name: "Flea Market" },
+  // ]);
 
   const [check, setCheck] = useState(false);
 
@@ -68,11 +67,6 @@ const FormBuilder = () => {
     },
   });
 
-  const [templateData, setTemplateData] = useState({
-    template_name: "",
-    template_description: "",
-  });
-
   const handleChange = (field, value) => {
     // console.log(formData, "Fd");
     setFormData((prev) => ({
@@ -82,8 +76,7 @@ const FormBuilder = () => {
   };
 
   const handleNestedChange = (nestedField, subField, value) => {
-
-    console.log(formData)
+    // console.log(formData);
 
     setFormData((prev) => ({
       ...prev,
@@ -94,16 +87,12 @@ const FormBuilder = () => {
     }));
   };
 
-  const handleTemplateChange = (field, value) => {
-    setTemplateData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
+  // this function uploads template to backend, and returns a template id
   const uploadTemplate = async (data) => {
-    // console.log(data);
+    console.log(data, "im template data");
     let ans;
+
+    // uncomment this ---------------------
     try {
       const response = await axios.post(`${uri}/templates`, data);
 
@@ -124,54 +113,23 @@ const FormBuilder = () => {
     return ans;
   };
 
+  // this function uploads the center, call it after the template is sent, and t_id is returned
   const uploadCenter = async (template_id) => {
-    // console.log("inside here");
-    // console.log(formData, "I'm form data");
-
     const newData = {
       ...formData,
       template_id: template_id,
     };
 
-    // console.log(newData, "latest serve");
+    console.log(newData, "im center_data");
 
+    // uncomment this ------
     try {
       const response = await axios.post(`${uri}/centers`, newData);
-      // console.log("Center uploaded:", response.data);
+      console.log("Center uploaded:", response.data);
     } catch (error) {
       console.error("Error uploading center:", error);
     }
   };
-
-  // const handleSubmit = async () => {
-  //   console.log(formData);
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:5050/centers",
-  //       formData
-  //     );
-  //     console.log("Response:", response.data);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
-
-  const handleSubmit = async () => {
-    const t_id = await uploadTemplate(); // Step 1: Upload template and  t `template_id`
-    // console.log("got tid?", t_id);
-
-    // uploadCenter(); // Step 2: Use the `template_id` to create the center
-  };
-
-  // const handleUploadTemplate = () => {
-  //   // e.preventDefault();
-  //   if (finalTemplate == {}) {
-  //     return;
-  //   }
-  //   uploadTemplate(finalTemplate);
-  //   console.log(finalTemplate);
-  //   console.log("template was submitted");
-  // };
 
   const handleAddParticipantField = () => {
     setExtraParticipantFields([
@@ -179,15 +137,6 @@ const FormBuilder = () => {
       { id: `field_${Date.now()}`, type: "text", label: "" },
     ]);
   };
-
-  // const uploadTemplate = async (data) => {
-  //   try {
-  //     const res = await axios.post("http://localhost:5050/templates", data);
-  //     console.log(res);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const handleRemoveParticipantField = (index) => {
     setExtraParticipantFields(
@@ -203,13 +152,13 @@ const FormBuilder = () => {
         { ...currentQuestion, question_id: Date.now() },
       ],
     }));
+
     setCurrentQuestion({
       label: "",
       input_type: "text",
       values: "",
       image: "",
       required: false,
-      customStyles: {},
     });
   };
 
@@ -220,26 +169,16 @@ const FormBuilder = () => {
     }));
   };
 
-  function downloadObjectAsJSON(obj, filename = "template_config.json") {
-    // console.log("inside")
-    const blob = new Blob([JSON.stringify(obj, null, 2)], {
-      type: "application/json",
-    });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
-  }
-
-  const handleCustomStylesChange = (field, value) => {
-    setCurrentQuestion((prev) => ({
-      ...prev,
-      customStyles: {
-        ...prev.customStyles,
-        [field]: value, // Update the specific field in customStyles
-      },
-    }));
-  };
+  // function downloadObjectAsJSON(obj, filename = "template_config.json") {
+  //   // console.log("inside")
+  //   const blob = new Blob([JSON.stringify(obj, null, 2)], {
+  //     type: "application/json",
+  //   });
+  //   const link = document.createElement("a");
+  //   link.href = URL.createObjectURL(blob);
+  //   link.download = filename;
+  //   link.click();
+  // }
 
   const handleGenerateConfig = async () => {
     setCurrentQuestion((currentQuestion) => ({
@@ -268,17 +207,19 @@ const FormBuilder = () => {
       template_name: formConfig.templateName,
       template_config: {
         // company_logo: formConfig.companyLogo,
-        company_address: formConfig.companyAddress,
+        // company_address: formConfig.companyAddress,
         questions: processedQuestions,
         extra_participants_form_fields: extraParticipantFields,
       },
     };
 
     setFinalTemplate(config);
-    downloadObjectAsJSON(config);
+    // downloadObjectAsJSON(config);
     const t_id = await uploadTemplate(config);
     // console.log("template id: ", t_id);
-    t_id && (await uploadCenter(t_id));
+    // t_id && (await uploadCenter(t_id));
+    await uploadCenter(6);
+
     // console.log(t_id, "yes");
 
     toast.success(`Center was submitted with template_id ${t_id}`);
@@ -292,25 +233,6 @@ const FormBuilder = () => {
       <Typography variant="h4">Form Builder</Typography>
 
       <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
-        {/* <h3>Template Information</h3>
-        <TextField
-          label="Template Name"
-          fullWidth
-          margin="normal"
-          value={templateData.template_name}
-          onChange={(e) =>
-            handleTemplateChange("template_name", e.target.value)
-          }
-        /> */}
-        {/* <TextField
-          label="Template Description"
-          fullWidth
-          margin="normal"
-          value={templateData.template_description}
-          onChange={(e) =>
-            handleTemplateChange("template_description", e.target.value)
-          }
-        /> */}
         <h3>Center Information</h3>
         <TextField
           label="Center Name"
@@ -362,81 +284,7 @@ const FormBuilder = () => {
             handleNestedChange("contact_info", "phone", e.target.value)
           }
         />
-        {/* <Button variant="contained" color="primary" onClick={handleSubmit}>
-          Submit
-        </Button> */}
       </Paper>
-
-      {/* for the center */}
-      {/* <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
-        <TextField
-          label="Center Name"
-          fullWidth
-          margin="normal"
-          value={formData.center_name}
-          onChange={(e) => handleChange("center_name", e.target.value)}
-        />
-        <TextField
-          label="Center Logo URL"
-          fullWidth
-          margin="normal"
-          value={formData.additional_info.img}
-          onChange={(e) =>
-            handleNestedChange("additional_info", "img", e.target.value)
-          }
-        />
-        <TextField
-          label="Center Address"
-          fullWidth
-          margin="normal"
-          value={formData.address}
-          onChange={(e) => handleChange("address", e.target.value)}
-        />
-        <TextField
-          label="Center Details Info"
-          fullWidth
-          margin="normal"
-          value={formData.additional_info.intro}
-          onChange={(e) =>
-            handleNestedChange("additional_info", "intro", e.target.value)
-          }
-        />
-        <TextField
-          label="Center Email"
-          fullWidth
-          margin="normal"
-          value={formData.contact_info.email}
-          onChange={(e) =>
-            handleNestedChange("contact_info", "email", e.target.value)
-          }
-        />
-        <TextField
-          label="Center Phone"
-          fullWidth
-          margin="normal"
-          value={formData.contact_info.phone}
-          onChange={(e) =>
-            handleNestedChange("contact_info", "phone", e.target.value)
-          }
-        />
-        <TextField
-          label="Template"
-          select
-          fullWidth
-          margin="normal"
-          value={formData.template_id}
-          onChange={(e) => handleChange("template_id", e.target.value)}
-        >
-          {templates.map((template) => (
-            <MenuItem key={template.id} value={template.id}>
-              {template.name}
-            </MenuItem>
-          ))}
-        </TextField>
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
-          Submit
-        </Button>
-      </Paper> */}
 
       <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
         <TextField
@@ -495,7 +343,7 @@ const FormBuilder = () => {
                   variant: e.target.value,
                 }));
 
-                console.log(currentQuestion);
+                // console.log(currentQuestion);
               }}
             >
               <MenuItem value="text">Default</MenuItem>
@@ -725,9 +573,6 @@ const FormBuilder = () => {
                 }}
               >
                 <MenuItem value="text">Text</MenuItem>
-                {/* <MenuItem value="dropdown">Dropdown</MenuItem> */}
-                {/* <MenuItem value="date">Date</MenuItem> */}
-                {/* <MenuItem value="file">File</MenuItem> */}
               </Select>
             </FormControl>
             <IconButton
@@ -749,20 +594,10 @@ const FormBuilder = () => {
         sx={{ mt: 2 }}
         onClick={() => {
           handleGenerateConfig();
-          // handleSubmit();
         }}
       >
         Generate and Log Config
       </Button>
-
-      {/* <Button
-        variant="contained"
-        color="primary"
-        sx={{ mt: 2 }}
-        onClick={() => handleUploadTemplate(finalTemplate)}
-      >
-        Upload template
-      </Button> */}
     </Box>
   );
 };
