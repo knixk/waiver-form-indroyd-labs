@@ -92,7 +92,7 @@ const FormBuilder = () => {
     console.log(data, "im template data");
     let ans;
 
-    // DONT DELETE ME: uncomment this---------------------
+    // XXXX - DONT DELETE ME: uncomment this ---------------------
     // try {
     //   const response = await axios.post(`${uri}/templates`, data);
 
@@ -111,6 +111,8 @@ const FormBuilder = () => {
     // }
 
     // return ans;
+    // XXXX - DONT DELETE ME: uncomment this ---------------------
+
   };
 
   // this function uploads the center, call it after the template is sent, and t_id is returned
@@ -122,13 +124,15 @@ const FormBuilder = () => {
 
     console.log(newData, "im center_data");
 
-    // DONT DELETE ME: uncomment this ------
+    // XXXX - DONT DELETE ME: uncomment this ------------------
     // try {
     //   const response = await axios.post(`${uri}/centers`, newData);
     //   console.log("Center uploaded:", response.data);
     // } catch (error) {
     //   console.error("Error uploading center:", error);
     // }
+    // XXXX - DONT DELETE ME: uncomment this ---------------------
+
   };
 
   // adds participants question
@@ -221,6 +225,7 @@ const FormBuilder = () => {
       console.log("not empty");
     }
 
+    // it contains the template payload to be send to uploadTemplate
     const config = {
       template_name: formConfig.templateName,
       template_config: {
@@ -233,6 +238,8 @@ const FormBuilder = () => {
     setFinalTemplate(config);
     // uncomment to download
     // downloadObjectAsJSON(config);
+    
+    // we get back the template id, and use it to give it to the center and upload it too.
     const t_id = await uploadTemplate(config);
     console.log("template id: ", t_id);
     t_id && (await uploadCenter(t_id));
