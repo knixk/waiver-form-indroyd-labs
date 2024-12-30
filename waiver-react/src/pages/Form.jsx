@@ -80,9 +80,6 @@ const CheckboxQuestion = ({ question, formData, handleInputChange }) => {
   );
 };
 
-// add signature cecks
-// create a template builder
-
 const Form = () => {
   const myState = useContext(MyContext);
   const {
