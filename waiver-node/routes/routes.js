@@ -45,6 +45,7 @@ const privateKey = fs.readFileSync(prvtfilePath, "utf8");
 const {
   getTemplateByCenterName,
   getTemplateIdByCenterName,
+  getCenterIdByName,
 } = require("../controllers/controllers");
 
 let center_name = `asdasdasdUnique`;
@@ -246,14 +247,15 @@ router.get("/centers", async (req, res) => {
 });
 
 // API to get template_id by center_name
-router.get("/get-template-id", async (req, res) => {
-  const { center_name } = req.query;
+// router.get("/get-template-id", async (req, res) => {
+//   const { center_name } = req.query;
 
-  if (!center_name) {
-    return res.status(400).json({ error: "Center name is required" });
-  }
-});
+//   if (!center_name) {
+//     return res.status(400).json({ error: "Center name is required" });
+//   }
+// });
 
+// get the template id from center id
 router.post("/template-id-from-center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
@@ -283,6 +285,45 @@ router.post("/template-id-from-center", async (req, res) => {
       template_id: result[0].template_id,
     },
   });
+});
+
+router.post("/center-id-from-center-name", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res.status(500).json({
+      message: "Database connection not established",
+      code: 500,
+      response: {},
+    });
+  }
+
+  const { center_name } = req.body;
+
+  try {
+    const result = await getCenterIdByName(con, center_name);
+
+    if (!result || !result[0]) {
+      return res.status(404).json({
+        message: "Center not found.",
+        code: 404,
+        response: {},
+      });
+    }
+
+    res.status(200).json({
+      message: "Here is your center ID.",
+      code: 200,
+      response: {
+        center_id: result[0].center_id,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error retrieving center ID.",
+      code: 500,
+      response: { error },
+    });
+  }
 });
 
 // create submissions
@@ -330,7 +371,8 @@ router.post("/submissions", async (req, res) => {
 //   getTemplateIdByCenterName(con);
 // });
 
-router.post("/template-id-from-center", async (req, res) => {
+// get the template id from center name
+router.post("/template-id-from-center-name", async (req, res) => {
   const con = global.dbConnection; // Use the global database connection
 
   if (!con) {

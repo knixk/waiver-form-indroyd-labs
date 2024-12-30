@@ -24,6 +24,26 @@ function Home() {
   const { centerInfo, setCenterInfo, centerID, setCenterID } = myState;
 
   useEffect(() => {
+    const getCenterIdFromCenterName = async (centerName) => {
+      let centerId = null;
+      const endpoint = `${uri}/center-id-from-center-name`;
+
+      const options = {
+        center_name: centerName,
+      };
+
+      try {
+        const response = await axios.post(endpoint, options);
+        centerId = response.data.response.center_id;
+      } catch (error) {
+        console.error(error);
+        toast("Center not found...");
+        setTimeout(() => navigate("/"), 5000);
+      }
+
+      return centerId;
+    };
+
     if (
       import.meta.env.VITE_MODE == "prod" ||
       import.meta.env.VITE_MODE == "dev"
@@ -37,7 +57,9 @@ function Home() {
 
         try {
           const response = await axios.post(center, options);
-          console.log(JSON.parse(response.data.response.data.additional_info).img);
+          console.log(
+            JSON.parse(response.data.response.data.additional_info).img
+          );
           setCenterInfo(response.data.response.data);
           return response.data.data; // Return the response data
         } catch (error) {
@@ -48,12 +70,21 @@ function Home() {
           throw error; // Rethrow the error for further handling
         }
       };
+
+      console.log(centerParams);
       if (!centerParams) {
+        // console.log(centerID);
         setCenterID(6);
         postCenter(6);
       } else {
-        centerParams && setCenterID(centerParams);
-        centerParams && postCenter(centerParams);
+        // get the center id from center name, and maintain the rest flow
+        const my_center_id =
+          centerParams && getCenterIdFromCenterName(centerParams);
+
+        console.log(my_center_id, "im center id");
+
+        my_center_id && setCenterID(my_center_id);
+        my_center_id && postCenter(my_center_id);
       }
     }
   }, []);

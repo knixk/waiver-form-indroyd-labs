@@ -91,6 +91,23 @@ const uploadFileToDrive = async (fileName, filePath, mimeType) => {
 //   }
 // };
 
+// current one
+const getCenterIdByName = (con, centerName) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT id AS center_id
+      FROM centers
+      WHERE center_name = ?
+      LIMIT 1
+    `;
+    con.query(query, [centerName], (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+};
+
+
 const getTemplateIdByCenterName = (con, center_name) => {
   return new Promise((resolve, reject) => {
     const query = `
@@ -340,4 +357,5 @@ module.exports = {
   getTemplateBySubmissionId,
   getTemplateByCenterName,
   getTemplateIdByCenterName,
+  getCenterIdByName
 };

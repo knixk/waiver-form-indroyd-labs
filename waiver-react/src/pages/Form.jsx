@@ -266,7 +266,6 @@ const Form = () => {
           center_id: centerID,
         };
 
-
         await axios.post(`${uri}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
         setTimeout(() => navigate(`/?center=${centerID}`), 3000);
@@ -285,9 +284,11 @@ const Form = () => {
       import.meta.env.VITE_MODE == "dev"
     ) {
       console.log("in prod mode..");
-      
 
+      // fold flow, center ID -> template ID
+      // new flow, center Name -> center ID -> ....
 
+      // previously this one was being used, we can use this again
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
         const templates = `${uri}/template-id-from-center`;
@@ -306,6 +307,52 @@ const Form = () => {
           setTimeout(() => navigate("/"), 5000);
         }
 
+        return ans;
+      };
+
+      // new one:
+      const getCenterIdFromCenterName = async (centerName) => {
+        let centerId = null;
+        const endpoint = `${uri}/center-id-from-center-name`;
+
+        const options = {
+          center_name: centerName,
+        };
+
+        try {
+          const response = await axios.post(endpoint, options);
+          centerId = response.data.response.center_id;
+        } catch (error) {
+          console.error(error);
+          toast("Center not found...");
+          setTimeout(() => navigate("/"), 5000);
+        }
+
+        return centerId;
+      };
+
+      // new one use this to send the req to get the t_id from c_id
+      const getTemplateIdFromCenterName = async (centerName) => {
+        let ans = null;
+        const templates = `${uri}/template-id-from-center-name`;
+
+        const options = {
+          center_name: centerName,
+        };
+
+        try {
+          const response = await axios.post(templates, options);
+          ans = response.data.response.template_id;
+
+          // set the template id
+          setTemplateId(ans);
+        } catch (error) {
+          console.error(error);
+          toast("No form found...");
+          setTimeout(() => navigate("/"), 5000);
+        }
+
+        // return back the template id
         return ans;
       };
 
@@ -340,12 +387,35 @@ const Form = () => {
 
       const asyncFnStitch = async () => {
         if (!centerID) {
-          setCenterID(centerParams);
+          // don't set the id to the name, set it to an id, get it from name
+          setCenterID(29);
         }
 
+        // const data =
+        //   centerParams && (await getTemplateIdFromCenterID(centerParams));
+        // data && (await fetchTemplate(data));
+
+        const my_center_id = await getCenterIdFromCenterName(centerParams);
+
+        setCenterID(my_center_id);
+
         const data =
-          centerParams && (await getTemplateIdFromCenterID(centerParams));
+          my_center_id && (await getTemplateIdFromCenterID(my_center_id));
+
         data && (await fetchTemplate(data));
+
+        // this is to get the template:
+        // center params contains any str, you type after ?center= , so it will contain the name too.
+        // const data =
+        //   centerParams && (await getTemplateIdFromCenterName(centerParams));
+        // data && (await fetchTemplate(data));
+
+        // we still don't know the center name right? hmm yeah
+        // we need to get the id too so we can fetch details
+
+        /* to dos:
+        don't you think if ur getting center i
+        */
       };
 
       asyncFnStitch();
@@ -382,8 +452,8 @@ const Form = () => {
         setCenterID(6);
         postCenter(6);
       } else {
-        centerParams && setCenterID(centerParams);
-        centerParams && postCenter(centerParams);
+        // centerParams && setCenterID(centerParams);
+        centerParams && postCenter(centerID);
       }
     }
 
@@ -391,7 +461,6 @@ const Form = () => {
       console.log("inside dev mode...");
       setCenterInfo(dummyCenter);
       setCenterAddInfo(dummyCenter);
-
     }
   }, []);
 

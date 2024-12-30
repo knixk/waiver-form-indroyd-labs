@@ -20,7 +20,6 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
 
-
 function App() {
   const [sign, setSign] = useState(null);
   const [participants, setParticipants] = useState([]);
@@ -41,6 +40,7 @@ function App() {
   const [centerInfo, setCenterInfo] = useState();
   const [centerAddInfo, setCenterAddInfo] = useState();
   const [centerID, setCenterID] = useState();
+  const [centerName, setCenterName] = useState();
 
   const handleDownload = async () => {
     const formElement = document.querySelector(".form__container__main");
@@ -116,6 +116,8 @@ function App() {
         setCenterAddInfo,
         centerID,
         setCenterID,
+        centerName,
+        setCenterName,
       }}
     >
       <Router>
