@@ -69,9 +69,9 @@ function Home() {
 
           try {
             const response = await axios.post(center, options);
-            console.log(
-              JSON.parse(response.data.response.data.additional_info).img
-            );
+            // console.log(
+            //   JSON.parse(response.data.response.data.additional_info).img
+            // );
             setCenterInfo(response.data.response.data);
             return response.data.data; // Return the response data
           } catch (error) {
@@ -83,9 +83,9 @@ function Home() {
           }
         };
 
-        console.log(centerParams);
+        // console.log(centerParams);
         if (!centerParams) {
-          console.log("here");
+          // console.log("here");
           setCenterID(6);
           postCenter(6);
           setCenterName(`Flea market stall`);
@@ -95,7 +95,7 @@ function Home() {
         } else {
           // get the center id from center name, and maintain the rest flow
           const my_center_id = await getCenterIdFromCenterName(centerParams);
-          console.log(my_center_id, "im center id");
+          // console.log(my_center_id, "im center id");
 
           my_center_id && setCenterID(my_center_id);
           my_center_id && postCenter(my_center_id);
