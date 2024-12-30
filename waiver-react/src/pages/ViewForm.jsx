@@ -22,6 +22,8 @@ import {
 } from "@mui/material";
 
 import deleteIcon from "../assets/delete.png";
+import placeholderImg from "../assets/placeholder.jpg";
+
 
 const uri =
   import.meta.env.VITE_MODE == "prod"
@@ -50,11 +52,14 @@ const ViewForm = () => {
     viewParticipant,
     setErr,
     centerInfo,
+    setCenterInfo,
   } = myState;
 
   const navigate = useNavigate();
 
-  console.log(centerInfo);
+  // console.log(viewParticipant, "vp");
+
+  // console.log(centerInfo);
 
   if (!submissionID) {
     return (
@@ -138,7 +143,36 @@ const ViewForm = () => {
       }
     };
 
-    fetchTemplateFromSID(submissionID);
+    const postCenter = async (centerId) => {
+      // console.log(centerId, "im ci");
+      const center = `${uri}/get-center`;
+      const options = {
+        center_id: centerId,
+      };
+
+      try {
+        const response = await axios.post(center, options);
+        setCenterInfo(response.data.response.data);
+        const addInfo = JSON.parse(response.data.response.data.additional_info);
+        // console.log(centerInfo, "im cf");
+        // setCenterAddInfo(addInfo);
+        return response.data.data; // Return the response data
+      } catch (error) {
+        console.error(
+          "Error posting center:",
+          error.response?.data || error.message // Handle error gracefully
+        );
+        throw error; // Rethrow the error for further handling
+      }
+    };
+
+    const asyncSt = async () => {
+      await fetchTemplateFromSID(submissionID);
+
+      viewParticipant && (await postCenter(viewParticipant.center_id));
+    };
+
+    asyncSt();
   }, []);
 
   return (
@@ -156,16 +190,30 @@ const ViewForm = () => {
                 marginTop={2}
                 letterSpacing={1.5}
               >
-                {(formData && companyName) || "Company name"}
+                {/* {(formData && companyName) || "Company name"} */}
+
+                {centerInfo && centerInfo.center_name}
               </Typography>
               {/* {formData && (
                 <img className="form__logo" src={companyLogo} alt="" />
               )} */}
 
-              {centerInfo && (
+              {/* {centerInfo && (
                 <img
                   className="form__logo"
                   src={JSON.parse(centerInfo.additional_info).img}
+                  alt="logo"
+                />
+              )} */}
+
+              {centerInfo && (
+                <img
+                  className="form__logo"
+                  src={
+                    JSON.parse(centerInfo.additional_info).img == ""
+                      ? placeholderImg
+                      : JSON.parse(centerInfo.additional_info).img
+                  }
                   alt="logo"
                 />
               )}

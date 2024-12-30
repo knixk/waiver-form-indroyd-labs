@@ -9,6 +9,7 @@ import html2canvas from "html2canvas";
 // uncomment to import the dummyTemplate
 // import template_config from "../misc/dummyData/dummyTemplates/main-template-config.json";
 import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
+import placeholderImg from "../assets/placeholder.jpg";
 
 import * as Yup from "yup";
 
@@ -394,7 +395,7 @@ const Form = () => {
         // const data =
         //   centerParams && (await getTemplateIdFromCenterID(centerParams));
         // data && (await fetchTemplate(data));
-        console.log("here")
+        console.log("here");
         const my_center_id = await getCenterIdFromCenterName(centerParams);
 
         setCenterID(my_center_id);
@@ -427,6 +428,7 @@ const Form = () => {
       import.meta.env.VITE_MODE == "dev"
     ) {
       const postCenter = async (centerId) => {
+        console.log(centerId, "im ci");
         const center = `${uri}/get-center`;
         const options = {
           center_id: centerId,
@@ -453,7 +455,7 @@ const Form = () => {
         postCenter(6);
       } else {
         // centerParams && setCenterID(centerParams);
-        centerParams && postCenter(centerID);
+        centerID && postCenter(centerID);
       }
     }
 
@@ -482,10 +484,22 @@ const Form = () => {
               {centerInfo && centerInfo.center_name}
             </Typography>
 
-            {centerInfo && (
+            {/* {centerInfo && (
               <img
                 className="form__logo"
                 src={JSON.parse(centerInfo.additional_info).img}
+                alt="logo"
+              />
+            )} */}
+
+            {centerInfo && (
+              <img
+                className="form__logo"
+                src={
+                  JSON.parse(centerInfo.additional_info).img == ""
+                    ? placeholderImg
+                    : JSON.parse(centerInfo.additional_info).img
+                }
                 alt="logo"
               />
             )}

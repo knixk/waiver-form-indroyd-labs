@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 // import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
+import placeholderImg from "../assets/placeholder.jpg";
+
 const uri =
   import.meta.env.VITE_MODE == "prod"
     ? import.meta.env.VITE_AWS_URI
@@ -67,9 +69,9 @@ function Home() {
 
           try {
             const response = await axios.post(center, options);
-            console.log(
-              JSON.parse(response.data.response.data.additional_info).img
-            );
+            // console.log(
+            //   JSON.parse(response.data.response.data.additional_info).img
+            // );
             setCenterInfo(response.data.response.data);
             return response.data.data; // Return the response data
           } catch (error) {
@@ -81,9 +83,9 @@ function Home() {
           }
         };
 
-        console.log(centerParams);
+        // console.log(centerParams);
         if (!centerParams) {
-          console.log("here");
+          // console.log("here");
           setCenterID(6);
           postCenter(6);
           setCenterName(`Flea market stall`);
@@ -93,7 +95,7 @@ function Home() {
         } else {
           // get the center id from center name, and maintain the rest flow
           const my_center_id = await getCenterIdFromCenterName(centerParams);
-          console.log(my_center_id, "im center id");
+          // console.log(my_center_id, "im center id");
 
           my_center_id && setCenterID(my_center_id);
           my_center_id && postCenter(my_center_id);
@@ -136,7 +138,11 @@ function Home() {
         >
           {centerInfo && (
             <img
-              src={JSON.parse(centerInfo.additional_info).img}
+              src={
+                JSON.parse(centerInfo.additional_info).img == ""
+                  ? placeholderImg
+                  : JSON.parse(centerInfo.additional_info).img
+              }
               style={{ width: 200, borderRadius: 5, marginBottom: 10 }}
               alt="logo"
             />
@@ -151,7 +157,7 @@ function Home() {
               </Typography>
 
               <Typography color={"gainsboro"} sx={{ mt: 2 }}>
-                {centerInfo && JSON.parse(centerInfo.additional_info).intro}
+                {centerInfo && JSON.parse(centerInfo.additional_info)?.intro}
               </Typography>
 
               <Button

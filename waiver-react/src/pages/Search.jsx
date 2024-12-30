@@ -54,7 +54,6 @@ function Search() {
         },
       });
 
-
       // const tmp_data = JSON.parse(response.data.data[0].submission_data);
       // setTemplateData(tmp_data);
       localStorage.setItem("waiver_form_jwt_token", jwt);
@@ -150,6 +149,7 @@ function Search() {
           {data && data.length > 0 ? (
             <Grid container spacing={3}>
               {data.map((i) => {
+                console.log(i);
                 return (
                   <Grid item xs={12} key={i.id}>
                     <Paper elevation={2} sx={{ p: 3 }}>
@@ -171,6 +171,7 @@ function Search() {
                           navigate("/view-form", {
                             state: {
                               submission_id: i.id,
+                              center_id: i.center_id,
                             },
                           });
                         }}
