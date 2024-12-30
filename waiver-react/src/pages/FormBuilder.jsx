@@ -240,6 +240,7 @@ const FormBuilder = () => {
           margin="normal"
           value={formData.center_name}
           onChange={(e) => handleChange("center_name", e.target.value)}
+          required={true}
         />
         <TextField
           label="Center Logo URL"
@@ -280,6 +281,7 @@ const FormBuilder = () => {
           fullWidth
           margin="normal"
           value={formData.contact_info.phone}
+          required={true}
           onChange={(e) =>
             handleNestedChange("contact_info", "phone", e.target.value)
           }
@@ -295,6 +297,7 @@ const FormBuilder = () => {
           }
           fullWidth
           margin="normal"
+          required={true}
         />
       </Paper>
 
