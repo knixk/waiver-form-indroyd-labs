@@ -22,6 +22,8 @@ import {
 } from "@mui/material";
 
 import deleteIcon from "../assets/delete.png";
+import placeholderImg from "../assets/placeholder.jpg";
+
 
 const uri =
   import.meta.env.VITE_MODE == "prod"
