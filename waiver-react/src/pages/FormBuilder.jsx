@@ -218,7 +218,7 @@ const FormBuilder = () => {
       console.log("empty");
       setWantParticipants(false);
     } else {
-      console.log("not empty")
+      console.log("not empty");
     }
 
     const config = {
@@ -251,6 +251,7 @@ const FormBuilder = () => {
           console.log("submitted");
         }}
       >
+        {/* ----- This paper contains the center form ----- */}
         <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
           <h3>Center Information</h3>
           <TextField
@@ -259,7 +260,7 @@ const FormBuilder = () => {
             margin="normal"
             value={formData.center_name}
             onChange={(e) => handleChange("center_name", e.target.value)}
-            required={true}
+            required
           />
           <TextField
             label="Center Logo URL"
@@ -300,13 +301,14 @@ const FormBuilder = () => {
             fullWidth
             margin="normal"
             value={formData.contact_info.phone}
-            required={true}
+            required
             onChange={(e) =>
               handleNestedChange("contact_info", "phone", e.target.value)
             }
           />
         </Paper>
 
+        {/* ----- This paper contains the template form ----- */}
         <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
           <TextField
             label="Template Name"
@@ -319,10 +321,11 @@ const FormBuilder = () => {
             }
             fullWidth
             margin="normal"
-            required={true}
+            required
           />
         </Paper>
 
+        {/* ----- This paper contains the question form ----- */}
         <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
           <Typography variant="h5">Add Question</Typography>
           <TextField
@@ -531,7 +534,8 @@ const FormBuilder = () => {
           </Button>
         </Paper>
 
-        <div>
+        {/* ----- This paper contains the preview of all questions ----- */}
+        <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
           <Typography sx={{ mb: 2, mt: 3 }} variant="h5">
             Preview
           </Typography>
@@ -585,8 +589,9 @@ const FormBuilder = () => {
               </Button>
             </div>
           ))}
-        </div>
+        </Paper>
 
+        {/* ----- This paper contains the extra participants form ----- */}
         <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
           <Typography variant="h6" gutterBottom>
             Extra Participant Fields
@@ -605,6 +610,7 @@ const FormBuilder = () => {
                 fullWidth
                 label="Field Label"
                 value={field.label}
+                required
                 onChange={(e) => {
                   const newFields = [...extraParticipantFields];
                   newFields[index].label = e.target.value;
@@ -637,6 +643,8 @@ const FormBuilder = () => {
             Add Participant Field
           </Button>
         </Paper>
+
+        {/* ----- This is the submit button ----- */}
 
         <Button
           variant="contained"
