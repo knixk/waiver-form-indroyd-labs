@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import { nanoid } from "nanoid";
 import axios from "axios";
@@ -13,7 +13,7 @@ import placeholderImg from "../assets/placeholder.jpg";
 
 import * as Yup from "yup";
 
-// This is the schema to be used with validation fields
+// This is the schema to be used with validation fields, uncomment to start using
 // const validationSchema = Yup.object().shape({
 //   phoneNumber: Yup.string()
 //     .matches(/^\+?\d{10,15}$/, "Invalid phone number")
@@ -30,6 +30,8 @@ import * as Yup from "yup";
 import { useContext } from "react";
 import { MyContext } from "../App";
 import { useNavigate } from "react-router-dom";
+
+// imports from material ui
 import {
   Box,
   Button,
@@ -56,6 +58,7 @@ const uri =
 
 import deleteIcon from "../assets/delete.png";
 
+// custom component for a checkbox question, need to implement this
 const CheckboxQuestion = ({ question, formData, handleInputChange }) => {
   return (
     question.input_type === "checkbox" &&
@@ -118,6 +121,7 @@ const Form = () => {
 
   const [errors, setErrors] = useState({});
 
+  //  this would be able to validate the fields, it uses a schema, comes from yup library
   const validateField = (fieldKey, value) => {
     let schema = yup.string().email("Invalid email").required();
     schema
@@ -132,16 +136,12 @@ const Form = () => {
   const queryParameters = new URLSearchParams(window.location.search);
   const centerParams = queryParameters.get("center");
 
+  // handles the input change
   const handleInputChange = (id, value) => {
     setFormData((prev) => ({ ...prev, [id]: value }));
-
-    if (formData["want_participant_id"] == "Me and my kids!") {
-      // setWantParticipants(true);
-    } else {
-      // setWantParticipants(false);
-    }
   };
 
+  // handles the radio change
   const handleRadioChange = (questionId, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -156,6 +156,7 @@ const Form = () => {
     }
   };
 
+  // adds the participants
   const addParticipant = () => {
     setParticipants((prev) => [
       ...prev,
@@ -165,6 +166,7 @@ const Form = () => {
     ]);
   };
 
+  // updates the extra participants
   const updateParticipant = (index, field, value) => {
     const updatedParticipants = [...participants];
     updatedParticipants[index][field] = value;
@@ -175,6 +177,7 @@ const Form = () => {
     setParticipants((prev) => prev.filter((p) => p.id !== id));
   };
 
+  // is able to upload the image to google drive, not in use rn
   const uploadImageToBackend = async (imgData) => {
     const response = await axios.post(`${uri}/upload-image`, {
       imgData,
@@ -200,6 +203,7 @@ const Form = () => {
     }
   };
 
+  // handler for the final submit button
   const handleSubmit = async (e) => {
     // console.log(sign?.getTrimmedCanvas().width == 1)
     // setFormData({});
@@ -354,6 +358,7 @@ const Form = () => {
         return ans;
       };
 
+      // fetch the template with the template id
       const fetchTemplate = async (t_id) => {
         const templates = `${uri}/post-center`;
 
@@ -383,15 +388,8 @@ const Form = () => {
         }
       };
 
+      // this function essentially call our helper functions in a flow
       const asyncFnStitch = async () => {
-        if (!centerID) {
-          // don't set the id to the name, set it to an id, get it from name
-          // setCenterID(29);
-        }
-
-        // const data =
-        //   centerParams && (await getTemplateIdFromCenterID(centerParams));
-        // data && (await fetchTemplate(data));
         console.log("here");
         const my_center_id = await getCenterIdFromCenterName(centerParams);
 
@@ -401,19 +399,6 @@ const Form = () => {
           my_center_id && (await getTemplateIdFromCenterID(my_center_id));
 
         data && (await fetchTemplate(data));
-
-        // this is to get the template:
-        // center params contains any str, you type after ?center= , so it will contain the name too.
-        // const data =
-        //   centerParams && (await getTemplateIdFromCenterName(centerParams));
-        // data && (await fetchTemplate(data));
-
-        // we still don't know the center name right? hmm yeah
-        // we need to get the id too so we can fetch details
-
-        /* to dos:
-        don't you think if ur getting center i
-        */
       };
 
       asyncFnStitch();
@@ -451,7 +436,6 @@ const Form = () => {
         setCenterID(6);
         postCenter(6);
       } else {
-        // centerParams && setCenterID(centerParams);
         centerID && postCenter(centerID);
       }
     }
@@ -481,14 +465,6 @@ const Form = () => {
               {centerInfo && centerInfo.center_name}
             </Typography>
 
-            {/* {centerInfo && (
-              <img
-                className="form__logo"
-                src={JSON.parse(centerInfo.additional_info).img}
-                alt="logo"
-              />
-            )} */}
-
             {centerInfo && (
               <img
                 className="form__logo"
@@ -501,6 +477,7 @@ const Form = () => {
               />
             )}
 
+            {/* ---- our main form inside here ----- */}
             <form onSubmit={handleSubmit}>
               <TextField
                 fullWidth
@@ -537,6 +514,9 @@ const Form = () => {
                 }}
                 helperText={errors.phoneNumber}
               />
+
+              {/* ---- Render our custom questions ----- */}
+
               {questions &&
                 questions.map((question) => (
                   <Box key={question.question_id} sx={{ mt: 2 }}>
@@ -850,6 +830,8 @@ const Form = () => {
                 </Box>
               )}
 
+              {/* ---- Box for our signature ----- */}
+
               <Box sx={{ mt: 3 }}>
                 <Typography variant="h6">Signature</Typography>
                 <SignatureCanvas
@@ -865,6 +847,9 @@ const Form = () => {
                     className: "sigCanvas",
                   }}
                 />
+
+                {/* ---- Button to clear the signature ----- */}
+
                 <Button
                   variant="outlined"
                   color="error"
@@ -874,6 +859,8 @@ const Form = () => {
                   Clear
                 </Button>
               </Box>
+
+              {/* ---- Button to submit the signature ----- */}
 
               <Button
                 variant="contained"
@@ -890,6 +877,8 @@ const Form = () => {
           <></>
         )}
       </Box>
+      {/* ---- Display the loader ----- */}
+
       {loading && (
         <div className="loader__container">
           <div className="loader"></div>

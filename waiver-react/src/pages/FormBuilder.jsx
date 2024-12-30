@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 
 import { Delete } from "@mui/icons-material";
+// XXXX - DONT COMMENT AXIOS
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -112,7 +113,6 @@ const FormBuilder = () => {
 
     // return ans;
     // XXXX - DONT DELETE ME: uncomment this ---------------------
-
   };
 
   // this function uploads the center, call it after the template is sent, and t_id is returned
@@ -132,7 +132,6 @@ const FormBuilder = () => {
     //   console.error("Error uploading center:", error);
     // }
     // XXXX - DONT DELETE ME: uncomment this ---------------------
-
   };
 
   // adds participants question
@@ -238,7 +237,7 @@ const FormBuilder = () => {
     setFinalTemplate(config);
     // uncomment to download
     // downloadObjectAsJSON(config);
-    
+
     // we get back the template id, and use it to give it to the center and upload it too.
     const t_id = await uploadTemplate(config);
     console.log("template id: ", t_id);
@@ -255,6 +254,7 @@ const FormBuilder = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          handleGenerateConfig();
           console.log("submitted");
         }}
       >
@@ -657,9 +657,10 @@ const FormBuilder = () => {
           variant="contained"
           color="primary"
           sx={{ mt: 2 }}
-          onClick={() => {
-            handleGenerateConfig();
-          }}
+          type="submit"
+          // onClick={() => {
+          //   handleGenerateConfig();
+          // }}
         >
           Generate and Log Config
         </Button>
