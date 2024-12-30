@@ -49,6 +49,67 @@ const uploadFileToDrive = async (fileName, filePath, mimeType) => {
   }
 };
 
+// Controller to get template_id by center_name
+// const getTemplateIdByCenterName = async (req, res) => {
+//   const { center_name } = req.body;
+
+//   if (!center_name) {
+//     return res.status(400).json({
+//       success: false,
+//       message: "center_name is required",
+//     });
+//   }
+
+//   try {
+//     const query = `
+//       SELECT c.template_id
+//       FROM centers AS c
+//       WHERE c.center_name = ?
+//     `;
+
+//     const [rows] = await db.execute(query, [center_name]);
+
+//     if (rows.length > 0) {
+//       return res.status(200).json({
+//         success: true,
+//         response: {
+//           template_id: rows[0].template_id,
+//         },
+//       });
+//     } else {
+//       return res.status(404).json({
+//         success: false,
+//         message: "No center found with the given name",
+//       });
+//     }
+//   } catch (error) {
+//     console.error("Error fetching template_id:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Internal server error",
+//     });
+//   }
+// };
+
+const getTemplateIdByCenterName = (con, center_name) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+        SELECT c.template_id
+        FROM centers AS c
+        WHERE c.center_name = ?
+      `;
+    con.query(query, [center_name], (err, results) => {
+      if (err) {
+        return reject(err); // Reject on query error
+      }
+      if (results.length === 0) {
+        return reject(new Error("No center found with the given name")); // Reject if no results
+      }
+      resolve(results[0].template_id); // Resolve with the template_id
+    });
+  });
+};
+
 // controllers
 const postASubmission = (con, data) => {
   return new Promise((resolve, reject) => {
@@ -277,4 +338,6 @@ module.exports = {
   getSubmissionById,
   getCenterById,
   getTemplateBySubmissionId,
+  getTemplateByCenterName,
+  getTemplateIdByCenterName,
 };

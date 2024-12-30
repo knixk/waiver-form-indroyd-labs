@@ -6,23 +6,25 @@ import toast, { Toaster } from "react-hot-toast";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-import template_config from "../misc/dummyData/dummyTemplates/main-template-config.json";
+// uncomment to import the dummyTemplate
+// import template_config from "../misc/dummyData/dummyTemplates/main-template-config.json";
 import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
 import * as Yup from "yup";
 
-const validationSchema = Yup.object().shape({
-  phoneNumber: Yup.string()
-    .matches(/^\+?\d{10,15}$/, "Invalid phone number")
-    .required("Phone number is required"),
-  zipCode: Yup.string()
-    .matches(/^\d{6}(-\d{4})?$/, "Invalid ZIP code")
-    .required("ZIP code is required"),
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  // Add more validations as needed
-});
+// This is the schema to be used with validation fields
+// const validationSchema = Yup.object().shape({
+//   phoneNumber: Yup.string()
+//     .matches(/^\+?\d{10,15}$/, "Invalid phone number")
+//     .required("Phone number is required"),
+//   zipCode: Yup.string()
+//     .matches(/^\d{6}(-\d{4})?$/, "Invalid ZIP code")
+//     .required("ZIP code is required"),
+//   email: Yup.string()
+//     .email("Invalid email address")
+//     .required("Email is required"),
+//   // Add more validations as needed
+// });
 
 import { useContext } from "react";
 import { MyContext } from "../App";
@@ -128,7 +130,6 @@ const Form = () => {
       );
   };
 
-  const canvasContainerRef = useRef(null);
   const navigate = useNavigate();
   const queryParameters = new URLSearchParams(window.location.search);
   const centerParams = queryParameters.get("center");
@@ -207,30 +208,13 @@ const Form = () => {
     e.preventDefault();
 
     let err = false;
-    // return;
-
-    // try {
-    //   validationSchema.validateSync(formData, { abortEarly: false });
-    //   // Proceed with form submission
-    // } catch (error) {
-    //   err = true;
-    //   const validationErrors = {};
-    //   error.inner.forEach((err) => {
-    //     validationErrors[err.path] = err.message;
-    //     toast.error(err.message);
-    //   });
-    //   setErrors(validationErrors);
-    //   // return;
-    // }
 
     if (err) {
       return;
     }
-    // console.log("still working");
 
     if (sign?.getTrimmedCanvas().width == 1) {
       toast.error("You must sign the form!");
-      // console.log("empty");
       return;
     }
 
@@ -265,6 +249,8 @@ const Form = () => {
       const base64Data = reader.result.split(",")[1]; // Extract Base64 string
       const payload = { imgData: `data:application/pdf;base64,${base64Data}` };
 
+      // We were uploading the signature on google drive, but changed plans
+      // we're putting it directly in the db, sizes around 24kb
       try {
         // const response = await axios.post(
         //   "http://localhost:5050/upload-image",
@@ -280,7 +266,6 @@ const Form = () => {
           center_id: centerID,
         };
 
-        // console.log(centerID)
 
         await axios.post(`${uri}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
@@ -300,6 +285,9 @@ const Form = () => {
       import.meta.env.VITE_MODE == "dev"
     ) {
       console.log("in prod mode..");
+      
+
+
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
         const templates = `${uri}/template-id-from-center`;
@@ -310,7 +298,6 @@ const Form = () => {
 
         try {
           const response = await axios.post(templates, options);
-          // console.log(response.data.response.template_id)
           ans = response.data.response.template_id;
           setTemplateId(ans);
         } catch (error) {
@@ -331,7 +318,6 @@ const Form = () => {
 
         try {
           const response = await axios.post(templates, options);
-          // console.log(response.data.response[0].template_config)
           const myData = JSON.parse(response.data.response[0].template_config);
 
           if (myData) {
@@ -406,7 +392,6 @@ const Form = () => {
       setCenterInfo(dummyCenter);
       setCenterAddInfo(dummyCenter);
 
-      let prsedData = JSON.parse(dummyCenter.additional_info);
     }
   }, []);
 
