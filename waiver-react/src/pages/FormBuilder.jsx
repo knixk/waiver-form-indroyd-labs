@@ -23,8 +23,14 @@ const uri =
     ? import.meta.env.VITE_AWS_URI
     : import.meta.env.VITE_API_LOCAL_URI;
 
+const placeholderImgURL = `https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png`;
+
 const FormBuilder = () => {
   const [extraParticipantFields, setExtraParticipantFields] = useState([]);
+  const [wantParticipants, setWantParticipants] = useState(true);
+
+  // this is the template data, basically,
+  // participants aren't mandatory right..
 
   const [formConfig, setFormConfig] = useState({
     templateName: "",
@@ -32,27 +38,7 @@ const FormBuilder = () => {
     questions: [],
   });
 
-  const [currentQuestion, setCurrentQuestion] = useState({
-    label: "",
-    input_type: "text",
-    values: "",
-    image: "",
-    required: false,
-    variant: "",
-  });
-
-  // const [templates] = useState([
-  //   { id: 1, name: "Template 1" },
-  //   { id: 2, name: "Template 2" },
-  //   { id: 3, name: "Template 3" },
-  //   { id: 4, name: "Template 4" },
-  //   { id: 6, name: "Flea Market" },
-  // ]);
-
-  const [check, setCheck] = useState(false);
-
-  const [finalTemplate, setFinalTemplate] = useState({});
-
+  // this is the center data
   const [formData, setFormData] = useState({
     center_name: "",
     address: "",
@@ -63,18 +49,32 @@ const FormBuilder = () => {
     template_id: "",
     additional_info: {
       intro: "",
-      img: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
+      img: "",
     },
   });
 
+  // this is the current question's state
+  const [currentQuestion, setCurrentQuestion] = useState({
+    label: "",
+    input_type: "text",
+    values: "",
+    image: "",
+    required: false,
+    variant: "",
+  });
+
+  const [check, setCheck] = useState(false);
+
+  const [finalTemplate, setFinalTemplate] = useState({});
+
   const handleChange = (field, value) => {
-    // console.log(formData, "Fd");
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
+  // not sure where it's being used
   const handleNestedChange = (nestedField, subField, value) => {
     // console.log(formData);
 
@@ -92,25 +92,25 @@ const FormBuilder = () => {
     console.log(data, "im template data");
     let ans;
 
-    // uncomment this ---------------------
-    try {
-      const response = await axios.post(`${uri}/templates`, data);
+    // DONT DELETE ME: uncomment this---------------------
+    // try {
+    //   const response = await axios.post(`${uri}/templates`, data);
 
-      // console.log(response, "im res")
-      const templateId = await response.data.response.template_id;
-      // console.log(templateId);
-      setFormData((prev) => ({
-        ...prev,
-        template_id: templateId,
-      }));
-      console.log("Template uploaded:", response.data);
-      ans = await templateId;
-      return templateId;
-    } catch (error) {
-      console.error("Error uploading template:", error);
-    }
+    //   // console.log(response, "im res")
+    //   const templateId = await response.data.response.template_id;
+    //   // console.log(templateId);
+    //   setFormData((prev) => ({
+    //     ...prev,
+    //     template_id: templateId,
+    //   }));
+    //   console.log("Template uploaded:", response.data);
+    //   ans = await templateId;
+    //   return templateId;
+    // } catch (error) {
+    //   console.error("Error uploading template:", error);
+    // }
 
-    return ans;
+    // return ans;
   };
 
   // this function uploads the center, call it after the template is sent, and t_id is returned
@@ -122,15 +122,16 @@ const FormBuilder = () => {
 
     console.log(newData, "im center_data");
 
-    // uncomment this ------
-    try {
-      const response = await axios.post(`${uri}/centers`, newData);
-      console.log("Center uploaded:", response.data);
-    } catch (error) {
-      console.error("Error uploading center:", error);
-    }
+    // DONT DELETE ME: uncomment this ------
+    // try {
+    //   const response = await axios.post(`${uri}/centers`, newData);
+    //   console.log("Center uploaded:", response.data);
+    // } catch (error) {
+    //   console.error("Error uploading center:", error);
+    // }
   };
 
+  // adds participants question
   const handleAddParticipantField = () => {
     setExtraParticipantFields([
       ...extraParticipantFields,
@@ -138,12 +139,14 @@ const FormBuilder = () => {
     ]);
   };
 
+  // removes participant question
   const handleRemoveParticipantField = (index) => {
     setExtraParticipantFields(
       extraParticipantFields.filter((_, i) => i !== index)
     );
   };
 
+  // adds the question
   const handleAddQuestion = () => {
     setFormConfig((prev) => ({
       ...prev,
@@ -162,6 +165,7 @@ const FormBuilder = () => {
     });
   };
 
+  // removes the question
   const handleRemoveQuestion = (id) => {
     setFormConfig((prev) => ({
       ...prev,
@@ -169,6 +173,7 @@ const FormBuilder = () => {
     }));
   };
 
+  // downloads the template data to your pc
   // function downloadObjectAsJSON(obj, filename = "template_config.json") {
   //   // console.log("inside")
   //   const blob = new Blob([JSON.stringify(obj, null, 2)], {
@@ -180,6 +185,7 @@ const FormBuilder = () => {
   //   link.click();
   // }
 
+  // handler for the final button, which uploads and sends center & template
   const handleGenerateConfig = async () => {
     setCurrentQuestion((currentQuestion) => ({
       ...currentQuestion,
@@ -203,25 +209,33 @@ const FormBuilder = () => {
       };
     });
 
+    // if (wantParticipants) {
+
+    // }
+
+    // we're checking if they have added any fields for extra participants, if no then we set it to false
+    if (extraParticipantFields.length == 0) {
+      console.log("empty");
+      setWantParticipants(false);
+    } else {
+      console.log("not empty")
+    }
+
     const config = {
       template_name: formConfig.templateName,
       template_config: {
-        // company_logo: formConfig.companyLogo,
-        // company_address: formConfig.companyAddress,
         questions: processedQuestions,
         extra_participants_form_fields: extraParticipantFields,
+        want_participants: wantParticipants,
       },
     };
 
     setFinalTemplate(config);
+    // uncomment to download
     // downloadObjectAsJSON(config);
     const t_id = await uploadTemplate(config);
     console.log("template id: ", t_id);
     t_id && (await uploadCenter(t_id));
-    // await uploadCenter(6);
-
-    // console.log(t_id, "yes");
-
     toast.success(`Center was submitted with template_id ${t_id}`);
 
     console.log(config, "im the template");
@@ -339,6 +353,7 @@ const FormBuilder = () => {
               <MenuItem value="date">Date</MenuItem>
               <MenuItem value="file">File</MenuItem>
               <MenuItem value="label">Label</MenuItem>
+              <MenuItem value="radio">Radio</MenuItem>
             </Select>
           </FormControl>
 
@@ -367,6 +382,21 @@ const FormBuilder = () => {
           )}
 
           {currentQuestion.input_type === "dropdown" && (
+            <TextField
+              label="Values (comma separated)"
+              value={currentQuestion.values}
+              onChange={(e) =>
+                setCurrentQuestion((prev) => ({
+                  ...prev,
+                  values: e.target.value,
+                }))
+              }
+              fullWidth
+              margin="normal"
+            />
+          )}
+
+          {currentQuestion.input_type === "radio" && (
             <TextField
               label="Values (comma separated)"
               value={currentQuestion.values}
