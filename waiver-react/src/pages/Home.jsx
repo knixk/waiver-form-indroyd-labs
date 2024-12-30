@@ -16,14 +16,23 @@ function Home() {
   const [layer, setLayer] = useState(1);
   const navigate = useNavigate();
   const queryParameters = new URLSearchParams(window.location.search);
-  const centerParams = queryParameters.get("center");
+  let centerParams = queryParameters.get("center");
 
   // console.log(import.meta.env.VITE_MODE);
 
   const myState = useContext(MyContext);
-  const { centerInfo, setCenterInfo, centerID, setCenterID } = myState;
+  const {
+    centerInfo,
+    setCenterInfo,
+    centerID,
+    setCenterID,
+    centerName,
+    setCenterName,
+  } = myState;
 
+  // setCenterName(centerParams);
   useEffect(() => {
+    // takes a name returns an id
     const getCenterIdFromCenterName = async (centerName) => {
       let centerId = null;
       const endpoint = `${uri}/center-id-from-center-name`;
@@ -44,49 +53,55 @@ function Home() {
       return centerId;
     };
 
-    if (
-      import.meta.env.VITE_MODE == "prod" ||
-      import.meta.env.VITE_MODE == "dev"
-    ) {
-      // console.log("inside prod");
-      const postCenter = async (centerId) => {
-        const center = `${uri}/get-center`;
-        const options = {
-          center_id: centerId,
+    const asyncSt = async () => {
+      if (
+        import.meta.env.VITE_MODE == "prod" ||
+        import.meta.env.VITE_MODE == "dev"
+      ) {
+        // console.log("inside prod");
+        const postCenter = async (centerId) => {
+          const center = `${uri}/get-center`;
+          const options = {
+            center_id: centerId,
+          };
+
+          try {
+            const response = await axios.post(center, options);
+            console.log(
+              JSON.parse(response.data.response.data.additional_info).img
+            );
+            setCenterInfo(response.data.response.data);
+            return response.data.data; // Return the response data
+          } catch (error) {
+            console.error(
+              "Error posting center:",
+              error.response?.data || error.message // Handle error gracefully
+            );
+            throw error; // Rethrow the error for further handling
+          }
         };
 
-        try {
-          const response = await axios.post(center, options);
-          console.log(
-            JSON.parse(response.data.response.data.additional_info).img
-          );
-          setCenterInfo(response.data.response.data);
-          return response.data.data; // Return the response data
-        } catch (error) {
-          console.error(
-            "Error posting center:",
-            error.response?.data || error.message // Handle error gracefully
-          );
-          throw error; // Rethrow the error for further handling
+        console.log(centerParams);
+        if (!centerParams) {
+          console.log("here");
+          setCenterID(6);
+          postCenter(6);
+          // setCenterName("Flea market stall");
+          // centerParams = "Flea market stall";
+        } else {
+          // get the center id from center name, and maintain the rest flow
+          const my_center_id = await getCenterIdFromCenterName(centerParams);
+          console.log(my_center_id, "im center id");
+
+          my_center_id && setCenterID(my_center_id);
+          my_center_id && postCenter(my_center_id);
+
+          setCenterName(centerInfo && centerInfo.center_name);
         }
-      };
-
-      console.log(centerParams);
-      if (!centerParams) {
-        // console.log(centerID);
-        setCenterID(6);
-        postCenter(6);
-      } else {
-        // get the center id from center name, and maintain the rest flow
-        const my_center_id =
-          centerParams && getCenterIdFromCenterName(centerParams);
-
-        console.log(my_center_id, "im center id");
-
-        my_center_id && setCenterID(my_center_id);
-        my_center_id && postCenter(my_center_id);
       }
-    }
+    };
+
+    asyncSt();
   }, []);
 
   return (
@@ -138,7 +153,7 @@ function Home() {
 
               <Button
                 variant="contained"
-                onClick={() => navigate(`/form?center=${centerID}`)}
+                onClick={() => navigate(`/form?center=${centerName}`)}
                 sx={{ mt: 2.5 }}
               >
                 Get Started

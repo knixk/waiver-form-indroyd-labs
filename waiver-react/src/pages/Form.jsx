@@ -388,13 +388,13 @@ const Form = () => {
       const asyncFnStitch = async () => {
         if (!centerID) {
           // don't set the id to the name, set it to an id, get it from name
-          setCenterID(29);
+          // setCenterID(29);
         }
 
         // const data =
         //   centerParams && (await getTemplateIdFromCenterID(centerParams));
         // data && (await fetchTemplate(data));
-
+        console.log("here")
         const my_center_id = await getCenterIdFromCenterName(centerParams);
 
         setCenterID(my_center_id);
