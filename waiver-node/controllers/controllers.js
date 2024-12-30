@@ -49,6 +49,84 @@ const uploadFileToDrive = async (fileName, filePath, mimeType) => {
   }
 };
 
+// Controller to get template_id by center_name
+// const getTemplateIdByCenterName = async (req, res) => {
+//   const { center_name } = req.body;
+
+//   if (!center_name) {
+//     return res.status(400).json({
+//       success: false,
+//       message: "center_name is required",
+//     });
+//   }
+
+//   try {
+//     const query = `
+//       SELECT c.template_id
+//       FROM centers AS c
+//       WHERE c.center_name = ?
+//     `;
+
+//     const [rows] = await db.execute(query, [center_name]);
+
+//     if (rows.length > 0) {
+//       return res.status(200).json({
+//         success: true,
+//         response: {
+//           template_id: rows[0].template_id,
+//         },
+//       });
+//     } else {
+//       return res.status(404).json({
+//         success: false,
+//         message: "No center found with the given name",
+//       });
+//     }
+//   } catch (error) {
+//     console.error("Error fetching template_id:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Internal server error",
+//     });
+//   }
+// };
+
+// current one
+const getCenterIdByName = (con, centerName) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT id AS center_id
+      FROM centers
+      WHERE center_name = ?
+      LIMIT 1
+    `;
+    con.query(query, [centerName], (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+};
+
+
+const getTemplateIdByCenterName = (con, center_name) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+        SELECT c.template_id
+        FROM centers AS c
+        WHERE c.center_name = ?
+      `;
+    con.query(query, [center_name], (err, results) => {
+      if (err) {
+        return reject(err); // Reject on query error
+      }
+      if (results.length === 0) {
+        return reject(new Error("No center found with the given name")); // Reject if no results
+      }
+      resolve(results[0].template_id); // Resolve with the template_id
+    });
+  });
+};
+
 // controllers
 const postASubmission = (con, data) => {
   return new Promise((resolve, reject) => {
@@ -75,10 +153,28 @@ const postASubmission = (con, data) => {
   });
 };
 
+const getTemplateByCenterName = (con, center_name) => {
+  const query = `
+  SELECT template_id 
+  FROM centers 
+  WHERE center_name = ?`;
+
+  con.query(query, [center_name], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Database error", details: err });
+    }
+    if (result.length > 0) {
+      return res.json({ template_id: result[0].template_id });
+    } else {
+      return res.status(404).json({ error: "Center not found" });
+    }
+  });
+};
+
 const postACenter = (con, data) => {
   const query = `
-      INSERT INTO centers (center_name, address, contact_info, template_id)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO centers (center_name, address, contact_info, template_id, additional_info)
+      VALUES (?, ?, ?, ?, ?)
     `;
 
   con.query(
@@ -88,87 +184,13 @@ const postACenter = (con, data) => {
       data.address,
       JSON.stringify(data.contact_info),
       data.template_id,
+      JSON.stringify(data.additional_info),
     ], // Ensure JSON is stringified
     (err, result) => {
       if (err) throw err;
     }
   );
 };
-
-// const getSubmissionsByCenter = async (con, centerId) => {
-//   const query = `SELECT * FROM submissions WHERE center_id = ? ORDER BY submission_date DESC`;
-
-//   return new Promise((resolve, reject) => {
-//     con.query(query, [centerId], (err, result) => {
-//       if (err) {
-//         reject(err); // Reject the promise on error
-//       } else {
-//         resolve(result); // Resolve the promise with the result
-//       }
-//     });
-//   });
-// };
-
-// deprecated
-// const getSubmissions = async (
-//   con,
-//   { name = null, mobile_number = null, email = null, days = null } = {}
-// ) => {
-//   let getSubmissionsQuery = "SELECT * FROM submissions WHERE 1=1"; // Base query to start with
-
-//   // Filter by name if provided
-//   if (name) {
-//     getSubmissionsQuery += ` AND name LIKE '%${name}%'`; // Using LIKE for partial matching
-//   }
-
-//   // Filter by mobile_number if provided
-//   if (mobile_number) {
-//     getSubmissionsQuery += ` AND mobile_number LIKE '%${mobile_number}%'`;
-//   }
-
-//   // Filter by email if provided
-//   if (email) {
-//     getSubmissionsQuery += ` AND email LIKE '%${email}%'`; // Using LIKE for partial matching
-//   }
-
-//   // Filter by submission date range if provided
-//   if (days) {
-//     getSubmissionsQuery += ` AND submission_date >= CURDATE() - INTERVAL ${days} DAY`;
-//   }
-
-//   // Order by the latest date
-//   getSubmissionsQuery += " ORDER BY submission_date DESC";
-
-//   return new Promise((resolve, reject) => {
-//     con.query(getSubmissionsQuery, (err, result, fields) => {
-//       if (err) {
-//         reject(err); // Reject promise on error
-//       } else {
-//         resolve(result); // Resolve promise with the result
-//       }
-//     });
-//   });
-// };
-
-// const getSubmissionsByCenter = async (con, center_name, searchQuery) => {
-//   const query = `
-//     SELECT * FROM submissions
-//     WHERE center_name = ?
-//     AND (mobile_number LIKE ? OR email LIKE ? OR name LIKE ?)
-//     ORDER BY submission_date DESC`;
-
-//   const searchParam = `%${searchQuery}%`;
-
-//   return new Promise((resolve, reject) => {
-//     con.query(query, [centerId, searchParam, searchParam, searchParam], (err, result) => {
-//       if (err) {
-//         reject(err);
-//       } else {
-//         resolve(result);
-//       }
-//     });
-//   });
-// };
 
 const getSubmissionsByCenter = async (con, center_name, searchQuery) => {
   const query = `
@@ -333,4 +355,7 @@ module.exports = {
   getSubmissionById,
   getCenterById,
   getTemplateBySubmissionId,
+  getTemplateByCenterName,
+  getTemplateIdByCenterName,
+  getCenterIdByName
 };

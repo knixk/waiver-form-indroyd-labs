@@ -105,7 +105,7 @@ const FormBuilder = () => {
       }));
       console.log("Template uploaded:", response.data);
       ans = await templateId;
-      return templateId;
+      // return templateId;
     } catch (error) {
       console.error("Error uploading template:", error);
     }
@@ -160,7 +160,7 @@ const FormBuilder = () => {
       image: "",
       required: false,
     });
-  };
+  };  
 
   const handleRemoveQuestion = (id) => {
     setFormConfig((prev) => ({
@@ -216,15 +216,15 @@ const FormBuilder = () => {
     setFinalTemplate(config);
     // downloadObjectAsJSON(config);
     const t_id = await uploadTemplate(config);
-    console.log("template id: ", t_id);
-    t_id && (await uploadCenter(t_id));
-    // await uploadCenter(6);
+    // console.log("template id: ", t_id);
+    // t_id && (await uploadCenter(t_id));
+    await uploadCenter(6);
 
     // console.log(t_id, "yes");
 
     toast.success(`Center was submitted with template_id ${t_id}`);
 
-    console.log(config, "im the template");
+    // console.log(config);
   };
 
   return (

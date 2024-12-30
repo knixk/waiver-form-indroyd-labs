@@ -49,9 +49,12 @@ const ViewForm = () => {
     submissionID,
     viewParticipant,
     setErr,
+    centerInfo,
   } = myState;
 
   const navigate = useNavigate();
+
+  console.log(centerInfo);
 
   if (!submissionID) {
     return (
@@ -155,8 +158,16 @@ const ViewForm = () => {
               >
                 {(formData && companyName) || "Company name"}
               </Typography>
-              {formData && (
+              {/* {formData && (
                 <img className="form__logo" src={companyLogo} alt="" />
+              )} */}
+
+              {centerInfo && (
+                <img
+                  className="form__logo"
+                  src={JSON.parse(centerInfo.additional_info).img}
+                  alt="logo"
+                />
               )}
 
               <form

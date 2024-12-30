@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import Form from "./pages/Form";
@@ -8,22 +8,17 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ViewForm from "./pages/ViewForm";
 import Error from "./pages/Error";
-import axios from "axios";
 import FormBuilder from "./pages/FormBuilder";
 
+// context api allows us to use state from one place in every component, which is very handy
 import { createContext } from "react";
 
 // Create the context
 export const MyContext = createContext();
 
-const AWS_URI =
-  "https://kekb2shy3xebaxqohtougon6ma0adifj.lambda-url.us-east-1.on.aws/";
-
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
-
-// context api allows us to use state from one place in every component, which is very handy
 
 function App() {
   const [sign, setSign] = useState(null);
@@ -41,11 +36,11 @@ function App() {
   const [submissions, setSubmissions] = useState();
   const [viewParticipant, setViewParticipant] = useState();
   const [err, setErr] = useState(false);
-  const [awsURI, setAWSURI] = useState(AWS_URI);
   const [wantParticipants, setWantParticipants] = useState(true);
   const [centerInfo, setCenterInfo] = useState();
   const [centerAddInfo, setCenterAddInfo] = useState();
   const [centerID, setCenterID] = useState();
+  const [centerName, setCenterName] = useState();
 
   const handleDownload = async () => {
     const formElement = document.querySelector(".form__container__main");
@@ -113,7 +108,6 @@ function App() {
         setViewParticipant,
         err,
         setErr,
-        awsURI,
         wantParticipants,
         setWantParticipants,
         centerInfo,
@@ -122,6 +116,8 @@ function App() {
         setCenterAddInfo,
         centerID,
         setCenterID,
+        centerName,
+        setCenterName,
       }}
     >
       <Router>
@@ -132,7 +128,6 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/view-form" element={<ViewForm />} />
           <Route path="/form-builder" element={<FormBuilder />} />
-
           <Route path="*" element={<Error />} />
         </Routes>
         <Footer />

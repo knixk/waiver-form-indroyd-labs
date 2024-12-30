@@ -6,23 +6,25 @@ import toast, { Toaster } from "react-hot-toast";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-import template_config from "../misc/dummyData/dummyTemplates/main-template-config.json";
+// uncomment to import the dummyTemplate
+// import template_config from "../misc/dummyData/dummyTemplates/main-template-config.json";
 import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
 import * as Yup from "yup";
 
-const validationSchema = Yup.object().shape({
-  phoneNumber: Yup.string()
-    .matches(/^\+?\d{10,15}$/, "Invalid phone number")
-    .required("Phone number is required"),
-  zipCode: Yup.string()
-    .matches(/^\d{6}(-\d{4})?$/, "Invalid ZIP code")
-    .required("ZIP code is required"),
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  // Add more validations as needed
-});
+// This is the schema to be used with validation fields
+// const validationSchema = Yup.object().shape({
+//   phoneNumber: Yup.string()
+//     .matches(/^\+?\d{10,15}$/, "Invalid phone number")
+//     .required("Phone number is required"),
+//   zipCode: Yup.string()
+//     .matches(/^\d{6}(-\d{4})?$/, "Invalid ZIP code")
+//     .required("ZIP code is required"),
+//   email: Yup.string()
+//     .email("Invalid email address")
+//     .required("Email is required"),
+//   // Add more validations as needed
+// });
 
 import { useContext } from "react";
 import { MyContext } from "../App";
@@ -118,15 +120,6 @@ const Form = () => {
 
   const [errors, setErrors] = useState({});
 
-  // const validateField = (field, value) => {
-  //   try {
-  //     validationSchema.validateSyncAt(field, { [field]: value });
-  //     setErrors((prev) => ({ ...prev, [field]: "" }));
-  //   } catch (error) {
-  //     setErrors((prev) => ({ ...prev, [field]: error.message }));
-  //   }
-  // };
-
   const validateField = (fieldKey, value) => {
     let schema = yup.string().email("Invalid email").required();
     schema
@@ -137,7 +130,6 @@ const Form = () => {
       );
   };
 
-  const canvasContainerRef = useRef(null);
   const navigate = useNavigate();
   const queryParameters = new URLSearchParams(window.location.search);
   const centerParams = queryParameters.get("center");
@@ -192,36 +184,37 @@ const Form = () => {
     return response.data.link; // Backend returns the Google Drive link
   };
 
+  const getTemplateId = async (centerName) => {
+    try {
+      const response = await axios.get(`${uri}/get-template-id`, {
+        params: { center_name: centerName },
+      });
+
+      console.log(response, "temp");
+      console.log("Template ID:", response.data.template_id);
+      return response.data.template_id;
+    } catch (error) {
+      if (error.response) {
+        console.error("Error:", error.response.data.error);
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
+  };
+
   const handleSubmit = async (e) => {
     // console.log(sign?.getTrimmedCanvas().width == 1)
     // setFormData({});
     e.preventDefault();
 
     let err = false;
-    // return;
-
-    // try {
-    //   validationSchema.validateSync(formData, { abortEarly: false });
-    //   // Proceed with form submission
-    // } catch (error) {
-    //   err = true;
-    //   const validationErrors = {};
-    //   error.inner.forEach((err) => {
-    //     validationErrors[err.path] = err.message;
-    //     toast.error(err.message);
-    //   });
-    //   setErrors(validationErrors);
-    //   // return;
-    // }
 
     if (err) {
       return;
     }
-    // console.log("still working");
 
     if (sign?.getTrimmedCanvas().width == 1) {
       toast.error("You must sign the form!");
-      // console.log("empty");
       return;
     }
 
@@ -256,6 +249,8 @@ const Form = () => {
       const base64Data = reader.result.split(",")[1]; // Extract Base64 string
       const payload = { imgData: `data:application/pdf;base64,${base64Data}` };
 
+      // We were uploading the signature on google drive, but changed plans
+      // we're putting it directly in the db, sizes around 24kb
       try {
         // const response = await axios.post(
         //   "http://localhost:5050/upload-image",
@@ -271,8 +266,6 @@ const Form = () => {
           center_id: centerID,
         };
 
-        // console.log(centerID)
-
         await axios.post(`${uri}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
         setTimeout(() => navigate(`/?center=${centerID}`), 3000);
@@ -286,12 +279,16 @@ const Form = () => {
 
   useEffect(() => {
     // setting the template info here..
-    // console.log("ue run")
     if (
       import.meta.env.VITE_MODE == "prod" ||
       import.meta.env.VITE_MODE == "dev"
     ) {
       console.log("in prod mode..");
+
+      // fold flow, center ID -> template ID
+      // new flow, center Name -> center ID -> ....
+
+      // previously this one was being used, we can use this again
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
         const templates = `${uri}/template-id-from-center`;
@@ -302,7 +299,6 @@ const Form = () => {
 
         try {
           const response = await axios.post(templates, options);
-          // console.log(response.data.response.template_id)
           ans = response.data.response.template_id;
           setTemplateId(ans);
         } catch (error) {
@@ -311,6 +307,52 @@ const Form = () => {
           setTimeout(() => navigate("/"), 5000);
         }
 
+        return ans;
+      };
+
+      // new one:
+      const getCenterIdFromCenterName = async (centerName) => {
+        let centerId = null;
+        const endpoint = `${uri}/center-id-from-center-name`;
+
+        const options = {
+          center_name: centerName,
+        };
+
+        try {
+          const response = await axios.post(endpoint, options);
+          centerId = response.data.response.center_id;
+        } catch (error) {
+          console.error(error);
+          toast("Center not found...");
+          setTimeout(() => navigate("/"), 5000);
+        }
+
+        return centerId;
+      };
+
+      // new one use this to send the req to get the t_id from c_id
+      const getTemplateIdFromCenterName = async (centerName) => {
+        let ans = null;
+        const templates = `${uri}/template-id-from-center-name`;
+
+        const options = {
+          center_name: centerName,
+        };
+
+        try {
+          const response = await axios.post(templates, options);
+          ans = response.data.response.template_id;
+
+          // set the template id
+          setTemplateId(ans);
+        } catch (error) {
+          console.error(error);
+          toast("No form found...");
+          setTimeout(() => navigate("/"), 5000);
+        }
+
+        // return back the template id
         return ans;
       };
 
@@ -323,11 +365,11 @@ const Form = () => {
 
         try {
           const response = await axios.post(templates, options);
-          // console.log(response.data.response[0].template_config)
           const myData = JSON.parse(response.data.response[0].template_config);
 
           if (myData) {
             setQuestions(myData.questions);
+            // set the company logo from the center, it's ok make the req
             setCompanyLogo(myData.company_logo);
             setExtraFields(myData.extra_participants_form_fields);
             setDisplayForm(true);
@@ -345,75 +387,39 @@ const Form = () => {
 
       const asyncFnStitch = async () => {
         if (!centerID) {
-          setCenterID(centerParams);
+          // don't set the id to the name, set it to an id, get it from name
+          // setCenterID(29);
         }
 
+        // const data =
+        //   centerParams && (await getTemplateIdFromCenterID(centerParams));
+        // data && (await fetchTemplate(data));
+        console.log("here")
+        const my_center_id = await getCenterIdFromCenterName(centerParams);
+
+        setCenterID(my_center_id);
+
         const data =
-          centerParams && (await getTemplateIdFromCenterID(centerParams));
+          my_center_id && (await getTemplateIdFromCenterID(my_center_id));
+
         data && (await fetchTemplate(data));
+
+        // this is to get the template:
+        // center params contains any str, you type after ?center= , so it will contain the name too.
+        // const data =
+        //   centerParams && (await getTemplateIdFromCenterName(centerParams));
+        // data && (await fetchTemplate(data));
+
+        // we still don't know the center name right? hmm yeah
+        // we need to get the id too so we can fetch details
+
+        /* to dos:
+        don't you think if ur getting center i
+        */
       };
 
       asyncFnStitch();
     }
-
-    // if (import.meta.env.VITE_MODE == "dev") {
-    //   console.log("in dev mode..");
-    //   const getTemplateIdFromCenterID = async (id) => {
-    //     let ans = null;
-    //     const templates = "http://localhost:5050/template-id-from-center";
-
-    //     const options = {
-    //       center_id: id,
-    //     };
-
-    //     try {
-    //       const response = await axios.post(templates, options);
-    //       ans = response.data.template_id;
-    //       setTemplateId(ans);
-    //     } catch (error) {
-    //       console.error(error);
-    //       toast("No form found...");
-    //       setTimeout(() => navigate("/"), 5000);
-    //     }
-
-    //     return ans;
-    //   };
-
-    //   const fetchTemplate = async (t_id) => {};
-
-    //   try {
-    //     // use local template
-    //     setQuestions(template_config.template_config.questions);
-    //     setCompanyLogo(template_config.template_config.company_logo);
-    //     setExtraFields(
-    //       template_config.template_config.extra_participants_form_fields
-    //     );
-    //     setDisplayForm(true);
-    //     setCompanyName(template_config.template_config.company_name);
-    //     // setWantParticipants(
-    //     //   template_config.template_config.want_to_add_participants
-    //     // );
-
-    //     setLoading(false);
-    //   } catch (error) {
-    //     toast("template doesn't exist");
-    //     console.error(
-    //       "Error:",
-    //       error.response ? error.response.data : error.message
-    //     );
-    //   }
-
-    //   const asyncFnStitch = async () => {
-    //     setCenterID(centerParams);
-
-    //     const data =
-    //       centerParams && (await getTemplateIdFromCenterID(centerParams));
-    //     data && (await fetchTemplate(data));
-    //   };
-
-    //   // asyncFnStitch();
-    //   fetchTemplate(4);
-    // }
 
     // Setting the center info here
     if (
@@ -428,14 +434,10 @@ const Form = () => {
 
         try {
           const response = await axios.post(center, options);
-          // console.log(JSON.parse(response.data.response.data.additional_info))
-          // console.log("Response:", response.data.data);
           setCenterInfo(response.data.response.data);
           const addInfo = JSON.parse(
             response.data.response.data.additional_info
           );
-          // console.log(response.data.data);
-          // const jsonData = J
           setCenterAddInfo(addInfo);
           return response.data.data; // Return the response data
         } catch (error) {
@@ -450,8 +452,8 @@ const Form = () => {
         setCenterID(6);
         postCenter(6);
       } else {
-        centerParams && setCenterID(centerParams);
-        centerParams && postCenter(centerParams);
+        // centerParams && setCenterID(centerParams);
+        centerParams && postCenter(centerID);
       }
     }
 
@@ -459,10 +461,6 @@ const Form = () => {
       console.log("inside dev mode...");
       setCenterInfo(dummyCenter);
       setCenterAddInfo(dummyCenter);
-      // setCenterID(5);
-
-      let prsedData = JSON.parse(dummyCenter.additional_info);
-      // console.log(prsedData);
     }
   }, []);
 
@@ -483,8 +481,13 @@ const Form = () => {
             >
               {centerInfo && centerInfo.center_name}
             </Typography>
-            {formData && (
-              <img className="form__logo" src={companyLogo} alt="" />
+
+            {centerInfo && (
+              <img
+                className="form__logo"
+                src={JSON.parse(centerInfo.additional_info).img}
+                alt="logo"
+              />
             )}
 
             <form onSubmit={handleSubmit}>
@@ -814,65 +817,6 @@ const Form = () => {
                               )
                             }
                           />
-                          {/* {field.input_type === "dropdown" && (
-                            <FormControl fullWidth margin="normal">
-                              <Typography
-                              >
-                                {field.label}
-                              </Typography>
-
-                              <Select
-                                value={formData[field.field_id] || ""}
-                                required={field.required || false}
-                                onChange={(e) =>
-                                  handleInputChange(
-                                    field.field_id,
-                                    e.target.value
-                                  )
-                                }
-                                displayEmpty
-                              >
-                                <MenuItem value="" disabled>
-                                  Choose
-                                </MenuItem>
-                                {field.values.split(",").map((option) => (
-                                  <MenuItem key={option} value={option}>
-                                    {option}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            </FormControl>
-                          )} */}
-                          {/* {field.type === "file" && (
-                            <FormControl fullWidth margin="normal">
-                              <Typography>{field.label}</Typography>
-                              <Button
-                                variant="contained"
-                                component="label"
-                                color="primary"
-                              >
-                                Upload File
-                                <input
-                                  // required={field.required || false}
-                                  type="file"
-                                  hidden
-                                  value={participant[field.label] || ""}
-                                  onChange={(e) =>
-                                    updateParticipant(
-                                      index,
-                                      field.label,
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              </Button>
-                              {participant[field.label] && (
-                                <Typography variant="body2" marginTop={1}>
-                                  Selected: {participant[field.label]}
-                                </Typography>
-                              )}
-                            </FormControl>
-                          )} */}
                         </Grid>
                       ))}
                       <Grid item xs={2}>
@@ -880,7 +824,6 @@ const Form = () => {
                           color="red"
                           onClick={() => deleteParticipant(participant.id)}
                         >
-                          {/* <HighlightOffIcon fontSize="large" /> */}
                           <img style={{ width: 30 }} src={deleteIcon} />
                         </IconButton>
                       </Grid>
@@ -896,18 +839,12 @@ const Form = () => {
                 </Box>
               )}
 
-              <Box
-                // ref={canvasContainerRef}
-                // style={{ width: "100%", maxWidth: "500px" }}
-                sx={{ mt: 3 }}
-              >
+              <Box sx={{ mt: 3 }}>
                 <Typography variant="h6">Signature</Typography>
                 <SignatureCanvas
                   ref={(ref) => setSign(ref)}
                   penColor="black"
                   canvasProps={{
-                    // width: 500,
-                    // height: 200,
                     style: {
                       maxWidth: "330px",
                       height: 200,

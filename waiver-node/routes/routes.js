@@ -42,8 +42,16 @@ const privateKey = fs.readFileSync(prvtfilePath, "utf8");
 // Encrypt the data with the public key
 //
 
+const {
+  getTemplateByCenterName,
+  getTemplateIdByCenterName,
+  getCenterIdByName,
+} = require("../controllers/controllers");
+
+let center_name = `asdasdasdUnique`;
+
 const myPayload = {
-  center_name: "Flea market stall",
+  center_name: center_name,
   created_at: Date.now(),
 };
 
@@ -52,7 +60,7 @@ const encryptedData = crypto.publicEncrypt(
   Buffer.from(JSON.stringify(myPayload))
 );
 // uncomment this to get the encrypted_key
-// console.log("Encrypted Data:", encryptedData.toString("base64"));
+console.log("Encrypted Data:", encryptedData.toString("base64"));
 
 router.get("/", (req, res) => {
   res.status(200).json({
@@ -61,59 +69,6 @@ router.get("/", (req, res) => {
     response: {},
   });
 });
-
-// router.get("/submissions", async (req, res) => {
-//   const con = global.dbConnection;
-//   if (!con) {
-//     return res.status(500).json({
-//       message: "Database connection not established",
-//       code: 500,
-//       response: {},
-//     });
-//   }
-
-//   const token = req.headers.authorization?.split(" ")[1];
-
-//   // console.log("im the token being verified, ", token);
-
-//   if (!token) {
-//     return res
-//       .status(401)
-//       .json({ message: "Token is required.", code: 401, response: {} });
-//   }
-
-//   try {
-//     // Verify and decode the token
-//     const decoded = jwt.verify(token, process.env.SECRET_KEY); // Replace `secretKey` with your JWT secret
-
-//     // console.log(decoded);
-//     const { center_id } = decoded;
-
-//     // console.log(center_id)
-
-//     if (!center_id) {
-//       return res.status(403).json({
-//         message: "Invalid token payload. Missing center_id.",
-//         code: 403,
-//         response: {},
-//       });
-//     }
-
-//     // Query submissions for the center_id
-//     const result = await getSubmissionsByCenter(con, center_id);
-
-//     res.status(200).json({
-//       response: result,
-//       message: "Submissions for the center.",
-//       code: 200,
-//     });
-//   } catch (err) {
-//     console.error("Invalid Token:", err);
-//     return res
-//       .status(403)
-//       .json({ message: "Invalid or expired token.", code: 403, response: {} });
-//   }
-// });
 
 router.get("/submissions", async (req, res) => {
   const con = global.dbConnection;
@@ -291,12 +246,21 @@ router.get("/centers", async (req, res) => {
   });
 });
 
+// API to get template_id by center_name
+// router.get("/get-template-id", async (req, res) => {
+//   const { center_name } = req.query;
+
+//   if (!center_name) {
+//     return res.status(400).json({ error: "Center name is required" });
+//   }
+// });
+
+// get the template id from center id
 router.post("/template-id-from-center", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {
     return res.status(500).json({
       message: "Database connection not established",
-
       code: 500,
       response: {},
     });
@@ -321,6 +285,45 @@ router.post("/template-id-from-center", async (req, res) => {
       template_id: result[0].template_id,
     },
   });
+});
+
+router.post("/center-id-from-center-name", async (req, res) => {
+  const con = global.dbConnection;
+  if (!con) {
+    return res.status(500).json({
+      message: "Database connection not established",
+      code: 500,
+      response: {},
+    });
+  }
+
+  const { center_name } = req.body;
+
+  try {
+    const result = await getCenterIdByName(con, center_name);
+
+    if (!result || !result[0]) {
+      return res.status(404).json({
+        message: "Center not found.",
+        code: 404,
+        response: {},
+      });
+    }
+
+    res.status(200).json({
+      message: "Here is your center ID.",
+      code: 200,
+      response: {
+        center_id: result[0].center_id,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error retrieving center ID.",
+      code: 500,
+      response: { error },
+    });
+  }
 });
 
 // create submissions
@@ -354,6 +357,67 @@ router.post("/submissions", async (req, res) => {
     code: 200,
     response: {},
   });
+});
+
+// router.post("/template-id-from-center-name", async (req, res) => {
+//   const con = global.dbConnection;
+//   if (!con) {
+//     return res.status(500).json({
+//       message: "Database connection not established",
+//       code: 500,
+//       response: {},
+//     });
+//   }
+//   getTemplateIdByCenterName(con);
+// });
+
+// get the template id from center name
+router.post("/template-id-from-center-name", async (req, res) => {
+  const con = global.dbConnection; // Use the global database connection
+
+  if (!con) {
+    return res.status(500).json({
+      message: "Database connection not established",
+      code: 500,
+      response: {},
+    });
+  }
+
+  const { center_name } = req.body;
+
+  if (!center_name) {
+    return res.status(400).json({
+      message: "center_name is required",
+      code: 400,
+      response: {},
+    });
+  }
+
+  try {
+    const templateId = await getTemplateIdByCenterName(con, center_name);
+
+    if (!templateId) {
+      return res.status(404).json({
+        message: "Error getting template by center name..",
+        code: 404,
+        response: {},
+      });
+    }
+
+    res.status(200).json({
+      message: "Here is your template id..",
+      code: 200,
+      response: {
+        template_id: templateId,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message || "Error occurred while fetching template ID",
+      code: 500,
+      response: {},
+    });
+  }
 });
 
 router.post("/templates", async (req, res) => {
@@ -407,11 +471,14 @@ router.post("/centers", async (req, res) => {
     });
   }
 
+  console.log(req.body);
+
   const data = {
     center_name: req.body.center_name,
     address: req.body.center_address,
     contact_info: req.body.contact_info,
     template_id: req.body.template_id,
+    additional_info: req.body.additional_info,
   };
 
   postACenter(con, data);
@@ -592,6 +659,7 @@ router.post("/upload-image", async (req, res) => {
   }
 });
 
+// deprecated
 router.get("/submission/ack/:id", async (req, res) => {
   const con = global.dbConnection;
   if (!con) {

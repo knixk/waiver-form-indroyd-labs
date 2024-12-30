@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
+// import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
 const uri =
   import.meta.env.VITE_MODE == "prod"
@@ -16,7 +16,7 @@ function Home() {
   const [layer, setLayer] = useState(1);
   const navigate = useNavigate();
   const queryParameters = new URLSearchParams(window.location.search);
-  const centerParams = queryParameters.get("center");
+  let centerParams = queryParameters.get("center");
 
   // console.log(import.meta.env.VITE_MODE);
 
@@ -24,72 +24,87 @@ function Home() {
   const {
     centerInfo,
     setCenterInfo,
-    centerAddInfo,
-    setCenterAddInfo,
     centerID,
     setCenterID,
+    centerName,
+    setCenterName,
   } = myState;
 
-  const handleNext = () => {
-    if (layer < 3) {
-      setLayer(layer + 1);
-    }
-  };
-
+  // setCenterName(centerParams);
   useEffect(() => {
-    if (
-      import.meta.env.VITE_MODE == "prod" ||
-      import.meta.env.VITE_MODE == "dev"
-    ) {
-      // console.log("inside prod");
-      const postCenter = async (centerId) => {
-        const center = `${uri}/get-center`;
-        const options = {
-          center_id: centerId,
+    // takes a name returns an id
+    const getCenterIdFromCenterName = async (centerName) => {
+      let centerId = null;
+      const endpoint = `${uri}/center-id-from-center-name`;
+
+      const options = {
+        center_name: centerName,
+      };
+
+      try {
+        const response = await axios.post(endpoint, options);
+        centerId = response.data.response.center_id;
+      } catch (error) {
+        console.error(error);
+        toast("Center not found...");
+        setTimeout(() => navigate("/"), 5000);
+      }
+
+      return centerId;
+    };
+
+    const asyncSt = async () => {
+      if (
+        import.meta.env.VITE_MODE == "prod" ||
+        import.meta.env.VITE_MODE == "dev"
+      ) {
+        // console.log("inside prod");
+        const postCenter = async (centerId) => {
+          const center = `${uri}/get-center`;
+          const options = {
+            center_id: centerId,
+          };
+
+          try {
+            const response = await axios.post(center, options);
+            console.log(
+              JSON.parse(response.data.response.data.additional_info).img
+            );
+            setCenterInfo(response.data.response.data);
+            return response.data.data; // Return the response data
+          } catch (error) {
+            console.error(
+              "Error posting center:",
+              error.response?.data || error.message // Handle error gracefully
+            );
+            throw error; // Rethrow the error for further handling
+          }
         };
 
-        try {
-          const response = await axios.post(center, options);
-          // console.log("Response:", response.data.data);
-          // console.log(response.data.response.data)
-          setCenterInfo(response.data.response.data);
-          // console.log(response.data.data);
-          // const jsonData = J
-          // setCenterAddInfo(response.data.data);
-          return response.data.data; // Return the response data
-        } catch (error) {
-          console.error(
-            "Error posting center:",
-            error.response?.data || error.message // Handle error gracefully
-          );
-          throw error; // Rethrow the error for further handling
+        console.log(centerParams);
+        if (!centerParams) {
+          console.log("here");
+          setCenterID(6);
+          postCenter(6);
+          setCenterName(`Flea market stall`);
+          // centerParams = ;
+          // setCenterName("Flea market stall");
+          // centerParams = "Flea market stall";
+        } else {
+          // get the center id from center name, and maintain the rest flow
+          const my_center_id = await getCenterIdFromCenterName(centerParams);
+          console.log(my_center_id, "im center id");
+
+          my_center_id && setCenterID(my_center_id);
+          my_center_id && postCenter(my_center_id);
+          setCenterName(centerParams);
+
+          // setCenterName(centerInfo && centerInfo.center_name);
         }
-      };
-      if (!centerParams) {
-        setCenterID(6);
-        // const params = new URLSearchParams({ ["center"]: 5 });
-        // history.replace({
-        //   pathname: location.pathname,
-        //   search: params.toString(),
-        // });
-
-        // console.log("no paramss");
-        postCenter(6);
-      } else {
-        centerParams && setCenterID(centerParams);
-        centerParams && postCenter(centerParams);
       }
-    }
+    };
 
-    // if (import.meta.env.VITE_MODE == "dev") {
-    //   console.log("inside dev mode...");
-    //   setCenterInfo(dummyCenter);
-    //   setCenterAddInfo(dummyCenter);
-    //   setCenterID(6);
-
-    //   let prsedData = JSON.parse(dummyCenter.additional_info);
-    //   // console.log(prsedData);
-    // }
+    asyncSt();
   }, []);
 
   return (
@@ -141,19 +156,11 @@ function Home() {
 
               <Button
                 variant="contained"
-                onClick={() => navigate(`/form?center=${centerID}`)}
+                onClick={() => navigate(`/form?center=${centerName}`)}
                 sx={{ mt: 2.5 }}
               >
                 Get Started
               </Button>
-
-              {/* <Button
-              variant="contained"
-              onClick={() => navigate("/search")}
-              sx={{ mt: 2.5, ml: 2 }}
-            >
-              Search forms
-            </Button> */}
             </Box>
           )}
         </Box>
