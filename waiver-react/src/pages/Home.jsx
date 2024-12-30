@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 // import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
+import placeholderImg from "../assets/placeholder.jpg";
+
 const uri =
   import.meta.env.VITE_MODE == "prod"
     ? import.meta.env.VITE_AWS_URI
@@ -136,7 +138,11 @@ function Home() {
         >
           {centerInfo && (
             <img
-              src={JSON.parse(centerInfo.additional_info).img}
+              src={
+                JSON.parse(centerInfo.additional_info).img == ""
+                  ? placeholderImg
+                  : JSON.parse(centerInfo.additional_info).img
+              }
               style={{ width: 200, borderRadius: 5, marginBottom: 10 }}
               alt="logo"
             />
@@ -151,7 +157,7 @@ function Home() {
               </Typography>
 
               <Typography color={"gainsboro"} sx={{ mt: 2 }}>
-                {centerInfo && JSON.parse(centerInfo.additional_info).intro}
+                {centerInfo && JSON.parse(centerInfo.additional_info)?.intro}
               </Typography>
 
               <Button

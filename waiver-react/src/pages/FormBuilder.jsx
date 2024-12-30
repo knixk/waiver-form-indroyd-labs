@@ -63,7 +63,7 @@ const FormBuilder = () => {
     template_id: "",
     additional_info: {
       intro: "",
-      img: "",
+      img: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
     },
   });
 

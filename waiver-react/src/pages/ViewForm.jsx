@@ -162,10 +162,22 @@ const ViewForm = () => {
                 <img className="form__logo" src={companyLogo} alt="" />
               )} */}
 
-              {centerInfo && (
+              {/* {centerInfo && (
                 <img
                   className="form__logo"
                   src={JSON.parse(centerInfo.additional_info).img}
+                  alt="logo"
+                />
+              )} */}
+
+              {centerInfo && (
+                <img
+                  className="form__logo"
+                  src={
+                    JSON.parse(centerInfo.additional_info).img == ""
+                      ? placeholderImg
+                      : JSON.parse(centerInfo.additional_info).img
+                  }
                   alt="logo"
                 />
               )}
