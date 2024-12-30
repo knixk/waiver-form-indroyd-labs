@@ -86,6 +86,8 @@ function Home() {
           console.log("here");
           setCenterID(6);
           postCenter(6);
+          setCenterName(`Flea market stall`);
+          // centerParams = ;
           // setCenterName("Flea market stall");
           // centerParams = "Flea market stall";
         } else {
@@ -95,8 +97,9 @@ function Home() {
 
           my_center_id && setCenterID(my_center_id);
           my_center_id && postCenter(my_center_id);
+          setCenterName(centerParams);
 
-          setCenterName(centerInfo && centerInfo.center_name);
+          // setCenterName(centerInfo && centerInfo.center_name);
         }
       }
     };
