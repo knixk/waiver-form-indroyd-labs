@@ -369,29 +369,29 @@ const Form = () => {
           id: t_id,
         };
 
-        // get the temp from localhost
-        setQuestions(template_config2.questions);
-        // set the company logo from the center, it's ok make the req
-        setCompanyLogo(template_config2.company_logo);
-        setExtraFields(template_config2.extra_participants_form_fields);
-        setDisplayForm(true);
-        setCompanyName(template_config2.company_name);
-        setLoading(false);
+        // ------ getting the template from computer -------
+        // setQuestions(template_config2.questions);
+        // // set the company logo from the center, it's ok make the req
+        // setCompanyLogo(template_config2.company_logo);
+        // setExtraFields(template_config2.extra_participants_form_fields);
+        // setDisplayForm(true);
+        // setCompanyName(template_config2.company_name);
+        // setLoading(false);
 
-        /* -------- UNCOMMENT THIS ---------
+        // /* -------- UNCOMMENT THIS ---------
         try {
-          // const response = await axios.post(templates, options);
-          // const myData = JSON.parse(response.data.response[0].template_config);
+          const response = await axios.post(templates, options);
+          const myData = JSON.parse(response.data.response[0].template_config);
 
           if (myData) {
             // XXX - UNCOMMENT TO FETCH TO SERVER
-            // setQuestions(myData.questions);
-            // // set the company logo from the center, it's ok make the req
-            // setCompanyLogo(myData.company_logo);
-            // setExtraFields(myData.extra_participants_form_fields);
-            // setDisplayForm(true);
+            setQuestions(myData.questions);
+            // set the company logo from the center, it's ok make the req
+            setCompanyLogo(myData.company_logo);
+            setExtraFields(myData.extra_participants_form_fields);
+            setDisplayForm(true);
             setCompanyName(myData.company_name);
-            // setLoading(false);
+            setLoading(false);
           }
         } catch (error) {
           toast("template doesn't exist");
@@ -401,8 +401,7 @@ const Form = () => {
           );
         }
 
-        -------- UNCOMMENT THIS ---------
-        */
+        // -------- UNCOMMENT THIS ---------
       };
 
       // this function essentially call our helper functions in a flow
