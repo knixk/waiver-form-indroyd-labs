@@ -48,7 +48,8 @@ const {
   getCenterIdByName,
 } = require("../controllers/controllers");
 
-let center_name = `asdasdasdUnique`;
+// let center_name = `asdasdasdUnique`;
+let center_name = `BavdhanCenter3`;
 
 const myPayload = {
   center_name: center_name,
@@ -59,6 +60,7 @@ const encryptedData = crypto.publicEncrypt(
   publicKey,
   Buffer.from(JSON.stringify(myPayload))
 );
+
 // uncomment this to get the encrypted_key
 console.log("Encrypted Data:", encryptedData.toString("base64"));
 

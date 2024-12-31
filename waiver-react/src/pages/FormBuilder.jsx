@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 
 import { Delete } from "@mui/icons-material";
+// XXXX - DONT COMMENT AXIOS
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -23,8 +24,14 @@ const uri =
     ? import.meta.env.VITE_AWS_URI
     : import.meta.env.VITE_API_LOCAL_URI;
 
+const placeholderImgURL = `https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png`;
+
 const FormBuilder = () => {
   const [extraParticipantFields, setExtraParticipantFields] = useState([]);
+  const [wantParticipants, setWantParticipants] = useState(true);
+
+  // this is the template data, basically,
+  // participants aren't mandatory right..
 
   const [formConfig, setFormConfig] = useState({
     templateName: "",
@@ -32,27 +39,7 @@ const FormBuilder = () => {
     questions: [],
   });
 
-  const [currentQuestion, setCurrentQuestion] = useState({
-    label: "",
-    input_type: "text",
-    values: "",
-    image: "",
-    required: false,
-    variant: "",
-  });
-
-  // const [templates] = useState([
-  //   { id: 1, name: "Template 1" },
-  //   { id: 2, name: "Template 2" },
-  //   { id: 3, name: "Template 3" },
-  //   { id: 4, name: "Template 4" },
-  //   { id: 6, name: "Flea Market" },
-  // ]);
-
-  const [check, setCheck] = useState(false);
-
-  const [finalTemplate, setFinalTemplate] = useState({});
-
+  // this is the center data
   const [formData, setFormData] = useState({
     center_name: "",
     address: "",
@@ -63,18 +50,32 @@ const FormBuilder = () => {
     template_id: "",
     additional_info: {
       intro: "",
-      img: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
+      img: "",
     },
   });
 
+  // this is the current question's state
+  const [currentQuestion, setCurrentQuestion] = useState({
+    label: "",
+    input_type: "text",
+    values: "",
+    image: "",
+    required: false,
+    variant: "",
+  });
+
+  const [check, setCheck] = useState(false);
+
+  const [finalTemplate, setFinalTemplate] = useState({});
+
   const handleChange = (field, value) => {
-    // console.log(formData, "Fd");
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
+  // not sure where it's being used
   const handleNestedChange = (nestedField, subField, value) => {
     // console.log(formData);
 
@@ -92,25 +93,26 @@ const FormBuilder = () => {
     console.log(data, "im template data");
     let ans;
 
-    // uncomment this ---------------------
-    try {
-      const response = await axios.post(`${uri}/templates`, data);
+    // XXXX - DONT DELETE ME: uncomment this ---------------------
+    // try {
+    //   const response = await axios.post(`${uri}/templates`, data);
 
-      // console.log(response, "im res")
-      const templateId = await response.data.response.template_id;
-      // console.log(templateId);
-      setFormData((prev) => ({
-        ...prev,
-        template_id: templateId,
-      }));
-      console.log("Template uploaded:", response.data);
-      ans = await templateId;
-      return templateId;
-    } catch (error) {
-      console.error("Error uploading template:", error);
-    }
+    //   // console.log(response, "im res")
+    //   const templateId = await response.data.response.template_id;
+    //   // console.log(templateId);
+    //   setFormData((prev) => ({
+    //     ...prev,
+    //     template_id: templateId,
+    //   }));
+    //   console.log("Template uploaded:", response.data);
+    //   ans = await templateId;
+    //   return templateId;
+    // } catch (error) {
+    //   console.error("Error uploading template:", error);
+    // }
 
-    return ans;
+    // return ans;
+    // XXXX - DONT DELETE ME: uncomment this ---------------------
   };
 
   // this function uploads the center, call it after the template is sent, and t_id is returned
@@ -122,15 +124,17 @@ const FormBuilder = () => {
 
     console.log(newData, "im center_data");
 
-    // uncomment this ------
-    try {
-      const response = await axios.post(`${uri}/centers`, newData);
-      console.log("Center uploaded:", response.data);
-    } catch (error) {
-      console.error("Error uploading center:", error);
-    }
+    // XXXX - DONT DELETE ME: uncomment this ------------------
+    // try {
+    //   const response = await axios.post(`${uri}/centers`, newData);
+    //   console.log("Center uploaded:", response.data);
+    // } catch (error) {
+    //   console.error("Error uploading center:", error);
+    // }
+    // XXXX - DONT DELETE ME: uncomment this ---------------------
   };
 
+  // adds participants question
   const handleAddParticipantField = () => {
     setExtraParticipantFields([
       ...extraParticipantFields,
@@ -138,12 +142,14 @@ const FormBuilder = () => {
     ]);
   };
 
+  // removes participant question
   const handleRemoveParticipantField = (index) => {
     setExtraParticipantFields(
       extraParticipantFields.filter((_, i) => i !== index)
     );
   };
 
+  // adds the question
   const handleAddQuestion = () => {
     setFormConfig((prev) => ({
       ...prev,
@@ -162,6 +168,7 @@ const FormBuilder = () => {
     });
   };
 
+  // removes the question
   const handleRemoveQuestion = (id) => {
     setFormConfig((prev) => ({
       ...prev,
@@ -169,6 +176,7 @@ const FormBuilder = () => {
     }));
   };
 
+  // downloads the template data to your pc
   // function downloadObjectAsJSON(obj, filename = "template_config.json") {
   //   // console.log("inside")
   //   const blob = new Blob([JSON.stringify(obj, null, 2)], {
@@ -180,6 +188,7 @@ const FormBuilder = () => {
   //   link.click();
   // }
 
+  // handler for the final button, which uploads and sends center & template
   const handleGenerateConfig = async () => {
     setCurrentQuestion((currentQuestion) => ({
       ...currentQuestion,
@@ -203,25 +212,36 @@ const FormBuilder = () => {
       };
     });
 
+    // if (wantParticipants) {
+
+    // }
+
+    // we're checking if they have added any fields for extra participants, if no then we set it to false
+    if (extraParticipantFields.length == 0) {
+      console.log("empty");
+      setWantParticipants(false);
+    } else {
+      console.log("not empty");
+    }
+
+    // it contains the template payload to be send to uploadTemplate
     const config = {
       template_name: formConfig.templateName,
       template_config: {
-        // company_logo: formConfig.companyLogo,
-        // company_address: formConfig.companyAddress,
         questions: processedQuestions,
         extra_participants_form_fields: extraParticipantFields,
+        want_participants: wantParticipants,
       },
     };
 
     setFinalTemplate(config);
+    // uncomment to download
     // downloadObjectAsJSON(config);
+
+    // we get back the template id, and use it to give it to the center and upload it too.
     const t_id = await uploadTemplate(config);
     console.log("template id: ", t_id);
     t_id && (await uploadCenter(t_id));
-    // await uploadCenter(6);
-
-    // console.log(t_id, "yes");
-
     toast.success(`Center was submitted with template_id ${t_id}`);
 
     console.log(config, "im the template");
@@ -231,232 +251,264 @@ const FormBuilder = () => {
     <Box p={2}>
       <Toaster />
       <Typography variant="h4">Form Builder</Typography>
-
-      <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
-        <h3>Center Information</h3>
-        <TextField
-          label="Center Name"
-          fullWidth
-          margin="normal"
-          value={formData.center_name}
-          onChange={(e) => handleChange("center_name", e.target.value)}
-        />
-        <TextField
-          label="Center Logo URL"
-          fullWidth
-          margin="normal"
-          value={formData.additional_info.img}
-          onChange={(e) =>
-            handleNestedChange("additional_info", "img", e.target.value)
-          }
-        />
-        <TextField
-          label="Center Address"
-          fullWidth
-          margin="normal"
-          value={formData.address}
-          onChange={(e) => handleChange("address", e.target.value)}
-        />
-        <TextField
-          label="Center Details Info"
-          fullWidth
-          margin="normal"
-          value={formData.additional_info.intro}
-          onChange={(e) =>
-            handleNestedChange("additional_info", "intro", e.target.value)
-          }
-        />
-        <TextField
-          label="Center Email"
-          fullWidth
-          margin="normal"
-          value={formData.contact_info.email}
-          onChange={(e) =>
-            handleNestedChange("contact_info", "email", e.target.value)
-          }
-        />
-        <TextField
-          label="Center Phone"
-          fullWidth
-          margin="normal"
-          value={formData.contact_info.phone}
-          onChange={(e) =>
-            handleNestedChange("contact_info", "phone", e.target.value)
-          }
-        />
-      </Paper>
-
-      <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
-        <TextField
-          label="Template Name"
-          value={formConfig.templateName}
-          onChange={(e) =>
-            setFormConfig((prev) => ({ ...prev, templateName: e.target.value }))
-          }
-          fullWidth
-          margin="normal"
-        />
-      </Paper>
-
-      <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
-        <Typography variant="h5">Add Question</Typography>
-        <TextField
-          label="Label"
-          value={currentQuestion.label}
-          onChange={(e) =>
-            setCurrentQuestion((prev) => ({ ...prev, label: e.target.value }))
-          }
-          fullWidth
-          margin="normal"
-        />
-
-        {/* Input type dropdown */}
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Input Type</InputLabel>
-          <Select
-            value={currentQuestion.input_type}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleGenerateConfig();
+          console.log("submitted");
+        }}
+      >
+        {/* ----- This paper contains the center form ----- */}
+        <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
+          <h3>Center Information</h3>
+          <TextField
+            label="Center Name"
+            fullWidth
+            margin="normal"
+            value={formData.center_name}
+            onChange={(e) => handleChange("center_name", e.target.value)}
+            required
+          />
+          <TextField
+            label="Center Logo URL"
+            fullWidth
+            margin="normal"
+            value={formData.additional_info.img}
             onChange={(e) =>
-              setCurrentQuestion((prev) => ({
+              handleNestedChange("additional_info", "img", e.target.value)
+            }
+          />
+          <TextField
+            label="Center Address"
+            fullWidth
+            margin="normal"
+            value={formData.address}
+            onChange={(e) => handleChange("address", e.target.value)}
+          />
+          <TextField
+            label="Center Details Info"
+            fullWidth
+            margin="normal"
+            value={formData.additional_info.intro}
+            onChange={(e) =>
+              handleNestedChange("additional_info", "intro", e.target.value)
+            }
+          />
+          <TextField
+            label="Center Email"
+            fullWidth
+            margin="normal"
+            value={formData.contact_info.email}
+            onChange={(e) =>
+              handleNestedChange("contact_info", "email", e.target.value)
+            }
+          />
+          <TextField
+            label="Center Phone"
+            fullWidth
+            margin="normal"
+            value={formData.contact_info.phone}
+            required
+            onChange={(e) =>
+              handleNestedChange("contact_info", "phone", e.target.value)
+            }
+          />
+        </Paper>
+
+        {/* ----- This paper contains the template form ----- */}
+        <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
+          <TextField
+            label="Template Name"
+            value={formConfig.templateName}
+            onChange={(e) =>
+              setFormConfig((prev) => ({
                 ...prev,
-                input_type: e.target.value,
+                templateName: e.target.value,
               }))
             }
-          >
-            <MenuItem value="text">Text</MenuItem>
-            <MenuItem value="textarea">Textarea</MenuItem>
-            <MenuItem value="dropdown">Dropdown</MenuItem>
-            <MenuItem value="date">Date</MenuItem>
-            <MenuItem value="file">File</MenuItem>
-            <MenuItem value="label">Label</MenuItem>
-          </Select>
-        </FormControl>
+            fullWidth
+            margin="normal"
+            required
+          />
+        </Paper>
 
-        {/* Variant dropdown */}
-        {currentQuestion.input_type == "text" && (
+        {/* ----- This paper contains the question form ----- */}
+        <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
+          <Typography variant="h5">Add Question</Typography>
+          <TextField
+            label="Label"
+            value={currentQuestion.label}
+            onChange={(e) =>
+              setCurrentQuestion((prev) => ({ ...prev, label: e.target.value }))
+            }
+            fullWidth
+            margin="normal"
+          />
+
+          {/* Input type dropdown */}
           <FormControl fullWidth margin="normal">
-            <InputLabel>Select Variant</InputLabel>
+            <InputLabel>Input Type</InputLabel>
             <Select
-              value={currentQuestion.variant}
-              onChange={(e) => {
+              value={currentQuestion.input_type}
+              onChange={(e) =>
                 setCurrentQuestion((prev) => ({
                   ...prev,
-                  variant: e.target.value,
-                }));
-
-                // console.log(currentQuestion);
-              }}
+                  input_type: e.target.value,
+                }))
+              }
             >
-              <MenuItem value="text">Default</MenuItem>
-              <MenuItem value="phone_number">Phone Number</MenuItem>
-              <MenuItem value="zip_code">Zip Code</MenuItem>
-              <MenuItem value="password">Password</MenuItem>
-              <MenuItem value="email">Email</MenuItem>
+              <MenuItem value="text">Text</MenuItem>
+              <MenuItem value="textarea">Textarea</MenuItem>
+              <MenuItem value="dropdown">Dropdown</MenuItem>
+              <MenuItem value="date">Date</MenuItem>
+              <MenuItem value="file">File</MenuItem>
+              <MenuItem value="label">Label</MenuItem>
+              <MenuItem value="radio">Radio</MenuItem>
+              <MenuItem value="checkbox">Checkbox</MenuItem>
             </Select>
           </FormControl>
-        )}
 
-        {currentQuestion.input_type === "dropdown" && (
+          {/* Variant dropdown */}
+          {currentQuestion.input_type == "text" && (
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Select Variant</InputLabel>
+              <Select
+                value={currentQuestion.variant}
+                onChange={(e) => {
+                  setCurrentQuestion((prev) => ({
+                    ...prev,
+                    variant: e.target.value,
+                  }));
+
+                  // console.log(currentQuestion);
+                }}
+              >
+                <MenuItem value="text">Default</MenuItem>
+                <MenuItem value="phone_number">Phone Number</MenuItem>
+                <MenuItem value="zip_code">Zip Code</MenuItem>
+                <MenuItem value="password">Password</MenuItem>
+                <MenuItem value="email">Email</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+
+          {currentQuestion.input_type === "dropdown" && (
+            <TextField
+              label="Values (comma separated)"
+              value={currentQuestion.values}
+              onChange={(e) =>
+                setCurrentQuestion((prev) => ({
+                  ...prev,
+                  values: e.target.value,
+                }))
+              }
+              fullWidth
+              margin="normal"
+            />
+          )}
+
+          {currentQuestion.input_type === "radio" && (
+            <TextField
+              label="Values (comma separated)"
+              value={currentQuestion.values}
+              onChange={(e) =>
+                setCurrentQuestion((prev) => ({
+                  ...prev,
+                  values: e.target.value,
+                }))
+              }
+              fullWidth
+              margin="normal"
+            />
+          )}
+          <Typography>
+            Required
+            <Checkbox
+              name="required__check"
+              onChange={() => {
+                setCheck(!check);
+              }}
+              checked={check} // Ensures it shows the correct state
+              // onChange={() => }
+            />
+          </Typography>
+
           <TextField
-            label="Values (comma separated)"
-            value={currentQuestion.values}
+            label="Image URL (optional)"
+            value={currentQuestion.image}
+            onChange={(e) =>
+              setCurrentQuestion((prev) => ({ ...prev, image: e.target.value }))
+            }
+            fullWidth
+            margin="normal"
+          />
+
+          <TextField
+            label="Font Size (e.g., 1rem, 1.5rem)"
+            value={currentQuestion.fontSize}
             onChange={(e) =>
               setCurrentQuestion((prev) => ({
                 ...prev,
-                values: e.target.value,
+                fontSize: e.target.value,
               }))
             }
             fullWidth
             margin="normal"
           />
-        )}
-        <Typography>
-          Required
-          <Checkbox
-            name="required__check"
-            onChange={() => {
-              setCheck(!check);
-            }}
-            checked={check} // Ensures it shows the correct state
-            // onChange={() => }
-          />
-        </Typography>
-
-        <TextField
-          label="Image URL (optional)"
-          value={currentQuestion.image}
-          onChange={(e) =>
-            setCurrentQuestion((prev) => ({ ...prev, image: e.target.value }))
-          }
-          fullWidth
-          margin="normal"
-        />
-
-        <TextField
-          label="Font Size (e.g., 1rem, 1.5rem)"
-          value={currentQuestion.fontSize}
-          onChange={(e) =>
-            setCurrentQuestion((prev) => ({
-              ...prev,
-              fontSize: e.target.value,
-            }))
-          }
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Text Color (e.g., red, #000000)"
-          value={currentQuestion.color}
-          onChange={(e) =>
-            setCurrentQuestion((prev) => ({ ...prev, color: e.target.value }))
-          }
-          fullWidth
-          margin="normal"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={currentQuestion.bold}
-              onChange={(e) =>
-                setCurrentQuestion((prev) => ({
-                  ...prev,
-                  bold: e.target.checked,
-                }))
-              }
-            />
-          }
-          label="Bold"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={currentQuestion.italic}
-              onChange={(e) =>
-                setCurrentQuestion((prev) => ({
-                  ...prev,
-                  italic: e.target.checked,
-                }))
-              }
-            />
-          }
-          label="Italic"
-        />
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Text Alignment</InputLabel>
-          <Select
-            value={currentQuestion.alignment}
+          <TextField
+            label="Text Color (e.g., red, #000000)"
+            value={currentQuestion.color}
             onChange={(e) =>
-              setCurrentQuestion((prev) => ({
-                ...prev,
-                alignment: e.target.value,
-              }))
+              setCurrentQuestion((prev) => ({ ...prev, color: e.target.value }))
             }
-          >
-            <MenuItem value="left">Left</MenuItem>
-            <MenuItem value="center">Center</MenuItem>
-            <MenuItem value="right">Right</MenuItem>
-          </Select>
-        </FormControl>
-        {/* <TextField
+            fullWidth
+            margin="normal"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={currentQuestion.bold}
+                onChange={(e) =>
+                  setCurrentQuestion((prev) => ({
+                    ...prev,
+                    bold: e.target.checked,
+                  }))
+                }
+              />
+            }
+            label="Bold"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={currentQuestion.italic}
+                onChange={(e) =>
+                  setCurrentQuestion((prev) => ({
+                    ...prev,
+                    italic: e.target.checked,
+                  }))
+                }
+              />
+            }
+            label="Italic"
+          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Text Alignment</InputLabel>
+            <Select
+              value={currentQuestion.alignment}
+              onChange={(e) =>
+                setCurrentQuestion((prev) => ({
+                  ...prev,
+                  alignment: e.target.value,
+                }))
+              }
+            >
+              <MenuItem value="left">Left</MenuItem>
+              <MenuItem value="center">Center</MenuItem>
+              <MenuItem value="right">Right</MenuItem>
+            </Select>
+          </FormControl>
+          {/* <TextField
           label="Custom Styles (JSON format)"
           value={JSON.stringify(currentQuestion.customStyles, null, 2)}
           onChange={(e) => {
@@ -481,123 +533,139 @@ const FormBuilder = () => {
           margin="normal"
           multiline
         /> */}
-        <Button sx={{ mt: 1 }} variant="contained" onClick={handleAddQuestion}>
-          Add Question
-        </Button>
-      </Paper>
-
-      <div>
-        <Typography sx={{ mb: 2, mt: 3 }} variant="h5">
-          Preview
-        </Typography>
-        {formConfig.questions.map((question) => (
-          <div key={question.question_id} style={{ marginBottom: "20px" }}>
-            {question.image && (
-              <img src={question.image} alt="" style={{ maxWidth: "100%" }} />
-            )}
-            <Typography
-              sx={{
-                fontSize: question.fontSize || "1rem",
-                color: question.color || "black",
-                fontWeight: question.bold ? "bold" : "normal",
-                fontStyle: question.italic ? "italic" : "normal",
-                textAlign: question.alignment || "left",
-                ...question.customStyles,
-              }}
-            >
-              {question.label}
-            </Typography>
-            {question.input_type === "text" && (
-              <TextField fullWidth margin="normal" />
-            )}
-            {question.input_type === "textarea" && (
-              <TextField fullWidth margin="normal" multiline rows={4} />
-            )}
-            {question.input_type === "dropdown" && (
-              <FormControl fullWidth margin="normal">
-                <InputLabel>{question.label}</InputLabel>
-                <Select>
-                  {question.values.split(",").map((value, index) => (
-                    <MenuItem key={index} value={value.trim()}>
-                      {value.trim()}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-            {question.input_type === "date" && (
-              <TextField type="date" fullWidth margin="normal" />
-            )}
-            {question.input_type === "file" && (
-              <TextField type="file" fullWidth margin="normal" />
-            )}
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => handleRemoveQuestion(question.question_id)}
-            >
-              Remove
-            </Button>
-          </div>
-        ))}
-      </div>
-
-      <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          Extra Participant Fields
-        </Typography>
-        {extraParticipantFields.map((field, index) => (
-          <Box
-            key={index}
-            sx={{ mb: 2, p: 2, border: "1px solid #ccc", borderRadius: "4px" }}
+          <Button
+            sx={{ mt: 1 }}
+            variant="contained"
+            onClick={handleAddQuestion}
           >
-            <TextField
-              fullWidth
-              label="Field Label"
-              value={field.label}
-              onChange={(e) => {
-                const newFields = [...extraParticipantFields];
-                newFields[index].label = e.target.value;
-                setExtraParticipantFields(newFields);
-              }}
-              sx={{ mb: 2 }}
-            />
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>Field Type</InputLabel>
-              <Select
-                value={field.type}
-                onChange={(e) => {
-                  const newFields = [...extraParticipantFields];
-                  newFields[index].type = e.target.value;
-                  setExtraParticipantFields(newFields);
+            Add Question
+          </Button>
+        </Paper>
+
+        {/* ----- This paper contains the preview of all questions ----- */}
+        <Paper elevation={3} sx={{ p: 2, mb: 2, mt: 2 }}>
+          <Typography sx={{ mb: 2, mt: 3 }} variant="h5">
+            Preview
+          </Typography>
+          {formConfig.questions.map((question) => (
+            <div key={question.question_id} style={{ marginBottom: "20px" }}>
+              {question.image && (
+                <img src={question.image} alt="" style={{ maxWidth: "100%" }} />
+              )}
+              <Typography
+                sx={{
+                  fontSize: question.fontSize || "1rem",
+                  color: question.color || "black",
+                  fontWeight: question.bold ? "bold" : "normal",
+                  fontStyle: question.italic ? "italic" : "normal",
+                  textAlign: question.alignment || "left",
+                  ...question.customStyles,
                 }}
               >
-                <MenuItem value="text">Text</MenuItem>
-              </Select>
-            </FormControl>
-            <IconButton
-              color="error"
-              onClick={() => handleRemoveParticipantField(index)}
-            >
-              <Delete />
-            </IconButton>
-          </Box>
-        ))}
-        <Button variant="contained" onClick={handleAddParticipantField}>
-          Add Participant Field
-        </Button>
-      </Paper>
+                {question.label}
+              </Typography>
+              {question.input_type === "text" && (
+                <TextField fullWidth margin="normal" />
+              )}
+              {question.input_type === "textarea" && (
+                <TextField fullWidth margin="normal" multiline rows={4} />
+              )}
+              {question.input_type === "dropdown" && (
+                <FormControl fullWidth margin="normal">
+                  <InputLabel>{question.label}</InputLabel>
+                  <Select>
+                    {question.values.split(",").map((value, index) => (
+                      <MenuItem key={index} value={value.trim()}>
+                        {value.trim()}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+              {question.input_type === "date" && (
+                <TextField type="date" fullWidth margin="normal" />
+              )}
+              {question.input_type === "file" && (
+                <TextField type="file" fullWidth margin="normal" />
+              )}
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => handleRemoveQuestion(question.question_id)}
+              >
+                Remove
+              </Button>
+            </div>
+          ))}
+        </Paper>
 
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ mt: 2 }}
-        onClick={() => {
-          handleGenerateConfig();
-        }}
-      >
-        Generate and Log Config
-      </Button>
+        {/* ----- This paper contains the extra participants form ----- */}
+        <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            Extra Participant Fields
+          </Typography>
+          {extraParticipantFields.map((field, index) => (
+            <Box
+              key={index}
+              sx={{
+                mb: 2,
+                p: 2,
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
+            >
+              <TextField
+                fullWidth
+                label="Field Label"
+                value={field.label}
+                required
+                onChange={(e) => {
+                  const newFields = [...extraParticipantFields];
+                  newFields[index].label = e.target.value;
+                  setExtraParticipantFields(newFields);
+                }}
+                sx={{ mb: 2 }}
+              />
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel>Field Type</InputLabel>
+                <Select
+                  value={field.type}
+                  onChange={(e) => {
+                    const newFields = [...extraParticipantFields];
+                    newFields[index].type = e.target.value;
+                    setExtraParticipantFields(newFields);
+                  }}
+                >
+                  <MenuItem value="text">Text</MenuItem>
+                </Select>
+              </FormControl>
+              <IconButton
+                color="error"
+                onClick={() => handleRemoveParticipantField(index)}
+              >
+                <Delete />
+              </IconButton>
+            </Box>
+          ))}
+          <Button variant="contained" onClick={handleAddParticipantField}>
+            Add Participant Field
+          </Button>
+        </Paper>
+
+        {/* ----- This is the submit button ----- */}
+
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2 }}
+          type="submit"
+          // onClick={() => {
+          //   handleGenerateConfig();
+          // }}
+        >
+          Generate and Log Config
+        </Button>
+      </form>
     </Box>
   );
 };
