@@ -94,24 +94,24 @@ const FormBuilder = () => {
     let ans;
 
     // XXXX - DONT DELETE ME: uncomment this ---------------------
-    // try {
-    //   const response = await axios.post(`${uri}/templates`, data);
+    try {
+      const response = await axios.post(`${uri}/templates`, data);
 
-    //   // console.log(response, "im res")
-    //   const templateId = await response.data.response.template_id;
-    //   // console.log(templateId);
-    //   setFormData((prev) => ({
-    //     ...prev,
-    //     template_id: templateId,
-    //   }));
-    //   console.log("Template uploaded:", response.data);
-    //   ans = await templateId;
-    //   return templateId;
-    // } catch (error) {
-    //   console.error("Error uploading template:", error);
-    // }
+      // console.log(response, "im res")
+      const templateId = await response.data.response.template_id;
+      // console.log(templateId);
+      setFormData((prev) => ({
+        ...prev,
+        template_id: templateId,
+      }));
+      console.log("Template uploaded:", response.data);
+      ans = await templateId;
+      return templateId;
+    } catch (error) {
+      console.error("Error uploading template:", error);
+    }
 
-    // return ans;
+    return ans;
     // XXXX - DONT DELETE ME: uncomment this ---------------------
   };
 
@@ -125,12 +125,12 @@ const FormBuilder = () => {
     console.log(newData, "im center_data");
 
     // XXXX - DONT DELETE ME: uncomment this ------------------
-    // try {
-    //   const response = await axios.post(`${uri}/centers`, newData);
-    //   console.log("Center uploaded:", response.data);
-    // } catch (error) {
-    //   console.error("Error uploading center:", error);
-    // }
+    try {
+      const response = await axios.post(`${uri}/centers`, newData);
+      console.log("Center uploaded:", response.data);
+    } catch (error) {
+      console.error("Error uploading center:", error);
+    }
     // XXXX - DONT DELETE ME: uncomment this ---------------------
   };
 
