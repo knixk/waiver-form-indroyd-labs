@@ -1,0 +1,37 @@
+{
+  "template_name": "test2",
+  "template_config": {
+    "questions": [
+      {
+        "label": "check",
+        "input_type": "checkbox",
+        "values": "",
+        "image": "",
+        "required": false,
+        "variant": "",
+        "question_id": 1735556542505,
+        "customStyles": {}
+      },
+      {
+        "label": "asdadsad",
+        "input_type": "radio",
+        "values": "asd, rewsd",
+        "image": "",
+        "required": false,
+        "question_id": 1735556555123,
+        "customStyles": {}
+      },
+      {
+        "label": "date",
+        "input_type": "date",
+        "values": "",
+        "image": "",
+        "required": false,
+        "question_id": 1735556572034,
+        "customStyles": {}
+      }
+    ],
+    "extra_participants_form_fields": [],
+    "want_participants": true
+  }
+}

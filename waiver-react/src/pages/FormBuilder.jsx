@@ -364,6 +364,7 @@ const FormBuilder = () => {
               <MenuItem value="file">File</MenuItem>
               <MenuItem value="label">Label</MenuItem>
               <MenuItem value="radio">Radio</MenuItem>
+              <MenuItem value="checkbox">Checkbox</MenuItem>
             </Select>
           </FormControl>
 
