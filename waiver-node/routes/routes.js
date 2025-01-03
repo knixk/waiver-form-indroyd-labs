@@ -680,7 +680,7 @@ router.get("/submission/ack/:id", async (req, res) => {
     (err, results) => {
       if (err) return res.status(500).json({ error: "Database error" });
       if (results.length === 0)
-        return res.status(404).json({ error: "Not found" });
+        return res.status(404).json({ error: "Not found" });  
 
       const submissionData = JSON.parse(results[0].submission_data);
       return res
