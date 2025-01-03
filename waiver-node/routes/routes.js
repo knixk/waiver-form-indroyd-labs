@@ -62,7 +62,7 @@ const encryptedData = crypto.publicEncrypt(
 );
 
 // uncomment this to get the encrypted_key
-console.log("Encrypted Data:", encryptedData.toString("base64"));
+// console.log("Encrypted Data:", encryptedData.toString("base64"));
 
 router.get("/", (req, res) => {
   res.status(200).json({
@@ -432,7 +432,7 @@ router.post("/templates", async (req, res) => {
     });
   }
 
-  console.log(req.body);
+  // console.log(req.body);
 
   const { template_name, template_config } = req.body;
 
@@ -473,7 +473,7 @@ router.post("/centers", async (req, res) => {
     });
   }
 
-  console.log(req.body);
+  // console.log(req.body);
 
   const data = {
     center_name: req.body.center_name,

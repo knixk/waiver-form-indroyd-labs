@@ -107,7 +107,6 @@ const getCenterIdByName = (con, centerName) => {
   });
 };
 
-
 const getTemplateIdByCenterName = (con, center_name) => {
   return new Promise((resolve, reject) => {
     const query = `
@@ -171,25 +170,79 @@ const getTemplateByCenterName = (con, center_name) => {
   });
 };
 
-const postACenter = (con, data) => {
-  const query = `
-      INSERT INTO centers (center_name, address, contact_info, template_id, additional_info)
-      VALUES (?, ?, ?, ?, ?)
-    `;
+// --------- og fn for the post a center -----------
+// const postACenter = (con, data) => {
+//   const query = `
+//       INSERT INTO centers (center_name, address, contact_info, template_id, additional_info)
+//       VALUES (?, ?, ?, ?, ?)
+//     `;
 
-  con.query(
-    query,
-    [
-      data.center_name,
-      data.address,
-      JSON.stringify(data.contact_info),
-      data.template_id,
-      JSON.stringify(data.additional_info),
-    ], // Ensure JSON is stringified
-    (err, result) => {
-      if (err) throw err;
+//   con.query(
+//     query,
+//     [
+//       data.center_name,
+//       data.address,
+//       JSON.stringify(data.contact_info),
+//       data.template_id,
+//       JSON.stringify(data.additional_info),
+//     ], // Ensure JSON is stringified
+//     (err, result) => {
+//       if (err) throw err;
+//     }
+//   );
+// };
+
+// -----x---- og fn for the post a center -----x------
+
+const postACenter = (con, data) => {
+  const checkQuery = `SELECT * FROM centers WHERE center_name = ?`;
+
+  con.query(checkQuery, [data.center_name], (err, result) => {
+    if (err) throw err;
+
+    if (result.length > 0) {
+      // -------------- Center exists, update it ---------------
+      const updateQuery = `
+        UPDATE centers
+        SET address = ?, contact_info = ?, template_id = ?, additional_info = ?
+        WHERE center_name = ?
+      `;
+      con.query(
+        updateQuery,
+        [
+          data.address,
+          JSON.stringify(data.contact_info),
+          data.template_id,
+          JSON.stringify(data.additional_info),
+          data.center_name,
+        ],
+        (err) => {
+          if (err) throw err;
+          console.log("Center updated successfully.");
+        }
+      );
+    } else {
+      // --------- Center doesn't exist, insert a new one -------------
+      const insertQuery = `
+        INSERT INTO centers (center_name, address, contact_info, template_id, additional_info)
+        VALUES (?, ?, ?, ?, ?)
+      `;
+      con.query(
+        insertQuery,
+        [
+          data.center_name,
+          data.address,
+          JSON.stringify(data.contact_info),
+          data.template_id,
+          JSON.stringify(data.additional_info),
+        ],
+        (err) => {
+          if (err) throw err;
+          console.log("Center inserted successfully.");
+        }
+      );
     }
-  );
+  });
 };
 
 const getSubmissionsByCenter = async (con, center_name, searchQuery) => {
@@ -357,5 +410,5 @@ module.exports = {
   getTemplateBySubmissionId,
   getTemplateByCenterName,
   getTemplateIdByCenterName,
-  getCenterIdByName
+  getCenterIdByName,
 };
