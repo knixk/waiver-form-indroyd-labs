@@ -49,7 +49,7 @@ const uploadFileToDrive = async (fileName, filePath, mimeType) => {
   }
 };
 
-// Controller to get template_id by center_name
+// --------------- deprecated - Controller to get template_id by center_name ------------------------
 // const getTemplateIdByCenterName = async (req, res) => {
 //   const { center_name } = req.body;
 
@@ -246,12 +246,23 @@ const postACenter = (con, data) => {
 };
 
 const getSubmissionsByCenter = async (con, center_name, searchQuery) => {
+  /*
   const query = `
   SELECT submissions.* 
   FROM submissions 
   INNER JOIN centers ON submissions.center_id = centers.id
   WHERE centers.center_name = ? 
   AND (submissions.mobile_number LIKE ? OR submissions.email LIKE ? OR submissions.name LIKE ?)
+  ORDER BY submissions.submission_date DESC`;
+  */
+
+  const query = `
+  SELECT submissions.* 
+  FROM submissions 
+  INNER JOIN centers ON submissions.center_id = centers.id
+  WHERE centers.center_name = ? 
+  AND (submissions.mobile_number LIKE ? OR submissions.email LIKE ? OR submissions.name LIKE ?)
+  AND submissions.submission_date >= NOW() - INTERVAL 24 HOUR
   ORDER BY submissions.submission_date DESC`;
 
   const searchParam = `%${searchQuery}%`;
@@ -268,6 +279,55 @@ const getSubmissionsByCenter = async (con, center_name, searchQuery) => {
         }
       }
     );
+  });
+};
+
+// const getAllSubmissionsByDateAndCenter = async (con, center_name) => {
+
+//   const query = `
+//   SELECT submissions.* 
+//   FROM submissions 
+//   INNER JOIN centers ON submissions.center_id = centers.id
+//   WHERE centers.center_name = ? 
+//   AND (submissions.mobile_number LIKE ? OR submissions.email LIKE ? OR submissions.name LIKE ?)
+//   AND submissions.submission_date >= NOW() - INTERVAL 24 HOUR
+//   ORDER BY submissions.submission_date DESC`;
+
+//   const searchParam = `%${searchQuery}%`;
+
+//   return new Promise((resolve, reject) => {
+//     con.query(
+//       query,
+//       [center_name, searchParam, searchParam, searchParam],
+//       (err, result) => {
+//         if (err) {
+//           reject(err);
+//         } else {
+//           resolve(result);
+//         }
+//       }
+//     );
+//   });
+// };
+
+
+const getSubmissionsByDateRangeAndCenter = async (con, center_name, start_date, end_date) => {
+  const query = `
+    SELECT submissions.* 
+    FROM submissions 
+    INNER JOIN centers ON submissions.center_id = centers.id
+    WHERE centers.center_name = ? 
+    AND submissions.submission_date BETWEEN ? AND ?
+    ORDER BY submissions.submission_date DESC`;
+
+  return new Promise((resolve, reject) => {
+    con.query(query, [center_name, start_date, end_date], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
   });
 };
 
@@ -411,4 +471,6 @@ module.exports = {
   getTemplateByCenterName,
   getTemplateIdByCenterName,
   getCenterIdByName,
+  // getAllSubmissionsByDateAndCenter
+  getSubmissionsByDateRangeAndCenter
 };
