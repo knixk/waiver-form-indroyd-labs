@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+
 // import dummyCenter from "../misc/dummyData/dummyCenters/dummyCenter.json";
 
 import placeholderImg from "../assets/placeholder.jpg";
@@ -126,6 +128,7 @@ function Home() {
         transition: "background-color 0.5s ease",
       }}
     >
+      <Toaster />
       {centerInfo && (
         <Box
           sx={{

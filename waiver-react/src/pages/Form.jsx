@@ -120,6 +120,8 @@ const Form = () => {
     setCenterInfo,
     centerAddInfo,
     setCenterAddInfo,
+    centerName,
+    setCenterName,
   } = myState;
 
   const [errors, setErrors] = useState({});
@@ -273,7 +275,7 @@ const Form = () => {
 
         await axios.post(`${uri}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
-        setTimeout(() => navigate(`/?center=${centerID}`), 3000);
+        setTimeout(() => navigate(`/?center=${centerName}`), 3000);
       } catch (error) {
         toast.error("Submission failed!");
         console.error(error);
@@ -288,7 +290,7 @@ const Form = () => {
       import.meta.env.VITE_MODE == "prod" ||
       import.meta.env.VITE_MODE == "dev"
     ) {
-      console.log("in prod mode..");
+      // console.log("in prod mode..");
 
       // fold flow, center ID -> template ID
       // new flow, center Name -> center ID -> ....
@@ -406,11 +408,12 @@ const Form = () => {
 
       // this function essentially call our helper functions in a flow
       const asyncFnStitch = async () => {
-        console.log("here");
+        // console.log("here");
         const my_center_id = await getCenterIdFromCenterName(centerParams);
 
         setCenterID(my_center_id);
-
+        setCenterName(centerParams);
+        // console.log("got the center name", centerName)
         const data =
           my_center_id && (await getTemplateIdFromCenterID(my_center_id));
 
@@ -426,7 +429,7 @@ const Form = () => {
       import.meta.env.VITE_MODE == "dev"
     ) {
       const postCenter = async (centerId) => {
-        console.log(centerId, "im ci");
+        // console.log(centerId, "im ci");
         const center = `${uri}/get-center`;
         const options = {
           center_id: centerId,

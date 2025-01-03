@@ -218,10 +218,10 @@ const FormBuilder = () => {
 
     // we're checking if they have added any fields for extra participants, if no then we set it to false
     if (extraParticipantFields.length == 0) {
-      console.log("empty");
+      // console.log("empty");
       setWantParticipants(false);
     } else {
-      console.log("not empty");
+      // console.log("not empty");
     }
 
     // it contains the template payload to be send to uploadTemplate
@@ -242,9 +242,9 @@ const FormBuilder = () => {
     const t_id = await uploadTemplate(config);
     console.log("template id: ", t_id);
     t_id && (await uploadCenter(t_id));
-    toast.success(`Center was submitted with template_id ${t_id}`);
-
-    console.log(config, "im the template");
+    toast.success(
+      `Center: ${formData.center_name}, was submitted and updated with template_id ${t_id}`
+    );
   };
 
   return (
@@ -254,8 +254,10 @@ const FormBuilder = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          toast("Please wait while your data is sent..");
+
           handleGenerateConfig();
-          console.log("submitted");
+          // console.log("submitted");
         }}
       >
         {/* ----- This paper contains the center form ----- */}

@@ -62,7 +62,7 @@ const encryptedData = crypto.publicEncrypt(
 );
 
 // uncomment this to get the encrypted_key
-console.log("Encrypted Data:", encryptedData.toString("base64"));
+// console.log("Encrypted Data:", encryptedData.toString("base64"));
 
 router.get("/", (req, res) => {
   res.status(200).json({
@@ -432,7 +432,7 @@ router.post("/templates", async (req, res) => {
     });
   }
 
-  console.log(req.body);
+  // console.log(req.body);
 
   const { template_name, template_config } = req.body;
 
@@ -473,7 +473,7 @@ router.post("/centers", async (req, res) => {
     });
   }
 
-  console.log(req.body);
+  // console.log(req.body);
 
   const data = {
     center_name: req.body.center_name,
@@ -680,7 +680,7 @@ router.get("/submission/ack/:id", async (req, res) => {
     (err, results) => {
       if (err) return res.status(500).json({ error: "Database error" });
       if (results.length === 0)
-        return res.status(404).json({ error: "Not found" });
+        return res.status(404).json({ error: "Not found" });  
 
       const submissionData = JSON.parse(results[0].submission_data);
       return res
