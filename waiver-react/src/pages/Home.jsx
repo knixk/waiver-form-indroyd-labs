@@ -32,10 +32,14 @@ function Home() {
     setCenterID,
     centerName,
     setCenterName,
+    setDisabled,
   } = myState;
 
   // setCenterName(centerParams);
   useEffect(() => {
+
+    setDisabled(false)
+
     // takes a name returns an id
     const getCenterIdFromCenterName = async (centerName) => {
       let centerId = null;

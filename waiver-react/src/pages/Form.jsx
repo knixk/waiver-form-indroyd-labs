@@ -126,6 +126,8 @@ const Form = () => {
 
   const [errors, setErrors] = useState({});
 
+  // setDisabled(false);
+
   //  this would be able to validate the fields, it uses a schema, comes from yup library
   const validateField = (fieldKey, value) => {
     let schema = yup.string().email("Invalid email").required();
@@ -226,7 +228,8 @@ const Form = () => {
     }
 
     toast("Submitting form, please wait...");
-    setDisabled(true);
+
+    setDisabled(true)
 
     const formElement = document.querySelector("body");
     const canvas = await html2canvas(formElement, {
@@ -273,8 +276,15 @@ const Form = () => {
           center_id: centerID,
         };
 
+        // console.log(submissionPayload);
+
+
         await axios.post(`${uri}/submissions`, submissionPayload);
         toast.success("Form submitted successfully!");
+        // -------  clearing old state ----------
+        setFormData({});
+        setParticipants([]);
+        // ---------- navigating to home after submit ----------
         setTimeout(() => navigate(`/?center=${centerName}`), 3000);
       } catch (error) {
         toast.error("Submission failed!");
@@ -285,6 +295,8 @@ const Form = () => {
   };
 
   useEffect(() => {
+    // setDisabled(true);
+
     // setting the template info here..
     if (
       import.meta.env.VITE_MODE == "prod" ||
@@ -295,7 +307,7 @@ const Form = () => {
       // fold flow, center ID -> template ID
       // new flow, center Name -> center ID -> ....
 
-      // previously this one was being used, we can use this again
+      // ---------- previously this one was being used, we can use this again 
       const getTemplateIdFromCenterID = async (id) => {
         let ans = null;
         const templates = `${uri}/template-id-from-center`;
@@ -359,11 +371,11 @@ const Form = () => {
           setTimeout(() => navigate("/"), 5000);
         }
 
-        // return back the template id
+        // return back the template id ----------
         return ans;
       };
 
-      // fetch the template with the template id
+      // ---------- fetch the template with the template id ----------
       const fetchTemplate = async (t_id) => {
         const templates = `${uri}/post-center`;
 
@@ -411,6 +423,8 @@ const Form = () => {
         // console.log("here");
         const my_center_id = await getCenterIdFromCenterName(centerParams);
 
+        // console.log("center id inside afs: ", my_center_id);
+
         setCenterID(my_center_id);
         setCenterName(centerParams);
         // console.log("got the center name", centerName)
@@ -418,45 +432,40 @@ const Form = () => {
           my_center_id && (await getTemplateIdFromCenterID(my_center_id));
 
         data && (await fetchTemplate(data));
+
+        const postCenter = async (centerId) => {
+          // console.log(centerId, "im ci");
+          const center = `${uri}/get-center`;
+          const options = {
+            center_id: centerId,
+          };
+
+          try {
+            const response = await axios.post(center, options);
+            setCenterInfo(response.data.response.data);
+            const addInfo = JSON.parse(
+              response.data.response.data.additional_info
+            );
+            setCenterAddInfo(addInfo);
+            return response.data.data; // Return the response data
+          } catch (error) {
+            console.error(
+              "Error posting center:",
+              error.response?.data || error.message // Handle error gracefully
+            );
+            throw error; // Rethrow the error for further handling
+          }
+        };
+        if (!centerParams) {
+          setCenterID(6);
+          postCenter(6);
+        } else {
+          (await my_center_id) && postCenter(my_center_id);
+          // console.log("centerID is: ", centerID);
+        }
       };
 
       asyncFnStitch();
-    }
-
-    // Setting the center info here
-    if (
-      import.meta.env.VITE_MODE == "prod" ||
-      import.meta.env.VITE_MODE == "dev"
-    ) {
-      const postCenter = async (centerId) => {
-        // console.log(centerId, "im ci");
-        const center = `${uri}/get-center`;
-        const options = {
-          center_id: centerId,
-        };
-
-        try {
-          const response = await axios.post(center, options);
-          setCenterInfo(response.data.response.data);
-          const addInfo = JSON.parse(
-            response.data.response.data.additional_info
-          );
-          setCenterAddInfo(addInfo);
-          return response.data.data; // Return the response data
-        } catch (error) {
-          console.error(
-            "Error posting center:",
-            error.response?.data || error.message // Handle error gracefully
-          );
-          throw error; // Rethrow the error for further handling
-        }
-      };
-      if (!centerParams) {
-        setCenterID(6);
-        postCenter(6);
-      } else {
-        centerID && postCenter(centerID);
-      }
     }
 
     if (import.meta.env.VITE_MODE == "dev") {
