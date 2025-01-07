@@ -13,6 +13,8 @@ const {
   getSubmissionById,
   getCenterById,
   getTemplateBySubmissionId,
+  // getAllSubmissionsByDateAndCenter
+  getSubmissionsByDateRangeAndCenter,
 } = require("../controllers/controllers");
 const env = require("dotenv");
 const jwt = require("jsonwebtoken");
@@ -62,7 +64,7 @@ const encryptedData = crypto.publicEncrypt(
 );
 
 // uncomment this to get the encrypted_key
-// console.log("Encrypted Data:", encryptedData.toString("base64"));
+console.log("Encrypted Data:", encryptedData.toString("base64"));
 
 router.get("/", (req, res) => {
   res.status(200).json({
@@ -108,6 +110,63 @@ router.get("/submissions", async (req, res) => {
 
     // Query submissions for the center_id with optional search
     const result = await getSubmissionsByCenter(con, center_name, searchQuery);
+
+    res.status(200).json({
+      response: result,
+      message: "Submissions for the center.",
+      code: 200,
+    });
+  } catch (err) {
+    console.error("Invalid Token:", err);
+    return res.status(403).json({
+      message: "Invalid or expired token.",
+      code: 403,
+      response: {},
+    });
+  }
+});
+
+router.get("/submissions-by-date", async (req, res) => {
+  const { start_date, end_date } = req.body;
+
+  const con = global.dbConnection;
+  if (!con) {
+    return res.status(500).json({
+      message: "Database connection not established",
+      code: 500,
+      response: {},
+    });
+  }
+
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({
+      message: "Token is required.",
+      code: 401,
+      response: {},
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const { center_name } = decoded;
+    if (!center_name) {
+      return res.status(403).json({
+        message: "Invalid token payload. Missing center_id.",
+        code: 403,
+        response: {},
+      });
+    }
+
+    // let's just call this fn and kind of modify this what say? instead of creating new one?
+    // Query submissions for the center_id with optional search
+    // const result = await getSubmissionsByDateRangeAndCenter(con, center_name);
+    const result = await getSubmissionsByDateRangeAndCenter(
+      con,
+      center_name,
+      start_date,
+      end_date
+    );
 
     res.status(200).json({
       response: result,
@@ -680,7 +739,7 @@ router.get("/submission/ack/:id", async (req, res) => {
     (err, results) => {
       if (err) return res.status(500).json({ error: "Database error" });
       if (results.length === 0)
-        return res.status(404).json({ error: "Not found" });  
+        return res.status(404).json({ error: "Not found" });
 
       const submissionData = JSON.parse(results[0].submission_data);
       return res
