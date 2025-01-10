@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 5050;
+
+// ------ uncomment in local ---------
+// const port = process.env.PORT || 5050;
 const cors = require("cors");
 const env = require("dotenv");
 const fs = require("fs");
@@ -44,8 +46,10 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 app.use(myRouter);
 
-app.listen(port, () => {
-  console.log(`app running on port: ${port}..`);
-});
+// ------- uncomment in local dev --------------
+// app.listen(port, () => {
+//   console.log(`app running on port: ${port}..`);
+// });
 
-// module.exports.handler = serverless(app);
+// ---------- uncomment in aws -----------
+module.exports.handler = serverless(app);
