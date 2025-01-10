@@ -51,7 +51,7 @@ const {
 } = require("../controllers/controllers");
 
 // let center_name = `asdasdasdUnique`;
-let center_name = `BavdhanCenter3`;
+let center_name = `BavdhanCenter4`;
 
 const myPayload = {
   center_name: center_name,
