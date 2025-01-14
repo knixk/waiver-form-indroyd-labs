@@ -256,16 +256,26 @@ const getSubmissionsByCenter = async (con, center_name, searchQuery) => {
   ORDER BY submissions.submission_date DESC`;
   */
 
-  const query = `
-  SELECT submissions.* 
-  FROM submissions 
-  INNER JOIN centers ON submissions.center_id = centers.id
-  WHERE centers.center_name = ? 
-  AND (submissions.mobile_number LIKE ? OR submissions.email LIKE ? OR submissions.name LIKE ?)
-  AND submissions.submission_date >= NOW() - INTERVAL 24 HOUR
-  ORDER BY submissions.submission_date DESC`;
+  // const query = `
+  // SELECT submissions.*
+  // FROM submissions
+  // INNER JOIN centers ON submissions.center_id = centers.id
+  // WHERE centers.center_name = ?
+  // AND (submissions.mobile_number LIKE ? OR submissions.email LIKE ? OR submissions.name LIKE ?)
+  // AND submissions.submission_date >= NOW() - INTERVAL 24 HOUR
+  // ORDER BY submissions.submission_date DESC`;
 
-  const searchParam = `%${searchQuery}%`;
+  const query = `SELECT submissions.* 
+FROM submissions 
+INNER JOIN centers ON submissions.center_id = centers.id
+WHERE centers.center_name = ? 
+  AND (submissions.mobile_number LIKE ? 
+       OR submissions.email LIKE ? 
+       OR submissions.name LIKE ?)
+  AND DATE(submissions.submission_date) = CURDATE()
+ORDER BY submissions.submission_date DESC;`;
+
+  const searchParam = `%${searchQuery}%`; 
 
   return new Promise((resolve, reject) => {
     con.query(
@@ -285,10 +295,10 @@ const getSubmissionsByCenter = async (con, center_name, searchQuery) => {
 // const getAllSubmissionsByDateAndCenter = async (con, center_name) => {
 
 //   const query = `
-//   SELECT submissions.* 
-//   FROM submissions 
+//   SELECT submissions.*
+//   FROM submissions
 //   INNER JOIN centers ON submissions.center_id = centers.id
-//   WHERE centers.center_name = ? 
+//   WHERE centers.center_name = ?
 //   AND (submissions.mobile_number LIKE ? OR submissions.email LIKE ? OR submissions.name LIKE ?)
 //   AND submissions.submission_date >= NOW() - INTERVAL 24 HOUR
 //   ORDER BY submissions.submission_date DESC`;
@@ -310,8 +320,12 @@ const getSubmissionsByCenter = async (con, center_name, searchQuery) => {
 //   });
 // };
 
-
-const getSubmissionsByDateRangeAndCenter = async (con, center_name, start_date, end_date) => {
+const getSubmissionsByDateRangeAndCenter = async (
+  con,
+  center_name,
+  start_date,
+  end_date
+) => {
   const query = `
     SELECT submissions.* 
     FROM submissions 
@@ -472,5 +486,5 @@ module.exports = {
   getTemplateIdByCenterName,
   getCenterIdByName,
   // getAllSubmissionsByDateAndCenter
-  getSubmissionsByDateRangeAndCenter
+  getSubmissionsByDateRangeAndCenter,
 };

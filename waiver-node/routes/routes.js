@@ -51,7 +51,10 @@ const {
 } = require("../controllers/controllers");
 
 // let center_name = `asdasdasdUnique`;
-let center_name = `BavdhanCenter4`;
+// let center_name = `BavdhanCenter4`;
+let center_name = `Flea market stall`;
+
+
 
 const myPayload = {
   center_name: center_name,
@@ -64,7 +67,7 @@ const encryptedData = crypto.publicEncrypt(
 );
 
 // uncomment this to get the encrypted_key
-// console.log("Encrypted Data:", encryptedData.toString("base64"));
+console.log("Encrypted Data:", encryptedData.toString("base64"));
 
 router.get("/", (req, res) => {
   res.status(200).json({
