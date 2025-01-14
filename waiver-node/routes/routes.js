@@ -67,7 +67,7 @@ const encryptedData = crypto.publicEncrypt(
 );
 
 // uncomment this to get the encrypted_key
-console.log("Encrypted Data:", encryptedData.toString("base64"));
+// console.log("Encrypted Data:", encryptedData.toString("base64"));
 
 router.get("/", (req, res) => {
   res.status(200).json({

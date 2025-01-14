@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 // ------ uncomment in local ---------
-const port = process.env.PORT || 5050;
+// const port = process.env.PORT || 5050;
 const cors = require("cors");
 const env = require("dotenv");
 const fs = require("fs");
@@ -10,7 +10,7 @@ const fs = require("fs");
 const { connectToDatabase } = require("./connectDB.js");
 // All the routes
 const myRouter = require("./routes/routes");
-// const serverless = require("serverless-http");
+const serverless = require("serverless-http");
 
 // use the db
 (async () => {
@@ -47,9 +47,9 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(myRouter);
 
 // ------- uncomment in local dev --------------
-app.listen(port, () => {
-  console.log(`app running on port: ${port}..`);
-});
+// app.listen(port, () => {
+//   console.log(`app running on port: ${port}..`);
+// });
 
 // ---------- uncomment in aws -----------
-// module.exports.handler = serverless(app);
+module.exports.handler = serverless(app);
